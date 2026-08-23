@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Determinantes Sociales de la Salud</title>
+<style>
+  :root{
+    --navy:#122A4E;
+    --navy-soft:#1F3E6E;
+    --navy-pale:#E7ECF5;
+    --outer:#1F3E6E;
+    --inner:#5B7FB5;
+    --bg:#FFFFFF;
+    --text:#1A1A1A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:Calibri, "Segoe UI", Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:24px 16px 60px;
+  }
+  h1{
+    text-align:center;
+    color:var(--navy);
+    font-size:26px;
+    margin:0 0 4px;
+  }
+  p.subtitle{
+    text-align:center;
+    color:#444;
+    font-size:16px;
+    margin:0 0 28px;
+  }
+  .layout{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:flex-start;
+    gap:32px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .wheel-wrap{
+    position:relative;
+    width:640px;
+    height:640px;
+    max-width:92vw;
+    max-height:92vw;
+    flex-shrink:0;
+  }
+  .ring{
+    position:absolute;
+    border-radius:50%;
+    border:1.5px dashed #C9D3E4;
+  }
+  .ring.outer{ inset:0; }
+  .ring.inner{ inset:110px; }
+  .center-circle{
+    position:absolute;
+    inset:0;
+    margin:auto;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    background:var(--navy);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-weight:600;
+    font-size:16px;
+    line-height:1.3;
+    padding:14px;
+  }
+  .node{
+    position:absolute;
+    width:120px;
+    transform:translate(-50%,-50%);
+    text-align:center;
+  }
+  .node button{
+    width:100%;
+    border:none;
+    border-radius:10px;
+    padding:9px 6px;
+    font-family:inherit;
+    font-size:12.5px;
+    font-weight:600;
+    line-height:1.25;
+    cursor:pointer;
+    color:#fff;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .node button:hover{
+    transform:scale(1.05);
+    box-shadow:0 3px 10px rgba(0,0,0,0.18);
+  }
+  .node.structural button{ background:var(--outer); }
+  .node.intermediate button{ background:var(--inner); }
+  .node button.active{ outline:3px solid #D8A527; }
+
+  .panel{
+    width:340px;
+    max-width:92vw;
+    background:var(--navy-pale);
+    border-radius:14px;
+    padding:22px;
+    min-height:300px;
+  }
+  .panel h2{
+    color:var(--navy);
+    font-size:19px;
+    margin:0 0 12px;
+  }
+  .panel .tag{
+    display:inline-block;
+    font-size:12px;
+    font-weight:700;
+    color:#fff;
+    padding:3px 10px;
+    border-radius:20px;
+    margin-bottom:14px;
+  }
+  .tag.structural{ background:var(--outer); }
+  .tag.intermediate{ background:var(--inner); }
+  .panel h3{
+    font-size:13.5px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--navy);
+    margin:16px 0 6px;
+  }
+  .panel p{
+    font-size:15px;
+    line-height:1.5;
+    margin:0;
+    color:#222;
+  }
+  .placeholder{
+    color:#666;
+    font-size:15px;
+    line-height:1.5;
+  }
+  .legend{
+    display:flex;
+    justify-content:center;
+    gap:24px;
+    margin-top:18px;
+    font-size:13px;
+    color:#333;
+  }
+  .legend span{ display:flex; align-items:center; gap:6px; }
+  .dot{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+  .dot.structural{ background:var(--outer); }
+  .dot.intermediate{ background:var(--inner); }
+  @media (max-width:760px){
+    .wheel-wrap{ width:480px; height:480px; }
+    .ring.inner{ inset:78px; }
+    .center-circle{ width:150px; height:150px; font-size:14px; }
+    .node{ width:96px; }
+    .node button{ font-size:11px; padding:7px 4px; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>Determinantes Sociales de la Salud</h1>
+  <p class="subtitle">Haz clic en cada factor para ver su definición y su relación con la salud</p>
+
+  <div class="layout">
+    <div class="wheel-wrap">
+      <div class="ring outer"></div>
+      <div class="ring inner"></div>
+      <div class="center-circle">Persona<br>Familia<br>Comunidad</div>
+      <div id="nodes"></div>
+    </div>
+
+    <div class="panel" id="panel">
+      <p class="placeholder">Selecciona un factor en la rueda para ver su información aquí.</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot structural"></i> Determinantes estructurales</span>
+    <span><i class="dot intermediate"></i> Determinantes intermedios</span>
+  </div>
+
+<script>
+const data = [
+  // ESTRUCTURALES
+  {id:1, layer:"structural", name:"Gobernanza y políticas públicas",
+    def:"Transparencia, marco legal y prioridades de gasto que fija el Estado.",
+    rel:"Estas decisiones determinan qué protecciones y recursos llegan (o no) a la población, moldeando desde arriba las oportunidades de salud de cada grupo social."},
+  {id:2, layer:"structural", name:"Políticas macroeconómicas",
+    def:"Empleo, salario mínimo e inversión social que define el país.",
+    rel:"Define cuánta seguridad económica tiene una familia, lo que luego se traduce en el ingreso disponible para vivienda, alimentación y salud."},
+  {id:3, layer:"structural", name:"Políticas sociales",
+    def:"Protección social, pensiones y subsidios disponibles para la población.",
+    rel:"Amortigua o profundiza las desigualdades según cuánta cobertura efectiva reciben los grupos más vulnerables."},
+  {id:4, layer:"structural", name:"Cultura y valores sociales",
+    def:"Normas de género y de derechos humanos vigentes en la sociedad.",
+    rel:"Influye en qué roles y comportamientos se consideran aceptables, afectando el acceso a oportunidades según género, etnia u orientación."},
+  {id:5, layer:"structural", name:"Clase social",
+    def:"Posición socioeconómica y forma en que se distribuye la riqueza.",
+    rel:"Ordena a las personas en una jerarquía social que condiciona, desde el inicio, el acceso a educación, vivienda y atención de salud."},
+  {id:6, layer:"structural", name:"Género",
+    def:"Rol social, brecha salarial y carga de cuidado asociadas a cada género.",
+    rel:"Genera distintas exposiciones a riesgo y distinto acceso a recursos entre hombres y mujeres a lo largo de la vida."},
+  {id:7, layer:"structural", name:"Etnia / raza",
+    def:"Discriminación, acceso a oportunidades e interculturalidad.",
+    rel:"Puede generar barreras adicionales de acceso a servicios y peores resultados de salud por discriminación estructural."},
+  {id:8, layer:"structural", name:"Educación",
+    def:"Niveles de alfabetización y logro educativo alcanzado.",
+    rel:"Determina el tipo de empleo al que se puede acceder y la capacidad de comprender y seguir indicaciones de salud."},
+
+  // INTERMEDIOS
+  {id:9, layer:"intermediate", name:"Condiciones de empleo y trabajo",
+    def:"Seguridad laboral y riesgos ocupacionales del trabajo que se tiene.",
+    rel:"Un empleo precario o riesgoso expone a lesiones, estrés y menor cobertura de salud."},
+  {id:10, layer:"intermediate", name:"Ingresos y situación económica",
+    def:"Capacidad de compra y acceso a bienes esenciales.",
+    rel:"El ingreso disponible decide qué alimentos, vivienda y atención de salud puede costear una familia."},
+  {id:11, layer:"intermediate", name:"Vivienda",
+    def:"Calidad del hogar, hacinamiento y saneamiento básico.",
+    rel:"Una vivienda precaria aumenta el riesgo de enfermedades respiratorias, infecciosas y accidentes domésticos."},
+  {id:12, layer:"intermediate", name:"Agua potable y saneamiento",
+    def:"Acceso a agua segura y condiciones de higiene.",
+    rel:"La falta de acceso incrementa las enfermedades gastrointestinales e infecciosas, especialmente en la infancia."},
+  {id:13, layer:"intermediate", name:"Entorno físico y ambiental",
+    def:"Contaminación, espacios verdes y exposición climática del entorno.",
+    rel:"El entorno donde se vive puede proteger o dañar la salud respiratoria, mental y física de las personas."},
+  {id:14, layer:"intermediate", name:"Acceso a alimentos sanos",
+    def:"Seguridad alimentaria y calidad nutricional de la dieta.",
+    rel:"Sin acceso a alimentos frescos, aumenta el riesgo de malnutrición, obesidad y enfermedades crónicas."},
+  {id:15, layer:"intermediate", name:"Redes de apoyo social",
+    def:"Capital social y apoyo comunitario disponible para la persona.",
+    rel:"Contar con redes de apoyo protege ante crisis y mejora la adherencia a los tratamientos de salud."},
+  {id:16, layer:"intermediate", name:"Factores psicosociales",
+    def:"Estrés crónico y vulnerabilidad psicosocial acumulada.",
+    rel:"El estrés sostenido por condiciones de vida difíciles impacta directamente en enfermedades cardiovasculares, mentales y metabólicas."},
+  {id:17, layer:"intermediate", name:"Conductas y estilos de vida",
+    def:"Alimentación, actividad física y consumo de alcohol o tabaco.",
+    rel:"Estas conductas están fuertemente moldeadas por el contexto —ingreso, educación, entorno— y no son solo decisiones individuales."},
+  {id:18, layer:"intermediate", name:"Sistema de salud",
+    def:"Cobertura, calidad y barreras geográficas o financieras de acceso.",
+    rel:"Un sistema con barreras de acceso agrava las inequidades ya generadas por el resto de los determinantes."},
+];
+
+const wrap = document.getElementById('nodes');
+const panel = document.getElementById('panel');
+const center = 320; // half of 640
+const outerRadius = 300;
+const innerRadius = 190;
+
+function place(items, radius){
+  const n = items.length;
+  items.forEach((item, i) => {
+    const angle = (i / n) * 2 * Math.PI - Math.PI/2;
+    const x = center + radius * Math.cos(angle);
+    const y = center + radius * Math.sin(angle);
+    const node = document.createElement('div');
+    node.className = 'node ' + item.layer;
+    node.style.left = x + 'px';
+    node.style.top = y + 'px';
+    const btn = document.createElement('button');
+    btn.textContent = item.name;
+    btn.dataset.id = item.id;
+    btn.addEventListener('click', () => show(item, btn));
+    node.appendChild(btn);
+    wrap.appendChild(node);
+  });
+}
+
+place(data.filter(d => d.layer === 'structural'), outerRadius);
+place(data.filter(d => d.layer === 'intermediate'), innerRadius);
+
+function show(item, btn){
+  document.querySelectorAll('.node button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const tagLabel = item.layer === 'structural' ? 'Determinante estructural' : 'Determinante intermedio';
+  panel.innerHTML = `
+    <span class="tag ${item.layer}">${tagLabel}</span>
+    <h2>${item.name}</h2>
+    <h3>Definición</h3>
+    <p>${item.def}</p>
+    <h3>Relación con los DSS</h3>
+    <p>${item.rel}</p>
+  `;
+}
+</script>
+</body>
+</html>
