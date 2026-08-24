@@ -83,17 +83,7 @@
   }
   .case-title{ color:var(--navy); font-weight:700; font-size:17px; margin-bottom:6px; }
   .case-q{ margin-bottom:18px; }
-  .case-q label{ display:block; font-weight:600; font-size:15px; margin-bottom:6px; }
-  .case-q textarea{
-    width:100%;
-    min-height:60px;
-    font-family:inherit;
-    font-size:14.5px;
-    border:1.5px solid #d4d9e2;
-    border-radius:8px;
-    padding:10px 12px;
-    resize:vertical;
-  }
+  .case-q label{ display:block; font-weight:600; font-size:15px; margin-bottom:10px; }
 
   .teacher-toggle{
     display:inline-block;
@@ -248,32 +238,137 @@ quizData.forEach((q, qi) => {
   quizEl.appendChild(qDiv);
 });
 
-// ---- Casos clínicos: preguntas de desarrollo libre ----
-const caseQuestions = [
-  "¿Qué determinantes sociales de la salud identifican en este caso? (mínimo 2)",
-  "¿Cuál de los 3 principios irrenunciables del MAIS está más comprometido, y por qué?",
-  "Dentro de las funciones del TENS, ¿qué acción tomarían primero — y a quién del equipo de salud le corresponde decidir el siguiente paso?",
-  "¿Qué eje de acción del MAIS respalda esa acción?",
-  "¿Qué información le falta al equipo de salud para intervenir mejor en este caso?"
+// ---- Casos clínicos: preguntas de selección múltiple ----
+const case1Questions = [
+  {
+    prompt: "1. ¿Qué determinantes sociales identifican correctamente en este caso?",
+    options: [
+      "Estructural: la Pensión Garantizada Universal (ingreso) / Intermedio: aislamiento geográfico y falta de red de apoyo",
+      "Estructural: aislamiento geográfico / Intermedio: la Pensión Garantizada Universal",
+      "Estructural: la hipertensión / Intermedio: la edad avanzada",
+      "Estructural: vivir en sector rural / Intermedio: el género"
+    ],
+    correct: 0
+  },
+  {
+    prompt: "2. ¿Cuál de los 3 principios irrenunciables del MAIS está más comprometido en este caso?",
+    options: ["Centralidad en las personas", "Integralidad de la atención", "Continuidad del cuidado", "Ninguno, es solo un problema de transporte"],
+    correct: 2
+  },
+  {
+    prompt: "3. Dentro de las funciones del TENS, ¿qué corresponde hacer primero?",
+    options: [
+      "Visitar a don Manuel por cuenta propia, sin coordinar ni dejar registro con el resto del equipo de salud",
+      "Registrar la inasistencia reiterada y comunicar el caso a la enfermera o enfermero del programa cardiovascular",
+      "Esperar a que don Manuel vuelva a agendar por su cuenta",
+      "Derivarlo directamente a la posta rural más cercana"
+    ],
+    correct: 1
+  },
+  {
+    prompt: "4. ¿Qué eje de acción del MAIS respalda la acción tomada en este caso?",
+    options: ["Participación social", "Enfoque en atención abierta", "Tecnología", "Calidad de la atención"],
+    correct: 1
+  },
+  {
+    prompt: "5. ¿Qué información le falta al equipo de salud para intervenir mejor?",
+    options: [
+      "El diagnóstico exacto de su hipertensión",
+      "Motivo real de la inasistencia, si continúa el tratamiento, y si existe otra red de apoyo además del vecino",
+      "El nombre completo del vecino que lo traslada",
+      "Si cuenta con seguro de salud privado"
+    ],
+    correct: 1
+  }
 ];
 
-function renderCase(containerId, caseNum){
+const case2Questions = [
+  {
+    prompt: "1. ¿Qué determinantes sociales identifican correctamente en este caso?",
+    options: [
+      "Entorno físico/ambiental (sin espacios seguros) y condiciones de empleo de la madre (jornada completa)",
+      "Nivel educacional de la madre y etnia de la familia",
+      "Acceso a agua potable y vivienda precaria",
+      "Género de la madre y clase social, en general"
+    ],
+    correct: 0
+  },
+  {
+    prompt: "2. ¿Cuál de los 3 principios irrenunciables del MAIS está más comprometido en este caso?",
+    options: ["Continuidad del cuidado", "Integralidad de la atención", "Centralidad en las personas", "Ninguno, es un tema solo de nutrición"],
+    correct: 1
+  },
+  {
+    prompt: "3. Dentro de las funciones del TENS, ¿qué corresponde hacer primero?",
+    options: [
+      "Indicar un plan de alimentación a la madre por cuenta propia, sin coordinar con la enfermera o nutricionista del programa",
+      "Registrar la antropometría y lo reportado por la madre, y comunicar el caso a la enfermera o nutricionista del programa niño sano",
+      "Solicitar directamente hora con un especialista",
+      "No intervenir, porque no corresponde a las funciones del TENS"
+    ],
+    correct: 1
+  },
+  {
+    prompt: "4. ¿Qué eje de acción del MAIS explica por qué es clave considerar que la abuela cuida al niño día a día?",
+    options: ["Intersectorialidad y territorialidad", "Enfoque de salud familiar", "Participación social", "Calidad de la atención"],
+    correct: 1
+  },
+  {
+    prompt: "5. ¿Qué información le falta al equipo de salud para intervenir mejor?",
+    options: [
+      "El nombre completo de la abuela",
+      "Alimentación real del niño, actividad física, tiempo de pantalla, antecedentes familiares y recursos de la abuela para aplicar cambios",
+      "El horario exacto de trabajo de la madre",
+      "El peso de la abuela"
+    ],
+    correct: 1
+  }
+];
+
+function renderCaseQuiz(containerId, questions){
   const container = document.getElementById(containerId);
-  caseQuestions.forEach((q, i) => {
-    const div = document.createElement('div');
-    div.className = 'case-q';
-    const label = document.createElement('label');
-    label.textContent = q;
-    const ta = document.createElement('textarea');
-    ta.placeholder = 'Escriban aquí su respuesta...';
-    div.appendChild(label);
-    div.appendChild(ta);
-    container.appendChild(div);
+  questions.forEach(q => {
+    const qDiv = document.createElement('div');
+    qDiv.className = 'q';
+    const p = document.createElement('p');
+    p.className = 'prompt';
+    p.textContent = q.prompt;
+    qDiv.appendChild(p);
+
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    q.options.forEach((optText, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.textContent = optText;
+      btn.addEventListener('click', () => {
+        if (qDiv.dataset.solved === '1') return;
+        if (oi === q.correct) {
+          btn.classList.add('correct');
+          qDiv.dataset.solved = '1';
+          qDiv.querySelectorAll('.opt').forEach(b => {
+            if (b !== btn) b.classList.add('disabled-other');
+          });
+          fb.textContent = '✓ Correcto';
+          fb.className = 'feedback correct';
+        } else {
+          btn.classList.add('incorrect');
+          btn.classList.add('disabled-other');
+          fb.textContent = 'No es esa, intenta con otra opción.';
+          fb.className = 'feedback incorrect';
+        }
+      });
+      qDiv.appendChild(btn);
+    });
+
+    qDiv.appendChild(fb);
+    container.appendChild(qDiv);
   });
 }
 
-renderCase('case1', 1);
-renderCase('case2', 2);
+renderCaseQuiz('case1', case1Questions);
+renderCaseQuiz('case2', case2Questions);
 </script>
 </body>
 </html>
