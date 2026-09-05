@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cuestionario AUDIT - Identificación de Trastornos por Consumo de Alcohol</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111;line-height:1.4}
+main{max-width:760px;margin:auto;background:#fff;min-height:100vh;padding:16px}
+h1{font-size:20px;text-align:center;margin:4px 0 6px}
+.subtitle{font-size:13px;text-align:center;color:#555;margin-bottom:18px}
+.section-title{font-size:15px;margin:20px 0 10px;padding:8px 10px;background:#e9ecef;border-radius:6px;font-weight:700}
+label.field-label{display:block;font-size:14px;font-weight:600;margin:10px 0 4px}
+input[type="text"],input[type="date"]{width:100%;font-size:15px;padding:10px;border:1px solid #aaa;border-radius:6px;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Estilo de Preguntas */
+.q-card{border:1px solid #ddd;border-radius:8px;padding:12px;margin-bottom:12px;background:#fafafa}
+.q-title{font-size:14px;font-weight:700;margin-bottom:10px;color:#222}
+.options{display:flex;flex-direction:column;gap:6px}
+.options label{display:flex;align-items:center;gap:8px;font-size:14px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer}
+.options label:hover{background:#f0f4f8}
+.options input{width:auto;margin:0}
+
+/* Panel de Resultados Flotante / Destacado */
+.result-card{position:sticky;bottom:70px;background:#1e293b;color:#fff;padding:14px;border-radius:8px;margin-top:20px;box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.result-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.score-badge{font-size:22px;font-weight:800;color:#38bdf8}
+.risk-title{font-size:16px;font-weight:700;margin-bottom:4px;color:#facc15}
+.action-text{font-size:13px;color:#e2e8f0;line-height:1.3}
+
+/* Botones de Acción */
+.actions{position:sticky;bottom:0;background:#fff;padding:10px 0;border-top:1px solid #ddd;display:flex;gap:8px;margin-top:15px}
+button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}
+.save{background:#0284c7;color:#fff}.clear{background:#e2e8f0;color:#1e293b}
+
+@media print{
+ body{background:#fff}.actions{display:none}main{max-width:none;padding:0}
+ .result-card{position:static;background:#fff;color:#000;border:2px solid #000;box-shadow:none}
+ .score-badge{color:#000}.risk-title{color:#000}.action-text{color:#222}
+ .options label{border:0;padding:2px 0}
+ .q-card{border:0;border-bottom:1px solid #ccc;border-radius:0;padding:8px 0}
+ input{border:0;border-bottom:1px solid #888;border-radius:0;padding:2px}
+}
+</style>
+</head>
+<body>
+<main>
+<form id="auditForm">
+<h1>CUESTIONARIO AUDIT</h1>
+<div class="subtitle">Test de Identificación de Trastornos por Consumo de Alcohol (OMS / MINSAL)</div>
+
+<div class="section-title">IDENTIFICACIÓN DEL PACIENTE</div>
+<div class="grid">
+  <div><label class="field-label">Nombre Paciente</label><input type="text"></div>
+  <div><label class="field-label">RUT</label><input type="text" placeholder="12345678-K"></div>
+  <div><label class="field-label">Fecha de Evaluación</label><input type="date" id="fechaEval"></div>
+  <div><label class="field-label">Evaluador/a</label><input type="text"></div>
+</div>
+
+<div class="section-title">PREGUNTAS DE EVALUACIÓN (AUDIT-10)</div>
+
+<!-- Pregunta 1 -->
+<div class="q-card">
+  <div class="q-title">1. ¿Con qué frecuencia consume bebidas alcohólicas?</div>
+  <div class="options">
+    <label><input type="radio" name="q1" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q1" value="1" onclick="calcularAUDIT()"> Una o menos veces al mes</label>
+    <label><input type="radio" name="q1" value="2" onclick="calcularAUDIT()"> De 2 a 4 veces al mes</label>
+    <label><input type="radio" name="q1" value="3" onclick="calcularAUDIT()"> De 2 a 3 veces a la semana</label>
+    <label><input type="radio" name="q1" value="4" onclick="calcularAUDIT()"> 4 o más veces a la semana</label>
+  </div>
+</div>
+
+<!-- Pregunta 2 -->
+<div class="q-card">
+  <div class="q-title">2. ¿Cuántos tragos o copas de alcohol suele tomar en un día de consumo normal?</div>
+  <div class="options">
+    <label><input type="radio" name="q2" value="0" onclick="calcularAUDIT()"> 1 o 2</label>
+    <label><input type="radio" name="q2" value="1" onclick="calcularAUDIT()"> 3 o 4</label>
+    <label><input type="radio" name="q2" value="2" onclick="calcularAUDIT()"> 5 o 6</label>
+    <label><input type="radio" name="q2" value="3" onclick="calcularAUDIT()"> 7, 8 o 9</label>
+    <label><input type="radio" name="q2" value="4" onclick="calcularAUDIT()"> 10 o más</label>
+  </div>
+</div>
+
+<!-- Pregunta 3 -->
+<div class="q-card">
+  <div class="q-title">3. ¿Con qué frecuencia toma 5 o más tragos en una sola ocasión de consumo?</div>
+  <div class="options">
+    <label><input type="radio" name="q3" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q3" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q3" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q3" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q3" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 4 -->
+<div class="q-card">
+  <div class="q-title">4. En el último año, ¿con qué frecuencia fue incapaz de parar de beber una vez que había empezado?</div>
+  <div class="options">
+    <label><input type="radio" name="q4" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q4" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q4" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q4" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q4" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 5 -->
+<div class="q-card">
+  <div class="q-title">5. En el último año, ¿con qué frecuencia dejó de hacer algo que se esperaba de usted porque había bebido?</div>
+  <div class="options">
+    <label><input type="radio" name="q5" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q5" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q5" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q5" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q5" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 6 -->
+<div class="q-card">
+  <div class="q-title">6. En el último año, ¿con qué frecuencia necesitó beber en ayunas para recuperarse después de haber bebido mucho el día anterior?</div>
+  <div class="options">
+    <label><input type="radio" name="q6" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q6" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q6" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q6" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q6" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 7 -->
+<div class="q-card">
+  <div class="q-title">7. En el último año, ¿con qué frecuencia tuvo sentimientos de culpa o remordimiento después de haber bebido?</div>
+  <div class="options">
+    <label><input type="radio" name="q7" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q7" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q7" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q7" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q7" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 8 -->
+<div class="q-card">
+  <div class="q-title">8. En el último año, ¿con qué frecuencia no pudo recordar lo que había sucedido la noche anterior porque había bebido?</div>
+  <div class="options">
+    <label><input type="radio" name="q8" value="0" onclick="calcularAUDIT()"> Nunca</label>
+    <label><input type="radio" name="q8" value="1" onclick="calcularAUDIT()"> Menos de una vez al mes</label>
+    <label><input type="radio" name="q8" value="2" onclick="calcularAUDIT()"> Mensualmente</label>
+    <label><input type="radio" name="q8" value="3" onclick="calcularAUDIT()"> Semanalmente</label>
+    <label><input type="radio" name="q8" value="4" onclick="calcularAUDIT()"> A diario o casi a diario</label>
+  </div>
+</div>
+
+<!-- Pregunta 9 -->
+<div class="q-card">
+  <div class="q-title">9. ¿Usted o alguna otra persona ha resultado herido porque usted había bebido?</div>
+  <div class="options">
+    <label><input type="radio" name="q9" value="0" onclick="calcularAUDIT()"> No</label>
+    <label><input type="radio" name="q9" value="2" onclick="calcularAUDIT()"> Sí, pero no en el último año</label>
+    <label><input type="radio" name="q9" value="4" onclick="calcularAUDIT()"> Sí, en el último año</label>
+  </div>
+</div>
+
+<!-- Pregunta 10 -->
+<div class="q-card">
+  <div class="q-title">10. ¿Algún familiar, amigo, médico u otro profesional de la salud se ha mostrado preocupado por su consumo de alcohol o le ha sugerido que deje de beber?</div>
+  <div class="options">
+    <label><input type="radio" name="q10" value="0" onclick="calcularAUDIT()"> No</label>
+    <label><input type="radio" name="q10" value="2" onclick="calcularAUDIT()"> Sí, pero no en el último año</label>
+    <label><input type="radio" name="q10" value="4" onclick="calcularAUDIT()"> Sí, en el último año</label>
+  </div>
+</div>
+
+<!-- Tarjeta de Resultados -->
+<div class="result-card">
+  <div class="result-header">
+    <span style="font-weight:600;">RESULTADO AUDIT:</span>
+    <span class="score-badge" id="scoreDisplay">0 / 40</span>
+  </div>
+  <div class="risk-title" id="riskDisplay">Zona I: Consumo de Bajo Riesgo</div>
+  <div class="action-text" id="actionDisplay">Intervención: Educación en Salud y Fomento de estilos de vida saludables.</div>
+</div>
+
+<!-- Botones de Acción -->
+<div class="actions">
+  <button class="clear" type="reset" onclick="setTimeout(calcularAUDIT, 50)">Limpiar</button>
+  <button class="save" type="button" onclick="window.print()">Guardar / Imprimir PDF</button>
+</div>
+
+</form>
+</main>
+
+<script>
+// Cargar la fecha actual de forma predeterminada
+document.getElementById('fechaEval').valueAsDate = new Date();
+
+function calcularAUDIT() {
+  let totalScore = 0;
+  
+  for (let i = 1; i <= 10; i++) {
+    const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selectedOption) {
+      totalScore += parseInt(selectedOption.value, 10);
+    }
+  }
+
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  const riskDisplay = document.getElementById('riskDisplay');
+  const actionDisplay = document.getElementById('actionDisplay');
+
+  scoreDisplay.innerText = `${totalScore} / 40`;
+
+  // Clasificación de acuerdo con las guías clínicas de OMS / MINSAL
+  if (totalScore <= 7) {
+    riskDisplay.innerText = "Zona I: Consumo de Bajo Riesgo";
+    riskDisplay.style.color = "#38bdf8"; // Azul / Celeste
+    actionDisplay.innerText = "Intervención: Educación en Salud, felicitación y fomento de conductas saludables.";
+  } else if (totalScore >= 8 && totalScore <= 15) {
+    riskDisplay.innerText = "Zona II: Consumo de Riesgo";
+    riskDisplay.style.color = "#facc15"; // Amarillo
+    actionDisplay.innerText = "Intervención: Intervención Breve (consejería estructurada para reducir el consumo).";
+  } else if (totalScore >= 16 && totalScore <= 19) {
+    riskDisplay.innerText = "Zona III: Consumo Nocivo / Perjudicial";
+    riskDisplay.style.color = "#f97316"; // Naranja
+    actionDisplay.innerText = "Intervención: Intervención Breve + Derivación asistida o seguimiento continuo en APS.";
+  } else { // 20 a 40 puntos
+    riskDisplay.innerText = "Zona IV: Sospecha de Dependencia al Alcohol";
+    riskDisplay.style.color = "#ef4444"; // Rojo
+    actionDisplay.innerText = "Intervención: Intervención Breve + Derivación a evaluación especializada y tratamiento (Programa de Salud Mental / COSAM).";
+  }
+}
+</script>
+</body>
+</html>
