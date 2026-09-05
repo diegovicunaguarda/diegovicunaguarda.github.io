@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EMPA 20 a 64 años</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;margin:0;background:#f3f4f6;color:#111;line-height:1.35}
+main{max-width:760px;margin:auto;background:#fff;min-height:100vh;padding:14px}
+h1{font-size:20px;text-align:center;margin:4px 0 18px}
+h2{font-size:16px;margin:22px 0 10px;padding:9px;background:#e9ecef;border-radius:8px}
+h3{font-size:14px;margin:16px 0 7px}
+label{display:block;font-size:14px;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;font-size:16px;padding:11px;border:1px solid #aaa;border-radius:7px;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:5px 0 10px}
+.choice label{display:inline-flex;align-items:center;gap:5px;font-weight:400;margin:0;padding:8px 10px;border:1px solid #bbb;border-radius:7px}
+.choice input{width:auto}
+.note{font-size:12px;color:#444;margin:3px 0 8px}
+.row{border-bottom:1px solid #ddd;padding:7px 0}
+.actions{position:sticky;bottom:0;background:#fff;padding:10px 0;border-top:1px solid #ddd;display:flex;gap:8px}
+button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight:700}
+.save{background:#111;color:#fff}.clear{background:#ddd;color:#111}
+@media print{
+ body{background:#fff}.actions{display:none}main{max-width:none;padding:0}
+ input,select,textarea{border:0;border-bottom:1px solid #999;border-radius:0;padding:4px}
+ h2{background:#eee;break-after:avoid}
+}
+</style>
+</head>
+<body>
+<main>
+<h1>EXAMEN DE MEDICINA PREVENTIVA DEL ADULTO (EMPA)<br>20 A 64 AÑOS</h1>
+
+<h2>IDENTIFICACIÓN</h2>
+<div class="grid">
+<div><label>Nombre</label><input></div>
+<div><label>Fecha de Nacimiento</label><input type="date"></div>
+<div><label>Dirección</label><input></div>
+<div><label>Sexo</label><div class="choice"><label><input type="radio" name="sexo"> M</label><label><input type="radio" name="sexo"> F</label></div></div>
+<div><label>Edad (años)</label><input type="number"></div>
+<div><label>RUT</label><input placeholder="________-_"></div>
+<div><label>Fono</label><input type="tel"></div>
+<div><label>Nombre del responsable</label><input></div>
+</div>
+<label>Firma</label><input>
+
+<h2>FACTORES DE RIESGO NO MODIFICABLES</h2>
+<div class="row"><b>a. Mujer postmenopáusica</b><div class="choice"><label><input type="radio" name="a"> Si</label><label><input type="radio" name="a"> No</label></div><div class="note">Consejería en Vida Sana</div></div>
+<div class="row"><b>b. Evento o muerte CV prematura (antes de 55 años en hombres o 65 años en mujeres) en familiares directos (padre, madre, hermanos e hijos)</b><div class="choice"><label><input type="radio" name="b"> Si</label><label><input type="radio" name="b"> No</label></div><div class="note">Consejería en Vida Sana y control anual</div></div>
+<div class="row"><b>c. Antecedentes familiares en 1° grado de Diabetes Mellitus</b><div class="choice"><label><input type="radio" name="c"> Si</label><label><input type="radio" name="c"> No</label></div><div class="note">Consejería en Vida Sana</div></div>
+<div class="row"><b>d. Antecedentes de macrosomía (Hijo ≥ 4,000 g)</b><div class="choice"><label><input type="radio" name="d"> Si</label><label><input type="radio" name="d"> No</label></div><div class="note">Consejería en Vida Sana</div></div>
+<div class="row"><b>e. Antecedentes de Diabetes Gestacional</b><div class="choice"><label><input type="radio" name="e"> Si</label><label><input type="radio" name="e"> No</label></div><div class="note">Consejería en Vida Sana y control anual</div></div>
+
+<h2>FACTORES DE RIESGO MODIFICABLES</h2>
+<h3>a. Obesidad</h3>
+<div class="grid"><div><label>Peso Kg</label><input type="number" step="0.1"></div><div><label>Talla cms</label><input type="number"></div><div><label>IMC Kg/m²</label><input type="number" step="0.1"></div></div>
+<div class="note">≥ 25 Kg/m², Derivar a Programa Elige Vida Sana</div>
+
+<label>Sedentarismo: Actividad Física &lt; a 30 min, y &lt; a 3 veces por semana</label>
+<div class="choice"><label><input type="radio" name="sed"> No</label><label><input type="radio" name="sed"> Si</label></div>
+<div class="note">Consejería en actividad física</div>
+
+<label>C. cintura cms</label><input type="number" step="0.1">
+<div class="note">Si ≥ 88 cms en mujeres y ≥ 102 cms en hombres: Consejería en Vida Sana</div>
+
+<h3>b. Tabaquismo. ¿Usted fuma?</h3>
+<div class="choice"><label><input type="radio" name="tab"> No</label><label><input type="radio" name="tab"> Si</label></div>
+<div class="note">Consejería breve</div>
+
+<h3>c. Hipertensión arterial</h3>
+<div class="grid"><div><label>PAS mmHg</label><input type="number"></div><div><label>PAD mmHg</label><input type="number"></div></div>
+<div class="note">PAS ≥ 140 mmHg — No / Si — Referir a pesquisa de PA.</div>
+<div class="note">Si pesquisa PA ≥ 140/90 mmHg —</div>
+<div class="note">PAD ≥ 90 mmHg — No / Si — Ingreso a PSCV HEARTS</div>
+
+<h3>d. Dislipidemia de 40 a 64 años</h3>
+<label>Colesterol total mg/dl</label><input type="number">
+<div class="note">&lt; 200 mg/dl: Control anual; ≥ 200 mg/dl: Perfil lipídico y confirmación diagnóstica</div>
+<h3>Perfil lipídico</h3>
+<div class="grid">
+<div><label>Colesterol total mg/dl</label><input type="number"></div>
+<div><label>C-HDL mg/dl</label><input type="number"></div>
+<div><label>C-LDL mg/dl</label><input type="number"></div>
+<div><label>Triglicéridos mg/dl</label><input type="number"></div>
+</div>
+<div class="note">Col. Total ≥ 240 mg/dl y/o Col. LDL ≥ 160 mg/dl — Ingreso a PSCV</div>
+
+<h3>e. Diabetes Mellistus en población de riesgo</h3>
+<label>Glicemia ayunas mg/dl</label><input type="number">
+<div class="note">Glicemia basal ≥ 200 mg/dl: Diabetes - Ingreso a PSCV</div>
+<label>Glicemia basal mg/dl</label><input type="number">
+<label>Glicemia post carga mg/dl</label><input type="number">
+<div class="note">Si ≥ 100 mg/dl y &lt; 126 mg/dl, realizar PTGO</div>
+<div class="note">Glicemia basal ≥ 126 mg/dl o glicemia 2h post carga ≥ 200 mg/dl: Diabetes - Ingreso a PSCV</div>
+<label>Si ≥ 126 mg/dl, repetir glicemia mg/dl</label><input type="number">
+<div class="note">≥ 126 mg/dl: Diabetes- Ingreso a PSCV</div>
+
+<h2>SÍNDROME METABÓLICO (Diagnóstico con 3 o más de los siguientes criterios)</h2>
+<div class="row"><b>Obesidad abdominal: Hombres ≥ 102 cm / Mujeres ≥ 88 cm</b><div class="choice"><label><input type="radio" name="sm1"> Si</label><label><input type="radio" name="sm1"> No</label></div></div>
+<div class="row"><b>Colesterol HDL: Hombres ≤ 40 mg/dl/ Mujeres ≤ de 50 mg/dl</b><div class="choice"><label><input type="radio" name="sm2"> Si</label><label><input type="radio" name="sm2"> No</label></div></div>
+<div class="row"><b>Triglicéridos: ≥ 150</b><div class="choice"><label><input type="radio" name="sm3"> Si</label><label><input type="radio" name="sm3"> No</label></div></div>
+<div class="row"><b>Presión arterial: ≥ 130 / 85 mmHg</b><div class="choice"><label><input type="radio" name="sm4"> Si</label><label><input type="radio" name="sm4"> No</label></div></div>
+<div class="row"><b>Glucosa ayunas: ≥ 110 mg/dl</b><div class="choice"><label><input type="radio" name="sm5"> Si</label><label><input type="radio" name="sm5"> No</label></div></div>
+
+<h2>CÁNCER (SÓLO MUJERES)</h2>
+<div class="row"><b>Mamografía de 50 años</b><div class="choice"><label><input type="radio" name="mam1"> Si</label><label><input type="radio" name="mam1"> No</label><label><input type="radio" name="mam1"> Normal</label><label><input type="radio" name="mam1"> Alterado</label><label><input type="radio" name="mam1"> Referencia</label></div></div>
+<div class="row"><b>Mamografía en otras edades</b><div class="choice"><label><input type="radio" name="mam2"> Si</label><label><input type="radio" name="mam2"> No</label><label><input type="radio" name="mam2"> Referencia</label></div></div>
+<div class="row"><b>Papanicolaou (PAP) vigente</b><div class="choice"><label><input type="radio" name="pap"> Si</label><label><input type="radio" name="pap"> No</label><label><input type="radio" name="pap"> Normal</label><label><input type="radio" name="pap"> Alterado</label><label><input type="radio" name="pap"> Referencia</label></div></div>
+
+<h2>SÍFILIS EN PERSONAS CON CONDUCTAS DE RIESGO</h2>
+<div class="note">Tiene parejas sexuales múltiples, sexo sin protección u otras enfermedades de transmisión sexual (ETS)</div>
+<div class="choice"><label><input type="radio" name="sif1"> No</label><label><input type="radio" name="sif1"> Si</label></div>
+<div class="note">Solicitar VDRL o RPR</div>
+<label>Resultado VDRL o RPR</label>
+<div class="choice"><label><input type="radio" name="sif2"> Negativo</label><label><input type="radio" name="sif2"> Positivo</label></div>
+<div class="note">Referir a Programa</div>
+
+<h2>TUBERCULOSIS</h2>
+<div class="note">Ha tenido tos o desgarro por más de 15 días</div>
+<div class="choice"><label><input type="radio" name="tb"> No</label><label><input type="radio" name="tb"> Si</label></div>
+<div class="note">Baciloscopía 1° muestra de inmediato y entrega de 2° caja</div>
+
+<h2>BEBER PROBLEMA</h2>
+<label>Consumo de bebidas alcohólicas</label>
+<div class="choice"><label><input type="radio" name="alc"> No</label><label><input type="radio" name="alc"> Si</label></div>
+<div class="note">AUDIT puntos ≤ 15 puntos, realice intervención breve;<br>≥ 16 puntos, realice intervención breve y derivación asistida a Programa Salud Mental</div>
+<label>AUDIT puntos</label><input type="number">
+
+<h2>OBSERVACIONES</h2>
+<textarea rows="7"></textarea>
+
+<div class="grid">
+<div><label>CECOSF</label><input value="Tejas Verdes"></div>
+<div><label>Sector</label><input value="Previsión"></div>
+</div>
+<label>San Antonio</label>
+
+<div class="actions">
+<button class="clear" type="button" onclick="document.querySelector('form')?.reset(); location.reload()">Limpiar</button>
+<button class="save" type="button" onclick="window.print()">Guardar como PDF</button>
+</div>
+</main>
+<form></form>
+</body>
+</html>
