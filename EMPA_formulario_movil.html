@@ -31,6 +31,8 @@ button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight
 </head>
 <body>
 <main>
+<!-- Se envuelve todo el examen en la etiqueta <form id="empaForm"> -->
+<form id="empaForm">
 <h1>EXAMEN DE MEDICINA PREVENTIVA DEL ADULTO (EMPA)<br>20 A 64 AÑOS</h1>
 
 <h2>IDENTIFICACIÓN</h2>
@@ -55,7 +57,11 @@ button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight
 
 <h2>FACTORES DE RIESGO MODIFICABLES</h2>
 <h3>a. Obesidad</h3>
-<div class="grid"><div><label>Peso Kg</label><input type="number" step="0.1"></div><div><label>Talla cms</label><input type="number"></div><div><label>IMC Kg/m²</label><input type="number" step="0.1"></div></div>
+<div class="grid">
+  <div><label>Peso Kg</label><input type="number" id="peso" step="0.1" oninput="calcularIMC()"></div>
+  <div><label>Talla cms</label><input type="number" id="talla" oninput="calcularIMC()"></div>
+  <div><label>IMC Kg/m²</label><input type="number" id="imc" step="0.1" readonly></div>
+</div>
 <div class="note">≥ 25 Kg/m², Derivar a Programa Elige Vida Sana</div>
 
 <label>Sedentarismo: Actividad Física &lt; a 30 min, y &lt; a 3 veces por semana</label>
@@ -87,7 +93,7 @@ button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight
 </div>
 <div class="note">Col. Total ≥ 240 mg/dl y/o Col. LDL ≥ 160 mg/dl — Ingreso a PSCV</div>
 
-<h3>e. Diabetes Mellistus en población de riesgo</h3>
+<h3>e. Diabetes Mellitus en población de riesgo</h3>
 <label>Glicemia ayunas mg/dl</label><input type="number">
 <div class="note">Glicemia basal ≥ 200 mg/dl: Diabetes - Ingreso a PSCV</div>
 <label>Glicemia basal mg/dl</label><input type="number">
@@ -131,17 +137,27 @@ button{flex:1;padding:13px;border:0;border-radius:8px;font-size:16px;font-weight
 <h2>OBSERVACIONES</h2>
 <textarea rows="7"></textarea>
 
-<div class="grid">
-<div><label>CECOSF</label><input value="Tejas Verdes"></div>
-<div><label>Sector</label><input value="Previsión"></div>
-</div>
-<label>San Antonio</label>
-
 <div class="actions">
-<button class="clear" type="button" onclick="document.querySelector('form')?.reset(); location.reload()">Limpiar</button>
+<button class="clear" type="reset">Limpiar</button>
 <button class="save" type="button" onclick="window.print()">Guardar como PDF</button>
 </div>
+</form>
 </main>
-<form></form>
+
+<script>
+function calcularIMC() {
+  const peso = parseFloat(document.getElementById('peso').value);
+  const tallaCms = parseFloat(document.getElementById('talla').value);
+  const campoIMC = document.getElementById('imc');
+
+  if (peso > 0 && tallaCms > 0) {
+    const tallaM = tallaCms / 100;
+    const imc = peso / (tallaM * tallaM);
+    campoIMC.value = imc.toFixed(1);
+  } else {
+    campoIMC.value = '';
+  }
+}
+</script>
 </body>
 </html>
