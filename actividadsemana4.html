@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad — Programas de Salud en Atención Primaria</title>
+<style>
+  :root {
+    --navy: #1b3a6b;
+    --blue: #2f6fb0;
+    --light-blue: #eaf2fa;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --red: #c62828;
+    --red-bg: #fdecea;
+    --gray: #5a6472;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f4f6f9;
+    color: #1f2733;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    color: white;
+    padding: 28px 20px 24px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.5rem; }
+  header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    background: #f4f6f9;
+    padding: 10px 0 14px;
+    z-index: 5;
+  }
+  .progress-track {
+    background: #dde3ea;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--blue);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 6px;
+    text-align: right;
+  }
+  .section-title {
+    color: var(--navy);
+    font-size: 1.1rem;
+    margin: 30px 0 4px;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin: 0 0 16px;
+  }
+  .case-box {
+    background: white;
+    border-left: 4px solid var(--blue);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 10px 0 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .case-box h3 { margin: 0 0 10px; color: var(--navy); font-size: 1.05rem; }
+  .case-box .person { margin: 10px 0; }
+  .case-box .person b { color: var(--navy); }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .q-number {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .q-prompt {
+    font-size: 1.02rem;
+    margin: 0 0 14px;
+    color: #1f2733;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f8fafc;
+    border: 1.5px solid #dde3ea;
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    font-size: 0.96rem;
+    cursor: pointer;
+    color: #1f2733;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:hover:not(.correct):not(.incorrect):not([disabled]) {
+    border-color: var(--blue);
+    background: var(--light-blue);
+  }
+  .option.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .option.incorrect {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .option[disabled] { cursor: default; }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--green-bg); color: var(--green); }
+  .feedback.no { background: var(--red-bg); color: var(--red); }
+  .summary {
+    display: none;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    padding: 30px 20px;
+    margin-top: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .summary.show { display: block; }
+  .summary h2 { color: var(--navy); margin-top: 0; }
+  .summary .score { font-size: 2.2rem; color: var(--blue); font-weight: 700; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Programas de Salud en Atención Primaria</h1>
+  <p>Actividad interactiva — Clase 4</p>
+</header>
+
+<main>
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 de 9 respondidas</div>
+  </div>
+
+  <div class="section-title">Parte 1 — Preguntas de materia</div>
+  <p class="section-sub">Selecciona la alternativa correcta. Puedes volver a intentarlo si te equivocas.</p>
+  <div id="materia"></div>
+
+  <div class="section-title">Parte 2 — Caso familiar</div>
+  <p class="section-sub">Lee la situación de cada integrante y responde qué corresponde en cada caso.</p>
+
+  <div class="case-box">
+    <h3>Familia Contreras</h3>
+    <div class="person"><b>Doña Elena, 78 años.</b> Vive con su hija. Le cuesta cada vez más levantarse sola y bañarse; su hija debe ayudarla en varias actividades del día. No se ha hecho el examen preventivo del adulto mayor en más de un año.</div>
+    <div class="person"><b>Marisol, 52 años, hija de Elena.</b> Está en control por presión arterial elevada; retira sus medicamentos y se controla mensualmente en el CESFAM.</div>
+    <div class="person"><b>Benjamín, 4 meses, nieto de Elena.</b> Su madre (otra hija de Elena) tuvo que volver a trabajar y ya no puede seguir con lactancia exclusiva.</div>
+    <div class="person"><b>Pedro, yerno de Elena, cuidador principal.</b> Durante un control de salud, comenta que últimamente está bebiendo alcohol "para aguantar el día" con más frecuencia que antes.</div>
+  </div>
+
+  <div id="caso"></div>
+
+  <div class="summary" id="summary">
+    <h2>¡Actividad completada!</h2>
+    <div class="score" id="scoreText"></div>
+    <p>Revisen juntos las preguntas que les costó más antes de continuar.</p>
+  </div>
+</main>
+
+<script>
+const materiaQuestions = [
+  {
+    prompt: "¿Qué ministerio financia la Red Local de Apoyos y Cuidados?",
+    options: [
+      "Ministerio de Salud",
+      "Ministerio de Desarrollo Social y Familia",
+      "Ministerio del Interior y Seguridad Pública",
+      "Ministerio de Educación"
+    ],
+    correct: 1,
+    feedback: "Correcto. La Red Local de Apoyos y Cuidados pertenece al Sistema Chile Cuida, del Ministerio de Desarrollo Social y Familia, aunque se ejecuta en articulación con los CESFAM.",
+    feedbackWrong: "La Red Local de Apoyos y Cuidados no depende de Salud: es un componente del Sistema Chile Cuida, a cargo del Ministerio de Desarrollo Social y Familia."
+  },
+  {
+    prompt: "¿Cuál es el objetivo principal del PSCV?",
+    options: [
+      "Prevenir enfermedades inmunoprevenibles",
+      "Controlar y compensar la hipertensión, la diabetes y la dislipidemia",
+      "Mejorar el estado nutricional de los adultos mayores",
+      "Apoyar a personas en situación de dependencia"
+    ],
+    correct: 1,
+    feedback: "Correcto. El PSCV se enfoca en el control y la compensación de los principales factores de riesgo cardiovascular.",
+    feedbackWrong: "Ese objetivo corresponde a otro programa. El PSCV se centra en el control y compensación de hipertensión, diabetes y dislipidemia."
+  },
+  {
+    prompt: "¿Qué programa depende del Ministerio del Interior y Seguridad Pública, y no del Ministerio de Salud?",
+    options: ["PNI", "PACAM", "SENDA", "PNAC"],
+    correct: 2,
+    feedback: "Correcto. SENDA es un buen ejemplo de que la salud comunitaria también se articula desde ministerios distintos a Salud.",
+    feedbackWrong: "SENDA es el que corresponde: depende del Ministerio del Interior y Seguridad Pública, no de Salud."
+  },
+  {
+    prompt: "¿Qué debe tener al día una persona para poder acceder al PACAM?",
+    options: [
+      "Su cédula de identidad vigente",
+      "El EMPAM (Examen de Medicina Preventiva del Adulto Mayor)",
+      "Una derivación del municipio",
+      "Su libreta de matrimonio"
+    ],
+    correct: 1,
+    feedback: "Correcto. El EMPAM evalúa funcionalidad física, cognitiva, emocional y social, y es requisito para mantenerse en el PACAM.",
+    feedbackWrong: "El requisito clínico clave es el EMPAM al día, junto con controles de salud y vacunas vigentes."
+  },
+  {
+    prompt: "¿Qué hace el TENS cuando administra una vacuna del PNI?",
+    options: [
+      "Solo la administra, sin registrar nada",
+      "Administra la vacuna y registra en el RNI",
+      "Deriva al paciente para que otro profesional la administre",
+      "Solo educa a la familia, no administra vacunas"
+    ],
+    correct: 1,
+    feedback: "Correcto. El TENS administra la vacuna, registra en el Registro Nacional de Inmunizaciones (RNI) y educa a la familia sobre el esquema.",
+    feedbackWrong: "El TENS sí administra la vacuna, y además debe registrarla en el RNI — el registro es parte esencial de la prestación."
+  }
+];
+
+const casoQuestions = [
+  {
+    prompt: "Doña Elena, por la dependencia moderada que está mostrando, ¿a qué programa corresponde su situación?",
+    options: ["PSCV", "PNAC", "Red Local de Apoyos y Cuidados (PRLAC)", "PACAM"],
+    correct: 2,
+    feedback: "Correcto. La dependencia moderada y la necesidad de apoyo en actividades diarias activan la Red Local de Apoyos y Cuidados (PRLAC), no el PACAM (que además ella no puede usar aún, porque no tiene su EMPAM al día).",
+    feedbackWrong: "Piensa en lo que describe el caso: dificultad para actividades de la vida diaria y necesidad de apoyo de su cuidadora. Eso corresponde a la Red Local de Apoyos y Cuidados (PRLAC)."
+  },
+  {
+    prompt: "Marisol, por su control de presión arterial, ¿a qué programa corresponde su situación?",
+    options: ["PNI", "PSCV", "SENDA", "PRLAC"],
+    correct: 1,
+    feedback: "Correcto. El control y manejo de la hipertensión corresponde al Programa de Salud Cardiovascular.",
+    feedbackWrong: "El control de presión arterial y la entrega de fármacos para su manejo corresponden al PSCV."
+  },
+  {
+    prompt: "Benjamín, porque su madre ya no puede continuar con lactancia exclusiva, ¿a qué programa corresponde su situación?",
+    options: ["PACAM", "PNAC", "PRLAC", "PNI"],
+    correct: 1,
+    feedback: "Correcto. El apoyo con fórmula para lactantes corresponde al PNAC.",
+    feedbackWrong: "El apoyo con fórmula cuando la lactancia exclusiva no es posible corresponde al PNAC."
+  },
+  {
+    prompt: "Pedro muestra señales de consumo de riesgo durante un control de salud. ¿Qué corresponde hacer?",
+    options: [
+      "Darle consejos personales para que reduzca el consumo, sin registrar ni derivar a nadie",
+      "Aplicar un instrumento de tamizaje y derivar a salud mental o COSAM si corresponde",
+      "No corresponde intervenir porque él no es el paciente en control",
+      "Inscribirlo directamente en el PACAM"
+    ],
+    correct: 1,
+    feedback: "Correcto. El TENS aplica un instrumento de tamizaje (por ejemplo ASSIST o AUDIT) y, si corresponde, deriva a salud mental o COSAM. Recuerda que SENDA Previene actúa en prevención comunitaria, pero la atención clínica individual del paciente se canaliza por la red de salud mental.",
+    feedbackWrong: "Actuar solo, sin registrar ni derivar, deja a Pedro sin el seguimiento que necesita. Lo que corresponde es tamizar y, si procede, derivar a salud mental o COSAM."
+  }
+];
+
+let answered = 0;
+const total = materiaQuestions.length + casoQuestions.length;
+let correctCount = 0;
+
+function buildQuestion(container, q, index, prefix) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const num = document.createElement('div');
+  num.className = 'q-number';
+  num.textContent = prefix + ' ' + (index + 1);
+  card.appendChild(num);
+
+  const prompt = document.createElement('p');
+  prompt.className = 'q-prompt';
+  prompt.textContent = q.prompt;
+  card.appendChild(prompt);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+
+  let solved = false;
+  let firstAttempt = true; // Flag: registra si el usuario aún no ha cometido errores en esta pregunta
+
+  q.options.forEach((optText, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = optText;
+    btn.addEventListener('click', () => {
+      if (solved) return;
+      if (i === q.correct) {
+        btn.classList.add('correct');
+        feedback.textContent = q.feedback;
+        feedback.className = 'feedback show ok';
+        solved = true;
+        answered++;
+        
+        // Solo suma al conteo de primer intento si no falló antes en esta misma pregunta
+        if (firstAttempt) {
+          correctCount++;
+        }
+        
+        updateProgress();
+        card.querySelectorAll('.option').forEach(o => o.setAttribute('disabled', 'true'));
+      } else {
+        btn.classList.add('incorrect');
+        feedback.textContent = q.feedbackWrong;
+        feedback.className = 'feedback show no';
+        btn.setAttribute('disabled', 'true');
+        firstAttempt = false; // Como se equivocó, ya no califica para "primer intento"
+      }
+    });
+    card.appendChild(btn);
+  });
+
+  card.appendChild(feedback);
+  container.appendChild(card);
+}
+
+function updateProgress() {
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = answered + ' de ' + total + ' respondidas';
+  if (answered === total) {
+    document.getElementById('summary').classList.add('show');
+    document.getElementById('scoreText').textContent = correctCount + ' / ' + total + ' al primer intento';
+  }
+}
+
+const materiaContainer = document.getElementById('materia');
+materiaQuestions.forEach((q, i) => buildQuestion(materiaContainer, q, i, 'Pregunta'));
+
+const casoContainer = document.getElementById('caso');
+casoQuestions.forEach((q, i) => buildQuestion(casoContainer, q, i, 'Situación'));
+</script>
+
+</body>
+</html>
