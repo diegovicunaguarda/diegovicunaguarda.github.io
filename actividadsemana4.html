@@ -259,7 +259,7 @@ const casoQuestions = [
     prompt: "Doña Elena, por la dependencia moderada que está mostrando, ¿a qué programa corresponde su situación?",
     options: ["PSCV", "PNAC", "Red Local de Apoyos y Cuidados (PRLAC)", "PACAM"],
     correct: 2,
-    feedback: "Correcto. La dependencia moderada y la necesidad de apoyo en actividades diarias activan la Red Local de Apoyos y Cuidados (PRLAC), no el PACAM (que además ella no puede usar aún, porque no tiene su EMPAM al día).",
+    feedback: "Correcto. La dependencia moderada activa la Red Local de Apoyos y Cuidados (PRLAC). Respecto al PACAM, si bien le corresponde por edad, requerirá regularizar su EMPAM para recibir los productos.",
     feedbackWrong: "Piensa en lo que describe el caso: dificultad para actividades de la vida diaria y necesidad de apoyo de su cuidadora. Eso corresponde a la Red Local de Apoyos y Cuidados (PRLAC)."
   },
   {
@@ -312,7 +312,7 @@ function buildQuestion(container, q, index, prefix) {
   feedback.className = 'feedback';
 
   let solved = false;
-  let firstAttempt = true; // Flag: registra si el usuario aún no ha cometido errores en esta pregunta
+  let firstAttempt = true;
 
   q.options.forEach((optText, i) => {
     const btn = document.createElement('button');
@@ -327,7 +327,6 @@ function buildQuestion(container, q, index, prefix) {
         solved = true;
         answered++;
         
-        // Solo suma al conteo de primer intento si no falló antes en esta misma pregunta
         if (firstAttempt) {
           correctCount++;
         }
@@ -339,8 +338,10 @@ function buildQuestion(container, q, index, prefix) {
         feedback.textContent = q.feedbackWrong;
         feedback.className = 'feedback show no';
         btn.setAttribute('disabled', 'true');
-        firstAttempt = false; // Como se equivocó, ya no califica para "primer intento"
+        firstAttempt = false;
       }
+      
+      feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
     card.appendChild(btn);
   });
@@ -354,8 +355,10 @@ function updateProgress() {
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressLabel').textContent = answered + ' de ' + total + ' respondidas';
   if (answered === total) {
-    document.getElementById('summary').classList.add('show');
+    const summary = document.getElementById('summary');
+    summary.classList.add('show');
     document.getElementById('scoreText').textContent = correctCount + ' / ' + total + ' al primer intento';
+    summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
 
