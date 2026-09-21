@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad — Persona Mayor y Tuberculosis</title>
+<style>
+  :root {
+    --navy: #1b3a6b;
+    --blue: #2f6fb0;
+    --light-blue: #eaf2fa;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --red: #c62828;
+    --red-bg: #fdecea;
+    --gray: #5a6472;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f4f6f9;
+    color: #1f2733;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    color: white;
+    padding: 28px 20px 24px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.5rem; }
+  header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    background: #f4f6f9;
+    padding: 10px 0 14px;
+    z-index: 5;
+  }
+  .progress-track {
+    background: #dde3ea;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--blue);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-top: 6px;
+    text-align: right;
+  }
+  .section-title {
+    color: var(--navy);
+    font-size: 1.1rem;
+    margin: 30px 0 4px;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin: 0 0 16px;
+  }
+  .case-box {
+    background: white;
+    border-left: 4px solid var(--blue);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin: 10px 0 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .case-box h3 { margin: 0 0 10px; color: var(--navy); font-size: 1.05rem; }
+  .case-box .person { margin: 10px 0; }
+  .case-box .person b { color: var(--navy); }
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .q-number {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .q-prompt {
+    font-size: 1.02rem;
+    margin: 0 0 14px;
+    color: #1f2733;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f8fafc;
+    border: 1.5px solid #dde3ea;
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    font-size: 0.96rem;
+    cursor: pointer;
+    color: #1f2733;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:hover:not(.correct):not(.incorrect):not([disabled]) {
+    border-color: var(--blue);
+    background: var(--light-blue);
+  }
+  .option.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .option.incorrect {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .option[disabled] { cursor: default; }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--green-bg); color: var(--green); }
+  .feedback.no { background: var(--red-bg); color: var(--red); }
+  .summary {
+    display: none;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    padding: 30px 20px;
+    margin-top: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .summary.show { display: block; }
+  .summary h2 { color: var(--navy); margin-top: 0; }
+  .summary .score { font-size: 2.2rem; color: var(--blue); font-weight: 700; margin: 8px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Persona Mayor y Tuberculosis</h1>
+  <p>Actividad interactiva — Clase 5</p>
+</header>
+
+<main>
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 de 10 respondidas</div>
+  </div>
+
+  <div class="section-title">Parte 1 — Preguntas de materia</div>
+  <p class="section-sub">Selecciona la alternativa correcta. Puedes volver a intentarlo si te equivocas.</p>
+  <div id="materia"></div>
+
+  <div class="section-title">Parte 2 — Caso familiar</div>
+  <p class="section-sub">Lee la situación de la Familia Morales y responde cada una de las interrogantes clínicas.</p>
+
+  <div class="case-box">
+    <h3>Familia Morales</h3>
+    <div class="person"><b>Don Segundo, 72 años.</b> Acude al CESFAM acompañado por su hija. Refiere tos persistente con expectoración de 3 semanas de evolución, sudoración nocturna y pérdida involuntaria de 4 kg de peso en el último mes. Presenta antecedentes de HTA y DM2. Su último EMPAM fue hace 2 años y no asiste a control cardiovascular hace 8 meses.</div>
+    <div class="person"><b>Claudia, 45 años (hija y cuidadora).</b> Acompaña a su padre y consulta en el centro por qué este mes no pudieron retirar los alimentos del PACAM (Bebida Láctea y Crema Nutra Max) en la bodega del consultorio.</div>
+  </div>
+
+  <div id="caso"></div>
+
+  <div class="summary" id="summary">
+    <h2>¡Actividad completada!</h2>
+    <div class="score" id="scoreText"></div>
+    <p>Revisen juntos los conceptos clave y casos dudosos antes del cierre de la clase.</p>
+  </div>
+</main>
+
+<script>
+const materiaQuestions = [
+  {
+    prompt: "¿Cuál es la diferencia principal entre una Atención Domiciliaria puntual y una Visita Domiciliaria Integral (VDI)?",
+    options: [
+      "La atención domiciliaria evalúa a toda la familia, mientras que la VDI se limita a curaciones o toma de signos.",
+      "La atención domiciliaria es una prestación puntual (ej. curación o signos vitales), mientras que la VDI es una evaluación biopsicosocial planificada de la persona y su entorno familiar.",
+      "La VDI la realizan únicamente médicos especialistas, mientras que la atención domiciliaria es administrativa.",
+      "Ambos términos significan exactamente lo mismo en la red de Atención Primaria de Salud."
+    ],
+    correct: 1,
+    feedback: "Correcto. La Atención Domiciliaria resuelve una técnica puntual, mientras que la VDI evalúa el contexto bio-psico-social y la dinámica familiar.",
+    feedbackWrong: "Recuerda: la atención domiciliaria es procedimental/puntual. La VDI es una evaluación integral y planificada con enfoque familiar."
+  },
+  {
+    prompt: "En la valoración familiar en APS, ¿qué representa principalmente el Genograma (o Familiograma)?",
+    options: [
+      "Las relaciones de la familia con las instituciones comunitarias como el colegio y el municipio.",
+      "La percepción subjetiva de satisfacción que siente cada integrante con su familia.",
+      "La estructura interna de la familia mapeada en al menos 3 generaciones, sus vínculos y antecedentes de salud.",
+      "El nivel de ingreso socioeconómico y tipo de contrato laboral de la jefatura de hogar."
+    ],
+    correct: 2,
+    feedback: "Correcto. El Genograma grafica la estructura familiar de al menos 3 generaciones, sus relaciones y antecedentes mórbidos.",
+    feedbackWrong: "El Genograma mira 'hacia adentro': representa la estructura biológica y relacional de la familia en 3 generaciones."
+  },
+  {
+    prompt: "¿A qué grupo poblacional está dirigido universalmente el Examen de Medicina Preventiva del Adulto Mayor (EMPAM)?",
+    options: [
+      "Personas de 60 años y más con diagnóstico previo de Diabetes o HTA.",
+      "Personas de 65 años y más, para evaluar su funcionalidad física, cognitiva y social.",
+      "Personas entre 20 y 64 años con factores de riesgo cardiovascular.",
+      "Exclusivamente a adultos mayores residentes en ELEAM."
+    ],
+    correct: 1,
+    feedback: "Correcto. El EMPAM es universal desde los 65 años en la red pública y evalúa la autonomía y funcionalidad del usuario.",
+    feedbackWrong: "El EMPAM se aplica anualmente a toda persona de 65 años y más en la APS para medir funcionalidad."
+  },
+  {
+    prompt: "Según la norma ministerial de APS, ¿cuándo se identifica a una persona como Sintomático Respiratorio (SR)?",
+    options: [
+      "Cuando presenta fiebre alta y dolor lumbar de más de 3 días de evolución.",
+      "Cuando presenta tos con expectoración (flemas) por 15 días o más.",
+      "Cuando presenta secreción nasal transparente y estornudos por más de 1 semana.",
+      "Únicamente cuando ingresa derivado desde la Unidad de Cuidados Intensivos."
+    ],
+    correct: 1,
+    feedback: "Correcto. Todo usuario que consulte con tos productiva (con flemas) por 15 días o más es un Sintomático Respiratorio (SR).",
+    feedbackWrong: "La definición operativa oficial de Sintomático Respiratorio (SR) es tos con expectoración por 15 días o más."
+  },
+  {
+    prompt: "Ante la atención de un usuario sospechoso de Tuberculosis en el CESFAM, ¿cuál es la medida inmediata de bioseguridad que debe aplicar el TENS?",
+    options: [
+      "Indicar al usuario que se retire inmediatamente a su hogar sin atenderlo para evitar contagios.",
+      "Colocar mascarilla quirúrgica al usuario, usar mascarilla N95/KN95 el personal, ventilar el espacio y notificar al profesional responsable.",
+      "Aplicar vacunas del calendario al usuario antes de solicitar la muestra de expectoración.",
+      "Omitir el uso de elementos de protección personal si el usuario afirma que solo tiene un resfrío."
+    ],
+    correct: 1,
+    feedback: "Correcto. La prevención de transmisión aérea exige mascarilla quirúrgica para la persona, respirador N95 para el personal, espacio ventilado y aviso al profesional.",
+    feedbackWrong: "Ante sospecha por vía aérea: mascarilla quirúrgica al paciente, mascarilla N95/KN95 para el TENS, ventilación y comunicación inmediata."
+  }
+];
+
+const casoQuestions = [
+  {
+    prompt: "Frente a la tos con expectoración de 3 semanas que presenta Don Segundo, ¿cuál es la conducta inmediata del TENS?",
+    options: [
+      "Indicarle reposo en casa e infusiones calientes hasta su próximo control cardiovascular en 2 meses.",
+      "Identificarlo como Sintomático Respiratorio (SR), registrarlo en el libro de SR, tomar/solicitar baciloscopía y avisar al profesional.",
+      "Tomar la muestra de expectoración pero omitir el registro en el libro de SR para evitar trámites.",
+      "Derivarlo de inmediato a urgencias hospitalarias sin tomar muestras ni atenderlo en el CESFAM."
+    ],
+    correct: 1,
+    feedback: "Correcto. Al presentar tos >15 días, el TENS activa la pesquisa: identificación de SR, registro obligatorio, baciloscopía y aviso al equipo.",
+    feedbackWrong: "Don Segundo cumple criterio de Sintomático Respiratorio (tos >15 días). Debe registrarse en el libro de SR, tomarse la baciloscopía y notificar al profesional."
+  },
+  {
+    prompt: "¿Qué instrucción técnica precisa debe entregar el TENS a Don Segundo para la toma de muestra de baciloscopía?",
+    options: [
+      "Solicitarle que junte saliva en cualquier frasco traído desde su hogar.",
+      "Entregar frasco estéril rotulado e indicar expectoración profunda (desgarro, no saliva) preferentemente matutina, resguardando la bioseguridad.",
+      "Indicarle que realice el desgarro frente a otros pacientes en la sala de espera para supervisarlo.",
+      "Decirle que la muestra no es necesaria porque sus síntomas corresponden solo a su hipertensión."
+    ],
+    correct: 1,
+    feedback: "Correcto. La muestra debe ser expectoración de desgarro profundo (no saliva), depositada en frasco estéril rotulado y bajo normas de bioseguridad.",
+    feedbackWrong: "El TENS debe educar sobre el desgarro profundo (no saliva superficial), entregar frasco estéril rotulado y resguardar la privacidad y bioseguridad."
+  },
+  {
+    prompt: "Claudia pregunta por qué Don Segundo no pudo retirar los alimentos del PACAM. ¿Cómo le explica el TENS esta situación educativamente?",
+    options: [
+      "Le explica que el PACAM exige tener el EMPAM al día (vencido hace 2 años) y le gestiona una hora de control para regularizar el beneficio.",
+      "Le informa que su padre perdió la alimentación complementaria de forma definitiva por faltar a sus controles.",
+      "Le indica que el PACAM es un programa exclusivo para menores de 60 años.",
+      "Le entrega los alimentos de inmediato sin verificar los controles ni la ficha clínica."
+    ],
+    correct: 0,
+    feedback: "Correcto. El TENS explica que el EMPAM al día es requisito para la entrega continuada del PACAM y orienta la regularización sin rechazar al usuario.",
+    feedbackWrong: "El PACAM requiere EMPAM vigente. El rol del TENS es educar sobre el requisito y gestionar la cita de control, no rechazar punitivamente."
+  },
+  {
+    prompt: "Para evaluar las condiciones del hogar de Don Segundo y diagramar a las 3 generaciones de la familia, el equipo programa una salida a terreno. ¿Qué herramientas corresponden?",
+    options: [
+      "Atención Domiciliaria puntual y prueba de APGAR.",
+      "Visita Domiciliaria Integral (VDI) para evaluar el contexto biopsicosocial y confección del Genograma familiar.",
+      "Consulta médica de urgencia y Ecomapa comunitario únicamente.",
+      "Examen de laboratorio de rutina e inspección de esterilización."
+    ],
+    correct: 1,
+    feedback: "Correcto. La evaluación en el hogar de la dinámica bio-psico-social es una VDI, y el esquema gráfico de 3 generaciones es el Genograma.",
+    feedbackWrong: "Para evaluar el hogar en su conjunto se realiza una Visita Domiciliaria Integral (VDI) y la estructura familiar de 3 generaciones se gráfica con el Genograma."
+  },
+  {
+    prompt: "Durante la atención presencial de Don Segundo en el CESFAM, ¿cuál es el actuar del TENS acorde a sus competencias profesionales?",
+    options: [
+      "Tomar decisiones clínicas autónomas y modificar los medicamentos de la hipertensión sin consultar al médico.",
+      "Tomar signos vitales/HGT, registrar parámetros, educar en la muestra de baciloscopía y comunicar de inmediato al profesional responsable.",
+      "Omitir el registro de la presión arterial (160/95 mmHg) en la ficha clínica para no alertar a la familia.",
+      "Indicar a Claudia que asuma el manejo de la sospecha de Tuberculosis por su cuenta en la casa."
+    ],
+    correct: 1,
+    feedback: "Correcto. El TENS ejecuta procedimientos técnicos, educa, registra fidedignamente y comunica de inmediato al profesional responsable.",
+    feedbackWrong: "El rol del TENS se enmarca en ejecutar controles/procedimientos, registrar los datos reales y comunicar oportunamente al profesional a cargo."
+  }
+];
+
+let answered = 0;
+const total = materiaQuestions.length + casoQuestions.length;
+let correctFirstAttemptCount = 0;
+
+function buildQuestion(container, q, index, prefix) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const num = document.createElement('div');
+  num.className = 'q-number';
+  num.textContent = prefix + ' ' + (index + 1);
+  card.appendChild(num);
+
+  const prompt = document.createElement('p');
+  prompt.className = 'q-prompt';
+  prompt.textContent = q.prompt;
+  card.appendChild(prompt);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+
+  let solved = false;
+  let failedFirstAttempt = false;
+
+  q.options.forEach((optText, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = optText;
+    btn.addEventListener('click', () => {
+      if (solved) return;
+      if (i === q.correct) {
+        btn.classList.add('correct');
+        feedback.textContent = q.feedback;
+        feedback.className = 'feedback show ok';
+        solved = true;
+        answered++;
+        if (!failedFirstAttempt) {
+          correctFirstAttemptCount++;
+        }
+        updateProgress();
+        card.querySelectorAll('.option').forEach(o => o.setAttribute('disabled', 'true'));
+      } else {
+        btn.classList.add('incorrect');
+        feedback.textContent = q.feedbackWrong;
+        feedback.className = 'feedback show no';
+        btn.setAttribute('disabled', 'true');
+        failedFirstAttempt = true;
+      }
+    });
+    card.appendChild(btn);
+  });
+
+  card.appendChild(feedback);
+  container.appendChild(card);
+}
+
+function updateProgress() {
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = answered + ' de ' + total + ' respondidas';
+  if (answered === total) {
+    document.getElementById('summary').classList.add('show');
+    document.getElementById('scoreText').textContent = correctFirstAttemptCount + ' / ' + total + ' al primer intento';
+  }
+}
+
+const materiaContainer = document.getElementById('materia');
+materiaQuestions.forEach((q, i) => buildQuestion(materiaContainer, q, i, 'Pregunta'));
+
+const casoContainer = document.getElementById('caso');
+casoQuestions.forEach((q, i) => buildQuestion(casoContainer, q, i, 'Situación'));
+</script>
+
+</body>
+</html>
