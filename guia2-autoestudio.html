@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Guía N°2 — Inmunizaciones, Vigilancia Epidemiológica y Esterilización en APS</title>
+<style>
+  :root {
+    --navy: #1b3a6b;
+    --blue: #2f6fb0;
+    --light-blue: #f0f4f9;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --orange: #e65100;
+    --orange-bg: #fff3e0;
+    --red: #c62828;
+    --red-bg: #fdecea;
+    --gray-bg: #f8fafc;
+    --border: #d0d7de;
+    --text: #1f2733;
+  }
+  
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: #eef2f5;
+    line-height: 1.5;
+  }
+
+  .container {
+    max-width: 850px;
+    margin: 20px auto;
+    background: white;
+    padding: 40px 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 8px;
+  }
+
+  header {
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+
+  .institution {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .module-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 2px;
+  }
+
+  .teacher-info {
+    font-size: 0.9rem;
+    color: #444;
+    margin-top: 4px;
+  }
+
+  h1 {
+    color: var(--navy);
+    margin: 10px 0 4px;
+    font-size: 1.55rem;
+  }
+
+  .subtitle {
+    color: #555;
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  h2 {
+    color: var(--navy);
+    font-size: 1.2rem;
+    border-left: 4px solid var(--blue);
+    padding-left: 10px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    color: var(--blue);
+    font-size: 1.02rem;
+    margin-top: 18px;
+    margin-bottom: 6px;
+  }
+
+  p, li {
+    font-size: 0.93rem;
+    text-align: justify;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  li { margin-bottom: 4px; }
+
+  .box-info {
+    background: var(--light-blue);
+    border: 1px solid #b2cce5;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+
+  .box-alert {
+    background: var(--orange-bg);
+    border-left: 4px solid var(--orange);
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .box-gold {
+    background: #fffde7;
+    border: 2px solid #fbc02d;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .card-area {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--gray-bg);
+    text-align: center;
+  }
+
+  .card-area h4 {
+    margin: 0 0 6px;
+    font-size: 0.9rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.88rem;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    text-align: left;
+  }
+
+  th {
+    background: var(--navy);
+    color: white;
+  }
+
+  .diagram-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+    margin: 16px 0;
+  }
+
+  .checklist-box {
+    background: var(--gray-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 12px 0;
+  }
+
+  /* Estilos del Autochequeo */
+  .q-card {
+    background: var(--gray-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+
+  .q-title {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+
+  .q-options {
+    font-size: 0.88rem;
+    margin-left: 15px;
+  }
+
+  .pauta-box {
+    background: #f0f7f0;
+    border: 1px solid #a3d9a5;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+
+  .pauta-item {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #b2d8b4;
+    padding-bottom: 8px;
+  }
+
+  .pauta-item:last-child {
+    border-bottom: none;
+  }
+
+  /* REGLAS EXCLUSIVAS DE IMPRESIÓN Y PDF COMPACTO */
+  @media print {
+    @page {
+      size: letter;
+      margin: 12mm 12mm 12mm 12mm;
+    }
+    
+    body {
+      background: white !important;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    .container {
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      border: none !important;
+    }
+
+    .card-area, 
+    .q-card, 
+    .diagram-box, 
+    .box-info, 
+    .box-alert, 
+    .box-gold, 
+    table, 
+    .checklist-box,
+    .pauta-box, 
+    .pauta-item {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    h1, h2, h3, h4 {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+
+    h2 {
+      margin-top: 18px !important;
+      margin-bottom: 8px !important;
+      padding-left: 8px !important;
+    }
+
+    h3 {
+      margin-top: 12px !important;
+      margin-bottom: 4px !important;
+    }
+
+    .grid-2, .grid-3 {
+      gap: 8px !important;
+      margin: 10px 0 !important;
+    }
+
+    .box-info, .box-gold, .box-alert {
+      padding: 10px 14px !important;
+      margin: 10px 0 !important;
+    }
+
+    .diagram-box {
+      padding: 10px !important;
+      margin: 10px 0 !important;
+    }
+
+    svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="institution">CFT Estatal Región Metropolitana — Sede Colina</div>
+    <div class="module-title">Cuidados de Enfermería en Salud Familiar y Comunitaria</div>
+    <div class="teacher-info"><b>Docente:</b> Diego Vicuña Guarda</div>
+    <h1>Guía de Autoestudio N°2: Inmunizaciones, Vigilancia y Esterilización en APS</h1>
+    <p class="subtitle">Material complementario de estudio autónomo | Preparación Evaluación Sumativa N°1</p>
+  </header>
+
+  <!-- BLOQUE 1 -->
+  <h2>Bloque 1: Programa Nacional de Inmunizaciones (PNI) y Vigilancia</h2>
+  
+  <h3>Historia y Legado Sanitario del PNI en Chile</h3>
+  <p>El Programa Nacional de Inmunizaciones (PNI) es uno de los logros más importantes de la salud pública chilena. Basado en los principios de <b>gratuidad, universalidad y obligatoriedad</b>, ha permitido erradicar y controlar enfermedades inmunoprevenibles mortales, convirtiendo a Chile en un referente internacional en la materia.</p>
+
+  <h3>Línea de Tiempo: Hitos Históricos de Impacto Sanitario</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 12%;">Año</th>
+        <th style="width: 28%;">Hito Sanitario</th>
+        <th>Impacto en la Salud Pública de Chile</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>1950</b></td>
+        <td><b>Erradicación de la Viruela</b></td>
+        <td>Chile elimina la viruela en su territorio, décadas antes de la erradicación mundial declarada por la OMS (1980).</td>
+      </tr>
+      <tr>
+        <td><b>1975</b></td>
+        <td><b>Erradicación de la Poliomielitis</b></td>
+        <td>Se registra el último caso de polio por virus salvaje, eliminando la parálisis infantil epidémica del país.</td>
+      </tr>
+      <tr>
+        <td><b>1978</b></td>
+        <td><b>Oficialización del PNI</b></td>
+        <td>Se estructura formalmente el PNI como política pública continua para la protección de todo el ciclo vital.</td>
+      </tr>
+      <tr>
+        <td><b>1992</b></td>
+        <td><b>Eliminación del Sarampión</b></td>
+        <td>Se interrumpe la transmisión autóctona del sarampión en territorio nacional.</td>
+      </tr>
+      <tr>
+        <td><b>2014</b></td>
+        <td><b>Vacuna contra el VPH</b></td>
+        <td>Ingreso de la vacuna contra el Virus del Papiloma Humano en etapa escolar (4° y 5° básico). <b>Prevención primaria del Cáncer Cervicouterino (CaCu)</b>.</td>
+      </tr>
+      <tr>
+        <td><b>2024</b></td>
+        <td><b>Anticuerpo VRS (Nirsevimab)</b></td>
+        <td><b>Hito Mundial:</b> Chile es el 1° país de Latinoamérica en inmunizar universalmente a recién nacidos y lactantes &lt;6 meses contra el Virus Respiratorio Sincicial, logrando <b>cero fallecimientos infantiles por VRS en la campaña de invierno</b> y una caída &gt;80% en hospitalizaciones críticas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Vigilancia Epidemiológica en Vacunatorio: ESAVI vs. EPRO</h3>
+  <p>En el box de inmunizaciones de APS, el TENS debe distinguir con precisión absoluta entre una reacción biológica del usuario y un error en el procedimiento.</p>
+
+  <div class="grid-2">
+    <!-- ESAVI -->
+    <div class="card-area" style="border-top: 4px solid var(--blue); text-align: left;">
+      <h4 style="color: var(--blue); text-align: center;">ESAVI (Evento Atribuible a Vacunación)</h4>
+      <p style="font-size: 0.85rem; margin: 4px 0;"><b>Definición:</b> Quadro médico no deseado que ocurre tras vacunar. Es una <i>respuesta BIOLÓGICA</i> del sistema inmune.</p>
+      <ul>
+        <li><b>ESAVI Leve (Esperado):</b> Fiebre &lt;38.5 °C, dolor/eritema local, irritabilidad. <i>Manejo:</i> Compresas frías, paracetamol según indicación.</li>
+        <li><b>ESAVI Grave (Inesperado):</b> Anafilaxia, convulsión, shock, hipotónico-hiporreactivo. <i>Manejo:</i> Atención médica urgente + <b>Notificación Inmediata Minsal/ISP</b>.</li>
+      </ul>
+    </div>
+
+    <!-- EPRO -->
+    <div class="card-area" style="border-top: 4px solid var(--red); text-align: left;">
+      <h4 style="color: var(--red); text-align: center;">EPRO (Error Programático)</h4>
+      <p style="font-size: 0.85rem; margin: 4px 0;"><b>Definición:</b> Evento evitable provocado por un <i>error HUMANO o de PROCESO</i> en la manipulación o administración.</p>
+      <ul>
+        <li><b>Ejemplos Reales:</b> Administrar vía Intramuscular una vacuna Subcutánea; error de dosis o diluyente; vacuna vencida; quiebre de cadena de frío.</li>
+        <li><b>Conducta TENS:</b> <b>Notificación inmediata a la Enfermera/o a cargo</b>. Nunca ocultar el error.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ÉTICA PROFESIONAL -->
+  <div class="box-gold">
+    <h3 style="color: #b78103; margin-top:0;">ÉTICA PROFESIONAL Y SEGURIDAD DEL PACIENTE: La Regla de No Ocultamiento</h3>
+    <p>Cometer una equivocación en vacunatorio (un EPRO) causa temor o ansiedad en el personal. Sin embargo, <b>ocultar un EPRO por miedo a una sanción administrativa es una falta grave a la ética de enfermería que pone en riesgo la vida del paciente</b>.</p>
+    <p>La conducta inmediata del TENS ante un EPRO debe ser: <b>1) Informar de inmediato a la Enfermera a cargo, 2) Contener con transparencia a la madre/familia, 3) Monitorear clínicamente al usuario y 4) Registrar el evento</b> para analizar las fallas del sistema sin buscar "culpables", garantizando la seguridad del paciente.</p>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <h2>Bloque 2: Central de Esterilización en APS (Foco en Inspección)</h2>
+  <p>La Central de Esterilización de un CESFAM es la unidad encargada de procesar el instrumental quirúrgico y de curación para garantizar atenciones libres de microorganismos. Su infraestructura está dividida normativamente en <b>3 Áreas Físicas Unidireccionales por código de color</b>.</p>
+
+  <div class="grid-3">
+    <!-- Área Roja -->
+    <div class="card-area" style="border-top: 4px solid var(--red);">
+      <h4 style="color: var(--red);">1. Área Roja (Sucia)</h4>
+      <p style="font-size: 0.8rem; margin: 2px 0;"><b>Descontaminación</b></p>
+      <p style="font-size: 0.78rem; text-align: left;">Recepción de material usado en cajas de curación/cirugía. Lavado manual/ultrasónico, enjuague y secado riguroso.</p>
+    </div>
+
+    <!-- Área Azul -->
+    <div class="card-area" style="border-top: 4px solid var(--blue);">
+      <h4 style="color: var(--blue);">2. Área Azul (Limpia)</h4>
+      <p style="font-size: 0.8rem; margin: 2px 0;"><b>Preparación e INSPECCIÓN</b></p>
+      <p style="font-size: 0.78rem; text-align: left;"><b>Área clave del TENS:</b> Examen visual y funcional del instrumental antes del empaque. Salida al autoclave.</p>
+    </div>
+
+    <!-- Área Verde -->
+    <div class="card-area" style="border-top: 4px solid var(--green);">
+      <h4 style="color: var(--green);">3. Área Verde (Estéril)</h4>
+      <p style="font-size: 0.8rem; margin: 2px 0;"><b>Almacenamiento</b></p>
+      <p style="font-size: 0.78rem; text-align: left;">Descarga de autoclaves, verificación de viraje de indicadores químicos y despacho de material estéril.</p>
+    </div>
+  </div>
+
+  <h3>La Etapa de INSPECCIÓN: El Corazón del Área Azul</h3>
+  <p><b>¿Por qué es crítica la inspección?</b> Si un instrumental se empaqueta con una mínima gota de materia orgánica (sangre, tejido, pus) o si la cremallera está trabada, <b>el agente esterilizante (vapor a presión) no penetrará en esa zona, provocando el fracaso total de la esterilización</b> e infeccionando a futuros pacientes.</p>
+
+  <div class="checklist-box">
+    <h3 style="margin-top:0; color: var(--navy);">Checklist de Inspección del TENS antes del Empaque:</h3>
+    <ul>
+      <li><b>1. Ausencia de Materia Orgánica:</b> Revisión bajo lupa con luz halógena de cremalleras, articulaciones y dientes de pinzas (Kocher, Crile, Kelly, Pean).</li>
+      <li><b>2. Funcionalidad Mecánica:</b> Verificar que los anillos cierren suavemente, que la cremallera engrane firme sin soltarse sola y que las tijeras tengan alineación y filo perfecto.</li>
+      <li><b>3. Integridad Superficial:</b> Comprobar ausencia de manchas de óxido, picaduras, desgaste de cromo o deformaciones en las puntas.</li>
+    </ul>
+  </div>
+
+  <div class="box-alert">
+    <b>Regla de Oro en la Etapa de Inspección:</b><br>
+    Todo instrumental que presente restos de suciedad, manchas orgánicas o fallas mecánicas <b>se RECHAZA e INMEDIATAMENTE se RE-DERIVA AL ÁREA ROJA (LAVADO)</b>. Jamás se limpia "al ojo" en el Área Azul ni se empaqueta un insumo defectuoso.
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <h2>Bloque 3: Valoración Clínica y Casos Integrados</h2>
+
+  <div class="box-info">
+    <h3 style="margin-top:0;">Caso 1: Vigilancia en Vacunatorio (Análisis de Conducta)</h3>
+    <p><b>Situación:</b> En el vacunatorio del CESFAM, el TENS atiende a un lactante de 2 meses para sus vacunas del esquema (Hexavalente y Neumocócica). Por distracción debida a la alta demanda, administra la vacuna Hexavalente por vía Subcutánea en lugar de la vía Intramuscular profunda normada.</p>
+    <p><b>Análisis Técnico:</b></p>
+    <ul>
+      <li><b>Clasificación:</b> Corresponde a un <b>Error Programático (EPRO)</b> por falla en la técnica de administración humana.</li>
+      <li><b>Actuar Correcto del TENS:</b> No ocultar el hecho por temor a represalias. Avisar inmediatamente a la Enfermera/o a cargo, comunicar con empatía a la madre el evento, evaluar la zona de punción por posible nódulo o inflamación y registrar el EPRO en el sistema para las medidas de mejora del servicio.</li>
+    </ul>
+  </div>
+
+  <div class="box-info">
+    <h3 style="margin-top:0;">Caso 2: Control de Calidad en Central de Esterilización</h3>
+    <p><b>Situación:</b> En el Área Azul de la Central de Esterilización, el TENS está armando una caja de sutura. Al inspeccionar con la lupa la cremallera de una pinza sustitutiva Kocher, observa una pequeña costra marrón oscurecida en los dientes de engaste.</p>
+    <p><b>Análisis Técnico:</b></p>
+    <ul>
+      <li><b>Clasificación:</b> Falla en la etapa de lavado/descontaminación (materia orgánica residual).</li>
+      <li><b>Actuar Correcto del TENS:</b> Aplicar la Regla de Oro de Inspección. Rechazar la pinza, separar la caja completa para re-lavado e <b>ingresar el instrumental devuelto al Área Roja (Sucia)</b>. Bajo ninguna circunstancia raspar la sangre con una gasa en el Área Azul.</li>
+    </ul>
+  </div>
+
+  <!-- BLOQUE 4 -->
+  <h2>Bloque 4: Autochequeo de Aprendizaje</h2>
+  <p>Responde de manera autónoma las siguientes 8 preguntas de selección múltiple. Al finalizar, coteja con la pauta técnica explicada.</p>
+
+  <div class="q-card">
+    <div class="q-title">1. ¿Qué hito de la salud pública chilena alcanzado en 2024 convirtió a Chile en el primer país de Latinoamérica en inmunizar masivamente a recién nacidos contra el VRS con Nirsevimab?</div>
+    <div class="q-options">
+      a) La erradicación de la viruela escolar.<br>
+      b) La eliminación autóctona del sarampión.<br>
+      c) La inmunización universal contra el Virus Respiratorio Sincicial, logrando cero muertes infantiles por esta causa.<br>
+      d) La incorporación del PAP a los 15 años.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">2. ¿Cuál es el objetivo fundamental de incorporar la vacuna contra el Virus del Papiloma Humano (VPH) en la etapa escolar (4° y 5° básico) dentro del PNI?</div>
+    <div class="q-options">
+      a) Prevenir la desnutrición infantil.<br>
+      b) Realizar prevención primaria del Cáncer Cervicouterino (CaCu).<br>
+      c) Sustituir la toma del Papanicolaou (PAP) en la adultez.<br>
+      d) Tratar las neumonías graves en el lactante.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">3. Al día siguiente de recibir su vacuna Hexavalente, la madre de un lactante consulta porque el niño presenta 37.6 °C de fiebre axilar y enrojecimiento leve en el muslo. ¿Cómo se clasifica clínicamente este cuadro?</div>
+    <div class="q-options">
+      a) Un Error Programático (EPRO) por mala técnica.<br>
+      b) Un ESAVI Leve esperado por respuesta inmunológica normal.<br>
+      c) Un ESAVI Grave que requiere hospitalización inmediata.<br>
+      d) Una intoxicación por vacuna vencida.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">4. Si durante la preparación de una vacuna el TENS utiliza accidentalmente un diluyente equivocado o administra una dosis errónea, ¿cómo se define este evento?</div>
+    <div class="q-options">
+      a) ESAVI Leve.<br>
+      b) Reacción anafiláctica esperada.<br>
+      c) Error Programático (EPRO).<br>
+      d) Caso sospechoso de Sarampión.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">5. ¿Cuál es la conducta ética y operativa inmediata que debe asumir el TENS ante la ocurrencia de un EPRO en el vacunatorio?</div>
+    <div class="q-options">
+      a) Callar y esperar a que la familia se retire para no generar problemas.<br>
+      b) Informar de inmediato a la Enfermera/o a cargo, contener al usuario y registrar el evento.<br>
+      c) Culpar a la madre por no sostener bien al niño.<br>
+      d) Eliminar la ficha del paciente del sistema informático.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">6. En la Central de Esterilización de APS, ¿en qué área física específica realiza el TENS la inspección visual y funcional del instrumental quirúrgico?</div>
+    <div class="q-options">
+      a) Área Roja (Sucia).<br>
+      b) Área Azul (Limpia).<br>
+      c) Área Verde (Estéril).<br>
+      d) Bodega de Farmacia.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">7. Durante la etapa de Inspección en el Área Azul, el TENS detecta restos hemáticos secos en la cremallera de una pinza Kocher. ¿Qué conducta corresponde aplicar?</div>
+    <div class="q-options">
+      a) Limpiar la pinza con un poco de alcohol y empaquetarla de todos modos.<br>
+      b) Rechazar la pinza e ingresarla de inmediato al Área Roja (Sucia) para su re-lavado.<br>
+      c) Colocar la pinza directamente dentro del autoclave.<br>
+      d) Enviar la pinza a la bodega de material estéril.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">8. ¿Por qué es inadmisible empaquetar e ingresar al autoclave un instrumental que contiene suciedad orgánica en sus cremalleras?</div>
+    <div class="q-options">
+      a) Porque el vapor no logra penetrar la materia orgánica, impidiendo la esterilización de esa zona.<br>
+      b) Porque el autoclave se rompe si recibe restos de sangre.<br>
+      c) Porque cambia el color del indicador químico superficial.<br>
+      d) Porque el instrumental se vuelve más pesado.
+    </div>
+  </div>
+
+  <!-- PAUTA DE RESPUESTAS -->
+  <div class="pauta-box">
+    <h3 style="color: #2e7d32; margin-top: 0;">Pauta de Respuestas y Fundamentación Técnica</h3>
+
+    <div class="pauta-item">
+      <b>1. Respuesta Correcta: C</b><br>
+      <i>Fundamento:</i> En 2024, Chile se convirtió en pionero regional al administrar masivamente el anticuerpo monoclonal Nirsevimab contra el VRS, logrando erradicar las muertes infantiles por este virus en la temporada invernal.
+    </div>
+
+    <div class="pauta-item">
+      <b>2. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> La vacuna contra el VPH es la estrategia de prevención primaria del CaCu en Chile (evita la infección por genotipos oncogénicos). El PAP es la prevención secundaria (detección precoz de la lesión).
+    </div>
+
+    <div class="pauta-item">
+      <b>3. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> La fiebre baja y el dolor local son reacciones fisiológicas esperadas del sistema inmune (ESAVI leve). Se manejan con medidas locales y antipiréticos sin requerir notificación de urgencia.
+    </div>
+
+    <div class="pauta-item">
+      <b>4. Respuesta Correcta: C</b><br>
+      <i>Fundamento:</i> Todo fallo derivado de la manipulación, preparación, dosis o vía humana se clasifica como Error Programático (EPRO) y es 100% evitable.
+    </div>
+
+    <div class="pauta-item">
+      <b>5. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> La seguridad del paciente exige la norma del "no ocultamiento". El TENS debe notificar de inmediato a la enfermera responsable para evaluar al paciente y aplicar las medidas correctivas.
+    </div>
+
+    <div class="pauta-item">
+      <b>6. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> El Área Azul (Limpia) es la zona destinada a la inspección, armado y empaque del instrumental seco antes de ingresar al autoclave.
+    </div>
+
+    <div class="pauta-item">
+      <b>7. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> Todo material con suciedad residual se rechaza y vuelve al Área Roja (Sucia). Jamás se limpia en el Área Azul ni se empaqueta sucio.
+    </div>
+
+    <div class="pauta-item">
+      <b>8. Respuesta Correcta: A</b><br>
+      <i>Fundamento:</i> La materia orgánica actúa como un escudo protector para los microorganismos. El vapor de agua a presión no puede atravesar la sangre o pus seca, resultando en un proceso estéril fallido.
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
