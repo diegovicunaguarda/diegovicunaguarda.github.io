@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Guía N°1 — Ciclo Vital, Salud de la Mujer, Infancia y Redes Familiares</title>
+<style>
+  :root {
+    --navy: #1b3a6b;
+    --blue: #2f6fb0;
+    --light-blue: #f0f4f9;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --orange: #e65100;
+    --orange-bg: #fff3e0;
+    --red: #c62828;
+    --red-bg: #fdecea;
+    --gray-bg: #f8fafc;
+    --border: #d0d7de;
+    --text: #1f2733;
+  }
+  
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--text);
+    background: #eef2f5;
+    line-height: 1.6;
+  }
+
+  .container {
+    max-width: 850px;
+    margin: 20px auto;
+    background: white;
+    padding: 40px 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 8px;
+  }
+
+  header {
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 16px;
+    margin-bottom: 28px;
+  }
+
+  .institution {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .module-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 2px;
+  }
+
+  .teacher-info {
+    font-size: 0.9rem;
+    color: #444;
+    margin-top: 4px;
+  }
+
+  h1 {
+    color: var(--navy);
+    margin: 10px 0 4px;
+    font-size: 1.55rem;
+  }
+
+  .subtitle {
+    color: #555;
+    font-size: 0.92rem;
+    margin: 0;
+  }
+
+  h2 {
+    color: var(--navy);
+    font-size: 1.25rem;
+    border-left: 4px solid var(--blue);
+    padding-left: 10px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    color: var(--blue);
+    font-size: 1.05rem;
+    margin-top: 22px;
+    margin-bottom: 8px;
+  }
+
+  p, li {
+    font-size: 0.95rem;
+    text-align: justify;
+  }
+
+  ul, ol {
+    padding-left: 20px;
+    margin-top: 6px;
+  }
+
+  li { margin-bottom: 6px; }
+
+  .box-info {
+    background: var(--light-blue);
+    border: 1px solid #b2cce5;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 15px 0;
+  }
+
+  .box-alert {
+    background: var(--orange-bg);
+    border-left: 4px solid var(--orange);
+    padding: 14px 18px;
+    margin: 15px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .box-gold {
+    background: #fffde7;
+    border: 2px solid #fbc02d;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 20px 0;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .card-curve {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    background: var(--gray-bg);
+    text-align: center;
+  }
+
+  .card-curve h4 {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+
+  th {
+    background: var(--navy);
+    color: white;
+  }
+
+  .diagram-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .symbol-table {
+    width: 100%;
+    margin: 15px 0;
+    background: var(--gray-bg);
+  }
+
+  .symbol-table td {
+    vertical-align: middle;
+    padding: 8px 12px;
+  }
+
+  /* Estilos del Autochequeo */
+  .q-card {
+    background: var(--gray-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+
+  .q-title {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+
+  .q-options {
+    font-size: 0.9rem;
+    margin-left: 15px;
+  }
+
+  .pauta-box {
+    background: #f0f7f0;
+    border: 1px solid #a3d9a5;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 30px;
+  }
+
+  .pauta-item {
+    margin-bottom: 14px;
+    border-bottom: 1px dashed #b2d8b4;
+    padding-bottom: 10px;
+  }
+
+  .pauta-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Ajustes para Impresión PDF */
+  @media print {
+    body { background: white; }
+    .container {
+      box-shadow: none;
+      padding: 0;
+      max-width: 100%;
+    }
+    .page-break { page-break-before: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="institution">CFT Estatal Región Metropolitana — Sede Colina</div>
+    <div class="module-title">Cuidados de Enfermería en Salud Familiar y Comunitaria</div>
+    <div class="teacher-info"><b>Docente:</b> Diego Vicuña Guarda</div>
+    <h1>Guía de Autoestudio N°1: Ciclo Vital, Salud de la Mujer, Infancia y Redes Familiares</h1>
+    <p class="subtitle">Material complementario de estudio autónomo | Preparación Evaluación Sumativa N°1</p>
+  </header>
+
+  <!-- BLOQUE 1 -->
+  <h2>Bloque 1: Salud Sexual y Reproductiva (Cáncer de la Mujer)</h2>
+  
+  <h3>Contexto Sanitario y Fundamentación</h3>
+  <p>En el marco de la Atención Primaria de Salud (APS), el Programa de Salud Sexual y Reproductiva prioriza la prevención secundaria del Cáncer Cervicouterino (CaCu) y del Cáncer de Mama. Ambos representan principales causas de muerte en mujeres en edad fértil y adulta en Chile, pero cuentan con estrategias de pesquisa precoz de alta efectividad cuando se respetan la cobertura y la periodicidad normadas por el Ministerio de Salud.</p>
+
+  <div class="box-info">
+    <h3>1. Papanicolaou (PAP) — Pesquisa de Cáncer Cervicouterino</h3>
+    <p><b>Origen y Fisiopatología:</b> El CaCu está fuertemente asociado a la infección persistente por el Virus del Papiloma Humano (VPH). Su desarrollo es de lenta progresión (toma entre 10 y 20 años desde una lesión preneoplásica hasta un cáncer invasor), lo que otorga una ventana amplia para su detección en etapa asintomática mediante la citología cervical (PAP).</p>
+    <ul>
+      <li><b>Población Objetivo Universal:</b> Mujeres de <b>25 a 64 años</b> (o antes si la usuaria lo solicita o existen factores de riesgo).</li>
+      <li><b>Periodicidad Normada:</b> Cada <b>3 años</b> en usuarias con resultados anteriores normales (tras 2 exámenes anuales consecutivos negativos).</li>
+      <li><b>Toma del Examen:</b> Procedimiento realizado por la Matrona en el CESFAM.</li>
+    </ul>
+
+    <h3 style="margin-top: 15px;">2. Mamografía — Pesquisa de Cáncer de Mama</h3>
+    <p><b>Fundamento Clínico:</b> El Cáncer de Mama es la primera causa de muerte por cáncer ginecológico en mujeres chilenas. En etapas iniciales no presenta dolor ni nódulos palpables. La mamografía es el único examen capaz de detectar microcalcificaciones o tumores subclínicos años antes de ser palpables.</p>
+    <ul>
+      <li><b>Población Objetivo Prioritaria:</b> Mujeres de <b>50 a 69 años</b> (grupo donde aumenta drásticamente la incidencia y el examen tiene mayor rendimiento técnico debido a la menor densidad mamaria).</li>
+      <li><b>Periodicidad Normada:</b> Cada <b>2 años</b>.</li>
+    </ul>
+  </div>
+
+  <!-- LA OPORTUNIDAD DE ORO -->
+  <div class="box-gold">
+    <h3 style="color: #b78103; margin-top:0;">LA OPORTUNIDAD DE ORO: Pesquisa Oportunística en APS</h3>
+    <p><b>El TENS es la puerta de entrada y el primer contacto directo con el usuario en la red de salud.</b> Muchas veces, las usuarias no acuden al CESFAM a pedir una hora preventiva de ginecología, sino que asisten a trámites puntuales: retirar medicamentos en farmacia, retirar alimentos en la bodega del PNAC/PACAM, vacunar a sus hijos o acompañar a un familiar.</p>
+    <p><b>Ese momento puntual es la única ventana de oportunidad preventiva.</b> El TENS debe realizar una <b>verificación activa en la Ficha Clínica Electrónica</b> sobre la vigencia del PAP y la Mamografía. Un par de preguntas amables en ventanilla o box pueden marcar la diferencia entre detectar un cáncer a tiempo o lamentar un diagnóstico tardío.</p>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <h2>Bloque 2: Crecimiento y Nutrición en el Lactante</h2>
+  
+  <h3>Crecimiento vs. Desarrollo</h3>
+  <p>En el control de salud infantil (Supervisión de Crecimiento y Desarrollo del Niño/a), el equipo distingue dos procesos complementarios:</p>
+  <ul>
+    <li><b>Crecimiento (Cuantitativo):</b> Proceso de aumento del tamaño físico y masa corporal. <i>Se puede contar y medir en cifras exactas: kilos de peso, centímetros de talla y centímetros de perímetro craneal.</i></li>
+    <li><b>Desarrollo (Cualitativo):</b> Proceso de adquisición de funciones, habilidades madurativas y complejidad neuropsicomotora. <i>Se evalúa en la capacidad funcional del niño: sostener la cabeza, gatear, hablar, manipular objetos y relacionarse.</i></li>
+  </ul>
+
+  <h3>Indicadores Antropométricos e Identificación Visual</h3>
+  <p>Un dato aislado de peso no permite diagnosticar el estado nutricional. En la ficha clínica se utilizan tres índices relacionales principales:</p>
+  <ul>
+    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#2f6fb0; font-size:1.2rem;">P</span>eso / <span style="color:#2f6fb0; font-size:1.2rem;">T</span>alla (<span style="color:#2f6fb0;">P/T</span>):</b> Refleja la proporcionalidad corporal. Es el indicador principal para evaluar el <b>estado nutricional actual / agudo</b> (clasifica en desnutrición, riesgo de desnutrir, normopeso, sobrepeso u obesidad).</li>
+    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#2e7d32; font-size:1.2rem;">T</span>alla / <span style="color:#2e7d32; font-size:1.2rem;">E</span>dad (<span style="color:#2e7d32;">T/E</span>):</b> Refleja el <b>crecimiento lineal acumulado / crónico</b> (clasifica en talla normal o retraso estatural).</li>
+    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#e65100; font-size:1.2rem;">P</span>eso / <span style="color:#e65100; font-size:1.2rem;">E</span>dad (<span style="color:#e65100;">P/E</span>):</b> Funciona como un indicador de <b>alerta global rápida</b> en menores de 1 año.</li>
+    <li><b>Perímetro Cefálico (PC):</b> Medición obligatoria del contorno craneal con cinta métrica hasta los 2 años para la detección precoz de alteraciones neurológicas (microcefalia o hidrocefalia).</li>
+  </ul>
+
+  <h3>Evaluación de la Tendencia: Las 3 Curvas de Crecimiento</h3>
+  <p>Lo determinante en el seguimiento del lactante es la trayectoria gráfica de su peso entre controles sucesivos. A continuación se ejemplifica con el caso de <b>Tomás (4 meses)</b>, comparando su evolución desde su control anterior:</p>
+
+  <div class="grid-3">
+    
+    <!-- Curva Ascendente -->
+    <div class="card-curve" style="border-top: 4px solid var(--green);">
+      <h4 style="color: var(--green);">1. Curva Ascendente ↗</h4>
+      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Incremento Óptimo</b></p>
+      <svg width="200" height="130" viewBox="0 0 200 130">
+        <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
+        <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
+        <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
+        <line x1="30" y1="25" x2="35" y2="25" stroke="#555"/>
+        <text x="8" y="28" font-size="8" fill="#666">6.5</text>
+        <line x1="30" y1="55" x2="35" y2="55" stroke="#555"/>
+        <text x="8" y="58" font-size="8" fill="#666">5.5</text>
+        <line x1="30" y1="85" x2="35" y2="85" stroke="#555"/>
+        <text x="8" y="88" font-size="8" fill="#666">4.5</text>
+        <line x1="75" y1="100" x2="75" y2="105" stroke="#555"/>
+        <text x="60" y="115" font-size="8" fill="#666">3 meses</text>
+        <line x1="150" y1="100" x2="150" y2="105" stroke="#555"/>
+        <text x="135" y="115" font-size="8" fill="#666">4 meses</text>
+        <polyline points="75,55 150,25" fill="none" stroke="var(--green)" stroke-width="3"/>
+        <circle cx="75" cy="55" r="4" fill="var(--green)"/>
+        <circle cx="150" cy="25" r="4" fill="var(--green)"/>
+        <text x="142" y="18" font-size="8" fill="#2e7d32" font-weight="bold">6.2 kg</text>
+      </svg>
+      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Ganancia de peso adecuada en el período. Aporte calórico efectivo.<br><b>Conducta TENS:</b> Registrar, felicitar al cuidador y reforzar LME.</p>
+    </div>
+
+    <!-- Curva Aplanada -->
+    <div class="card-curve" style="border-top: 4px solid var(--orange);">
+      <h4 style="color: var(--orange);">2. Curva Aplanada →</h4>
+      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Estancamiento (Alerta)</b></p>
+      <svg width="200" height="130" viewBox="0 0 200 130">
+        <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
+        <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
+        <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
+        <line x1="30" y1="25" x2="35" y2="25" stroke="#555"/>
+        <text x="8" y="28" font-size="8" fill="#666">6.5</text>
+        <line x1="30" y1="55" x2="35" y2="55" stroke="#555"/>
+        <text x="8" y="58" font-size="8" fill="#666">5.5</text>
+        <line x1="30" y1="85" x2="35" y2="85" stroke="#555"/>
+        <text x="8" y="88" font-size="8" fill="#666">4.5</text>
+        <line x1="75" y1="100" x2="75" y2="105" stroke="#555"/>
+        <text x="60" y="115" font-size="8" fill="#666">3 meses</text>
+        <line x1="150" y1="100" x2="150" y2="105" stroke="#555"/>
+        <text x="135" y="115" font-size="8" fill="#666">4 meses</text>
+        <polyline points="75,55 150,55" fill="none" stroke="var(--orange)" stroke-width="3"/>
+        <circle cx="75" cy="55" r="4" fill="var(--orange)"/>
+        <circle cx="150" cy="55" r="4" fill="var(--orange)"/>
+        <text x="142" y="48" font-size="8" fill="var(--orange)" font-weight="bold">5.5 kg</text>
+      </svg>
+      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> El niño no ganó peso. Posible falla de acople, grietas o enfermedad.<br><b>Conducta TENS:</b> Alerta temprana. Notificar al profesional sin dar el alta[cite: 1].</p>
+    </div>
+
+    <!-- Curva Descendente -->
+    <div class="card-curve" style="border-top: 4px solid var(--red);">
+      <h4 style="color: var(--red);">3. Curva Descendente ↘</h4>
+      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Pérdida (Alerta Alta)</b></p>
+      <svg width="200" height="130" viewBox="0 0 200 130">
+        <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
+        <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
+        <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
+        <line x1="30" y1="25" x2="35" y2="25" stroke="#555"/>
+        <text x="8" y="28" font-size="8" fill="#666">6.5</text>
+        <line x1="30" y1="55" x2="35" y2="55" stroke="#555"/>
+        <text x="8" y="58" font-size="8" fill="#666">5.5</text>
+        <line x1="30" y1="85" x2="35" y2="85" stroke="#555"/>
+        <text x="8" y="88" font-size="8" fill="#666">4.5</text>
+        <line x1="75" y1="100" x2="75" y2="105" stroke="#555"/>
+        <text x="60" y="115" font-size="8" fill="#666">3 meses</text>
+        <line x1="150" y1="100" x2="150" y2="105" stroke="#555"/>
+        <text x="135" y="115" font-size="8" fill="#666">4 meses</text>
+        <polyline points="75,55 150,75" fill="none" stroke="var(--red)" stroke-width="3"/>
+        <circle cx="75" cy="55" r="4" fill="var(--red)"/>
+        <circle cx="150" cy="75" r="4" fill="var(--red)"/>
+        <text x="142" y="88" font-size="8" fill="var(--red)" font-weight="bold">4.9 kg</text>
+      </svg>
+      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Pérdida activa de peso corporal. Riesgo de deshidratación o patología.<br><b>Conducta TENS:</b> Alerta prioritaria. Evaluación médica de inmediato.</p>
+    </div>
+
+  </div>
+
+  <h3>Lactancia Materna y Apoyo Alimentario (PNAC)</h3>
+  <p>La norma nacional establece la <b>Lactancia Materna Exclusiva (LME) hasta los 6 meses de vida</b>. Cuando la LME no es posible por causa médica o decisión materna informada, el equipo de salud evalúa el ingreso al <b>PNAC (Programa Nacional de Alimentación Complementaria)</b> para la entrega de fórmulas lácteas de inicio (como Leche Purita Mamá para la madre o fórmulas infantiles según indicación).</p>
+
+  <div class="box-alert">
+    <b>Pasos Operativos del TENS en Antropometría Infantil:</b>
+    <ol>
+      <li><b>Técnica Correcta:</b> Desvestir completamente al lactante, usar pañal seco, verificar balanza en cero (tarada) y medir longitud en podómetro con ayuda del acompañante.</li>
+      <li><b>Registro Inmediato:</b> Anotar los datos numéricos en la Ficha Clínica Electrónica y en el Carné de Salud del Niño/a.</li>
+      <li><b>Comparación y Alerta:</b> Cotejar la cifra con el control anterior. Si la curva se aplana o cae, <b>el TENS jamás debe dar por finalizada la atención ni dejar que la familia se retire sin la evaluación presencial de la enfermera o médico</b>[cite: 1].</li>
+    </ol>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- BLOQUE 3 -->
+  <h2>Bloque 3: Valoración Familiar (Estructura vs. Redes)</h2>
+  
+  <p>En el Modelo de Salud Familiar, la persona no es atendida como un individuo aislado, sino en el contexto de su dinámica familiar y comunitaria. Para esto, el equipo utiliza herramientas gráficas estandarizadas que sintetizan gran cantidad de información en la Ficha Familiar.</p>
+
+  <h3>1. El Genograma: Estructura e Historia Interna</h3>
+  <p>El <b>Genograma (o Familiograma)</b> es la representación gráfica del árbol familiar que muestra la estructura biológica y relacional de la familia a lo largo de un mínimo de <b>3 generaciones</b>.</p>
+
+  <!-- LEYENDA GRÁFICA DE SIMBOLOGÍA EN GENOGRAMA -->
+  <h3>Leyenda de Simbología Gráfica en Genograma</h3>
+  <table class="symbol-table">
+    <tr>
+      <td style="width: 70px; text-align: center;">
+        <svg width="30" height="30"><circle cx="15" cy="15" r="12" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
+      </td>
+      <td><b>Círculo:</b> Representa a una integrante femenina.</td>
+      <td style="width: 70px; text-align: center;">
+        <svg width="30" height="30"><rect x="3" y="3" width="24" height="24" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
+      </td>
+      <td><b>Cuadrado:</b> Representa a un integrante masculino.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="30" height="30">
+          <circle cx="15" cy="15" r="12" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/>
+          <circle cx="15" cy="15" r="8" fill="none" stroke="var(--navy)" stroke-width="1"/>
+        </svg>
+      </td>
+      <td><b>Doble Borde:</b> Identifica al <b>Caso Índice</b> (usuario principal atendido).</td>
+      <td style="text-align: center;">
+        <svg width="50" height="20">
+          <line x1="0" y1="7" x2="50" y2="7" stroke="var(--blue)" stroke-width="2"/>
+          <line x1="0" y1="13" x2="50" y2="13" stroke="var(--blue)" stroke-width="2"/>
+        </svg>
+      </td>
+      <td><b>Doble Línea Paralela:</b> Vínculo muy estrecho / relación fuerte.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="50" height="20"><line x1="0" y1="10" x2="50" y2="10" stroke="#666" stroke-width="2" stroke-dasharray="4"/></svg>
+      </td>
+      <td><b>Línea Discontinua:</b> Vínculo distante o relaciones esporádicas.</td>
+      <td style="text-align: center;">
+        <svg width="50" height="20"><path d="M 0 10 L 10 3 L 20 17 L 30 3 L 40 17 L 50 10" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
+      </td>
+      <td><b>Línea en Zigzag:</b> Relación conflictiva / fuente de tensión.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="50" height="20">
+          <line x1="0" y1="10" x2="50" y2="10" stroke="#666" stroke-width="1.5"/>
+          <line x1="22" y1="2" x2="28" y2="18" stroke="var(--red)" stroke-width="2"/>
+        </svg>
+      </td>
+      <td colspan="3"><b>Línea con Barra Cruzada:</b> Separación matrimonial o divorcio legal.</td>
+    </tr>
+  </table>
+
+  <!-- EJEMPLO INTEGRADO -->
+  <div class="box-info">
+    <h3 style="margin-top:0;">Ejemplo Clínico Aplicado: "Familia González"</h3>
+    <p><b>Caso Familiar:</b> Doña Rosa (68 años, hipertensa en control PSCV) vive con su hija Carmen (42 años, trabajadora de comercio, separada) y su nieto Lucas (5 años, en control infantil). Carmen reporta alta fatiga por extensas jornadas laborales.</p>
+  </div>
+
+  <!-- DIAGRAMA GENOGRAMA -->
+  <div class="diagram-box">
+    <h3>Genograma de la Familia González (Mirando hacia ADENTRO)</h3>
+    <svg width="520" height="260" viewBox="0 0 520 260">
+      <!-- Generación 1 -->
+      <text x="10" y="45" font-size="11" font-weight="bold" fill="#666">1ª Generación</text>
+      <circle cx="220" cy="40" r="28" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/>
+      <text x="220" y="38" font-size="11" font-weight="bold" text-anchor="middle">Rosa</text>
+      <text x="220" y="50" font-size="9" fill="#555" text-anchor="middle">68 años (HTA)</text>
+
+      <!-- Vínculo Rosa -> Carmen (2 líneas paralelas verticales perfectas) -->
+      <line x1="215" y1="68" x2="215" y2="102" stroke="var(--blue)" stroke-width="2"/>
+      <line x1="225" y1="68" x2="225" y2="102" stroke="var(--blue)" stroke-width="2"/>
+
+      <!-- Generación 2 -->
+      <text x="10" y="130" font-size="11" font-weight="bold" fill="#666">2ª Generación</text>
+      <!-- Carmen (Caso Índice) -->
+      <circle cx="220" cy="130" r="28" fill="#eaf2fa" stroke="var(--navy)" stroke-width="3"/>
+      <circle cx="220" cy="130" r="23" fill="none" stroke="var(--navy)" stroke-width="1"/>
+      <text x="220" y="128" font-size="11" font-weight="bold" text-anchor="middle">Carmen</text>
+      <text x="220" y="140" font-size="9" fill="#555" text-anchor="middle">42 años</text>
+
+      <!-- Ex Pareja (Padre de Lucas) -->
+      <rect x="350" y="105" width="50" height="50" fill="#f8fafc" stroke="#666" stroke-width="1.5"/>
+      <text x="375" y="134" font-size="10" text-anchor="middle">Padre</text>
+      <!-- Línea Matrimonio/Separación -->
+      <line x1="248" y1="130" x2="350" y2="130" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
+      <line x1="295" y1="120" x2="303" y2="140" stroke="var(--red)" stroke-width="2"/> <!-- Marca separación -->
+
+      <!-- Vínculo Carmen -> Lucas -->
+      <line x1="220" y1="158" x2="220" y2="185" stroke="#333" stroke-width="1.5"/>
+
+      <!-- Generación 3 -->
+      <text x="10" y="210" font-size="11" font-weight="bold" fill="#666">3ª Generación</text>
+      <!-- Lucas: Cuadrado perfecto de 50x50px centrado en X=220 (X=195 a 245) -->
+      <rect x="195" y="185" width="50" height="50" fill="#e8f5e9" stroke="var(--green)" stroke-width="2"/>
+      <text x="220" y="208" font-size="10" font-weight="bold" text-anchor="middle">Lucas</text>
+      <text x="220" y="222" font-size="9" fill="#555" text-anchor="middle">5 años</text>
+    </svg>
+    <p style="font-size: 0.8rem; color: #555; margin-top: 4px;">Análisis gráfico: Carmen es el Caso Índice (doble borde) | Rosa y Carmen viven juntas y poseen vínculo estrecho (dos líneas azules paralelas) | Lucas está representado por un cuadrado perfecto (masculino) | Separación legal con el padre (barra roja cruzada).</p>
+  </div>
+
+  <!-- CONTEXTO TEÓRICO DEL ECOMAPA -->
+  <h3>2. El Ecomapa: Inserción en la Red Comunitaria</h3>
+  <p>El <b>Ecomapa</b> grafica a la familia en su conjunto (representada por un círculo central) y sus vinculaciones con los sistemas del entorno (CESFAM, escuela, trabajo, iglesia, vecinos, programas sociales). Permite identificar si la familia cuenta con redes de apoyo o si su entorno le genera sobrecarga y estrés.</p>
+
+  <!-- LEYENDA GRÁFICA DE SIMBOLOGÍA EN ECOMAPA -->
+  <h3>Leyenda de Simbología Gráfica en Ecomapa</h3>
+  <table class="symbol-table">
+    <tr>
+      <td style="width: 70px; text-align: center;">
+        <svg width="60" height="20"><line x1="0" y1="10" x2="60" y2="10" stroke="var(--blue)" stroke-width="3"/></svg>
+      </td>
+      <td><b>Línea Azul Continua Gruesa:</b> Conexión fuerte, sólida y de apoyo constante (red nutricional).</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="60" height="20"><path d="M 0 10 L 10 3 L 20 17 L 30 3 L 40 17 L 50 3 L 60 10" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
+      </td>
+      <td><b>Línea Roja en Zigzag:</b> Relación estresante, conflictiva o generadora de tensión laboral/económica.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="60" height="20"><line x1="0" y1="10" x2="60" y2="10" stroke="#888" stroke-width="2" stroke-dasharray="4"/></svg>
+      </td>
+      <td><b>Línea Gris Discontinua:</b> Vínculo débil, esporádico o frágil.</td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">
+        <svg width="60" height="20">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--green)"/>
+            </marker>
+          </defs>
+          <line x1="5" y1="10" x2="55" y2="10" stroke="var(--green)" stroke-width="2" marker-end="url(#arrow)"/>
+        </svg>
+      </td>
+      <td><b>Flechas en los Extremos:</b> Muestran la dirección del flujo de energía, recursos o apoyo.</td>
+    </tr>
+  </table>
+
+  <!-- DIAGRAMA ECOMAPA -->
+  <div class="diagram-box">
+    <h3>Ecomapa de la Familia González (Mirando hacia AFUERA)</h3>
+    <svg width="500" height="230" viewBox="0 0 500 230">
+      <!-- Familia Centro -->
+      <ellipse cx="250" cy="115" rx="70" ry="38" fill="var(--navy)" />
+      <text x="250" y="112" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Familia</text>
+      <text x="250" y="125" font-size="11" font-weight="bold" fill="white" text-anchor="middle">González</text>
+
+      <!-- Nodo CESFAM -->
+      <circle cx="80" cy="55" r="32" fill="#eaf2fa" stroke="var(--blue)" stroke-width="2"/>
+      <text x="80" y="59" font-size="10" font-weight="bold" text-anchor="middle">CESFAM</text>
+      <line x1="110" y1="68" x2="185" y2="98" stroke="var(--blue)" stroke-width="3"/> <!-- Relación Fuerte -->
+
+      <!-- Nodo Escuela -->
+      <circle cx="420" cy="55" r="32" fill="#e8f5e9" stroke="var(--green)" stroke-width="2"/>
+      <text x="420" y="59" font-size="10" font-weight="bold" text-anchor="middle">Escuela</text>
+      <line x1="390" y1="68" x2="313" y2="98" stroke="var(--green)" stroke-width="2"/> <!-- Relación Apoyo -->
+
+      <!-- Nodo Trabajo Carmen -->
+      <circle cx="80" cy="175" r="32" fill="#fdecea" stroke="var(--red)" stroke-width="2"/>
+      <text x="80" y="179" font-size="10" font-weight="bold" text-anchor="middle">Trabajo</text>
+      <!-- Zigzag line -->
+      <path d="M 110 165 L 130 155 L 145 170 L 160 150 L 185 132" fill="none" stroke="var(--red)" stroke-width="2"/>
+
+      <!-- Nodo Club Adulto Mayor -->
+      <circle cx="420" cy="175" r="32" fill="#f8fafc" stroke="#888" stroke-width="1.5"/>
+      <text x="420" y="179" font-size="9" text-anchor="middle">Club A. Mayor</text>
+      <line x1="390" y1="165" x2="313" y2="132" stroke="#888" stroke-width="1.5" stroke-dasharray="4"/> <!-- Relación Débil -->
+    </svg>
+    <p style="font-size: 0.8rem; color: #555; margin-top: 4px;">Interpretación comunitaria: Conexión sólida con el CESFAM (controles al día) y la Escuela de Lucas | Relación en zigzag con el Trabajo (fuente de tensión) | Vínculo débil con el Club de Adulto Mayor.</p>
+  </div>
+
+  <h3>SÍNTESIS COMPARATIVA: GENOGRAMA VS. ECOMAPA</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th>Genograma (Familiograma)</th>
+        <th>Ecomapa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Foco de Evaluación</b></td>
+        <td><b>Hacia ADENTRO:</b> Estructura biológica y relacional interna.</td>
+        <td><b>Hacia AFUERA:</b> Inserción social y relaciones con el entorno.</td>
+      </tr>
+      <tr>
+        <td><b>Alcance Temporal</b></td>
+        <td>Transgeneracional (mínimo <b>3 generaciones</b>).</td>
+        <td>Situación actual (momento presente de la familia).</td>
+      </tr>
+      <tr>
+        <td><b>Información Clave</b></td>
+        <td>Enfermedades hereditarias, edades, causa de muerte, alianzas/conflictos.</td>
+        <td>Redes de apoyo comunitarias, fuentes de estrés laboral o económico.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- BLOQUE 4 -->
+  <h2>Bloque 4: Autochequeo de Aprendizaje</h2>
+  <p>Responde de manera autónoma las siguientes 8 preguntas de selección múltiple. Al finalizar, coteja con la pauta técnica explicada.</p>
+
+  <div class="q-card">
+    <div class="q-title">1. Una usuaria de 38 años acude a la entrega de alimentos en la bodega del PNAC/PACAM. Al revisar su Ficha Clínica, el TENS nota que su último PAP fue hace 4 años. ¿Qué principio normativo debe aplicar el TENS?</div>
+    <div class="q-options">
+      a) Entregar los alimentos y no intervenir, pues la usuaria no pidió hora ginecológica.<br>
+      b) Realizar Pesquisa Oportunística: educar sobre la importancia del PAP (25 a 64 años cada 3 años) y gestionar hora con la Matrona.<br>
+      c) Negar la entrega de la leche hasta que traiga el examen impreso.<br>
+      d) Indicarle que el PAP solo se realiza a partir de los 50 años.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">2. Usuaria de 58 años consulta en admisión. Al revisar su ficha, el TENS observa que no registra mamografía en los últimos 3 años. ¿Cuál es el rango etario y la periodicidad normada para este examen de tamizaje en APS?</div>
+    <div class="q-options">
+      a) 25 a 64 años, cada 3 años.<br>
+      b) 50 a 69 años, cada 2 años.<br>
+      c) 60 a 75 años, anualmente.<br>
+      d) Todo el ciclo vital, cada 5 años.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">3. Durante el control de un lactante de 3 meses, el TENS registra un peso que, al ser graficado, muestra una línea totalmente horizontal (aplanada) respecto al control anterior. ¿Qué representa clínicamente esta curva?</div>
+    <div class="q-options">
+      a) Ganancia ponderal óptima y saludable.<br>
+      b) Pérdida crítica de peso acumulado.<br>
+      c) Estancamiento en el incremento ponderal (signo de alerta).<br>
+      d) Un error exclusivo de la balanza digital.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">4. Ante la situación anterior (curva de peso aplanada), ¿cuál es el actuar operativo correcto del TENS en el box?</div>
+    <div class="q-options">
+      a) Dar de alta la atención y citar en 3 meses para reevaluar.<br>
+      b) Cambiar la indicación de fórmula láctea por iniciativa propia.<br>
+      c) Notificar inmediatamente a la enfermera o médico a cargo antes de que la familia se retire.<br>
+      d) Omitir el registro del peso en el carné de salud infantil.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">5. ¿Qué indicador antropométrico se utiliza como el principal referente para evaluar el estado nutricional actual (déficit o exceso) en el lactante?</div>
+    <div class="q-options">
+      a) Talla / Edad (T/E).<br>
+      b) Peso / Talla (P/T).<br>
+      c) Perímetro Cefálico.<br>
+      d) Peso / Edad únicamente.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">6. ¿Qué herramienta gráfica permite evaluar la estructura interna de una familia mapeando al menos 3 generaciones y sus antecedentes de salud?</div>
+    <div class="q-options">
+      a) Ecomapa.<br>
+      b) Genograma.<br>
+      c) APGAR Familiar.<br>
+      d) Ficha CAS.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">7. Al realizar una Visita Domiciliaria Integral, el equipo requiere evaluar si la familia cuenta con redes de apoyo en el municipio, colegio y CESFAM. ¿Qué instrumento gráfico es el indicado?</div>
+    <div class="q-options">
+      a) Genograma.<br>
+      b) Carné de Vacunación.<br>
+      c) Ecomapa.<br>
+      d) Curva de crecimiento OMS.
+    </div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-title">8. ¿Cuál es la diferencia conceptual clave entre el Genograma y el Ecomapa?</div>
+    <div class="q-options">
+      a) El Genograma evalúa la salud mental y el Ecomapa la salud física.<br>
+      b) El Genograma mira hacia adentro (estructura y genética) y el Ecomapa mira hacia afuera (redes comunitarias).<br>
+      c) El Genograma se aplica solo a niños y el Ecomapa a adultos mayores.<br>
+      d) Ambos instrumentos miden exactamente los mismos parámetros sin diferencias.
+    </div>
+  </div>
+
+  <!-- PAUTA DE RESPUESTAS -->
+  <div class="pauta-box">
+    <h3 style="color: #2e7d32; margin-top: 0;">Pauta de Respuestas y Fundamentación Técnica</h3>
+
+    <div class="pauta-item">
+      <b>1. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> El TENS debe aplicar el principio de <b>Pesquisa Oportunística</b> en cualquier punto de contacto (como la entrega del PNAC). El PAP se realiza entre los 25 y 64 años cada 3 años. Nunca se debe rechazar la entrega de alimentos ni condicionar punitivamente la atención.
+    </div>
+
+    <div class="pauta-item">
+      <b>2. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> La Mamografía de tamizaje en APS está normada para mujeres de 50 a 69 años con una periodicidad de cada 2 años. La opción A corresponde a la norma del PAP.
+    </div>
+
+    <div class="pauta-item">
+      <b>3. Respuesta Correcta: C</b><br>
+      <i>Fundamento:</i> Una curva horizontal refleja estancamiento en la ganancia de peso (el lactante no subió ni bajó respecto al control previo)[cite: 1]. Es una alerta temprana que exige revisar acople de lactancia o presencia de patología intercurrente[cite: 1].
+    </div>
+
+    <div class="pauta-item">
+      <b>4. Respuesta Correcta: C</b><br>
+      <i>Fundamento:</i> El TENS no asume conductas prescriptivas ni otorga altas ante parámetros alterados[cite: 1]. Su rol operativo es alertar inmediatamente al profesional universitario a cargo (enfermera/o o médico) antes de que la usuaria abandone el centro[cite: 1].
+    </div>
+
+    <div class="pauta-item">
+      <b>5. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> El índice Peso/Talla (P/T) evalúa la proporcionalidad corporal y clasifica el estado nutricional actual en desnutrición, riesgo de desnutrir, normopeso, sobrepeso u obesidad.
+    </div>
+
+    <div class="pauta-item">
+      <b>6. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> El Genograma es la herramienta gráfica estandarizada para evaluar la estructura biológica y relacional de la familia en un mínimo de 3 generaciones.
+    </div>
+
+    <div class="pauta-item">
+      <b>7. Respuesta Correcta: C</b><br>
+      <i>Fundamento:</i> El Ecomapa sitúa a la familia en el centro y diagrama sus conexiones y flujos de apoyo/tensión con las instituciones y sistemas del entorno comunitario (escuela, CESFAM, trabajo, etc.).
+    </div>
+
+    <div class="pauta-item">
+      <b>8. Respuesta Correcta: B</b><br>
+      <i>Fundamento:</i> Es la distinción binaria fundamental: Genograma = evaluación de la dinámica e historia interna (hacia adentro). Ecomapa = evaluación de la integración con el entorno y sus redes (hacia afuera).
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
