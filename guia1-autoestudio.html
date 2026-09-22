@@ -26,7 +26,7 @@
     font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     color: var(--text);
     background: #eef2f5;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .container {
@@ -41,7 +41,7 @@
   header {
     border-bottom: 3px solid var(--navy);
     padding-bottom: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .institution {
@@ -79,45 +79,45 @@
 
   h2 {
     color: var(--navy);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     border-left: 4px solid var(--blue);
     padding-left: 10px;
-    margin-top: 35px;
-    margin-bottom: 15px;
+    margin-top: 28px;
+    margin-bottom: 12px;
   }
 
   h3 {
     color: var(--blue);
-    font-size: 1.05rem;
-    margin-top: 22px;
-    margin-bottom: 8px;
+    font-size: 1.02rem;
+    margin-top: 18px;
+    margin-bottom: 6px;
   }
 
   p, li {
-    font-size: 0.95rem;
+    font-size: 0.93rem;
     text-align: justify;
   }
 
   ul, ol {
     padding-left: 20px;
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
-  li { margin-bottom: 6px; }
+  li { margin-bottom: 4px; }
 
   .box-info {
     background: var(--light-blue);
     border: 1px solid #b2cce5;
     border-radius: 6px;
-    padding: 16px 20px;
-    margin: 15px 0;
+    padding: 14px 18px;
+    margin: 14px 0;
   }
 
   .box-alert {
     background: var(--orange-bg);
     border-left: 4px solid var(--orange);
-    padding: 14px 18px;
-    margin: 15px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
     border-radius: 0 6px 6px 0;
   }
 
@@ -125,40 +125,40 @@
     background: #fffde7;
     border: 2px solid #fbc02d;
     border-radius: 8px;
-    padding: 18px 22px;
-    margin: 20px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
   }
 
   .grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin: 20px 0;
+    margin: 16px 0;
   }
 
   .card-curve {
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
     background: var(--gray-bg);
     text-align: center;
   }
 
   .card-curve h4 {
-    margin: 0 0 8px;
-    font-size: 0.9rem;
+    margin: 0 0 6px;
+    font-size: 0.88rem;
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 18px 0;
-    font-size: 0.9rem;
+    margin: 14px 0;
+    font-size: 0.88rem;
   }
 
   th, td {
     border: 1px solid var(--border);
-    padding: 10px 12px;
+    padding: 8px 10px;
     text-align: left;
   }
 
@@ -171,20 +171,20 @@
     background: white;
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 18px;
+    padding: 14px;
     text-align: center;
-    margin: 20px 0;
+    margin: 16px 0;
   }
 
   .symbol-table {
     width: 100%;
-    margin: 15px 0;
+    margin: 12px 0;
     background: var(--gray-bg);
   }
 
   .symbol-table td {
     vertical-align: middle;
-    padding: 8px 12px;
+    padding: 6px 10px;
   }
 
   /* Estilos del Autochequeo */
@@ -192,19 +192,19 @@
     background: var(--gray-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
   }
 
   .q-title {
     font-weight: 700;
     color: var(--navy);
-    font-size: 0.95rem;
-    margin-bottom: 8px;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
   }
 
   .q-options {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     margin-left: 15px;
   }
 
@@ -212,29 +212,98 @@
     background: #f0f7f0;
     border: 1px solid #a3d9a5;
     border-radius: 8px;
-    padding: 18px 22px;
-    margin-top: 30px;
+    padding: 16px 20px;
+    margin-top: 24px;
   }
 
   .pauta-item {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     border-bottom: 1px dashed #b2d8b4;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
   }
 
   .pauta-item:last-child {
     border-bottom: none;
   }
 
-  /* Ajustes para Impresión PDF */
+  /* REGLAS EXCLUSIVAS DE IMPRESIÓN Y PDF COMPACTO */
   @media print {
-    body { background: white; }
-    .container {
-      box-shadow: none;
-      padding: 0;
-      max-width: 100%;
+    @page {
+      size: letter;
+      margin: 12mm 12mm 12mm 12mm;
     }
-    .page-break { page-break-before: always; }
+    
+    body {
+      background: white !important;
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    .container {
+      box-shadow: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      border: none !important;
+    }
+
+    /* Evitar saltos de página forzados que dejan vacíos */
+    .page-break {
+      page-break-before: auto !important;
+      break-before: auto !important;
+    }
+
+    /* Evitar cortar bloques e imágenes a la mitad */
+    .card-curve, 
+    .q-card, 
+    .diagram-box, 
+    .box-info, 
+    .box-alert, 
+    .box-gold, 
+    table, 
+    .symbol-table,
+    .pauta-box, 
+    .pauta-item {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* Mantener títulos pegados a su contenido */
+    h1, h2, h3, h4 {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+
+    h2 {
+      margin-top: 20px !important;
+      margin-bottom: 8px !important;
+      padding-left: 8px !important;
+    }
+
+    h3 {
+      margin-top: 14px !important;
+      margin-bottom: 4px !important;
+    }
+
+    .grid-3 {
+      gap: 8px !important;
+      margin: 10px 0 !important;
+    }
+
+    .box-info, .box-gold, .box-alert {
+      padding: 10px 14px !important;
+      margin: 10px 0 !important;
+    }
+
+    .diagram-box {
+      padding: 10px !important;
+      margin: 10px 0 !important;
+    }
+
+    svg {
+      max-width: 100% !important;
+      height: auto !important;
+    }
   }
 </style>
 </head>
@@ -265,7 +334,7 @@
       <li><b>Toma del Examen:</b> Procedimiento realizado por la Matrona en el CESFAM.</li>
     </ul>
 
-    <h3 style="margin-top: 15px;">2. Mamografía — Pesquisa de Cáncer de Mama</h3>
+    <h3 style="margin-top: 12px;">2. Mamografía — Pesquisa de Cáncer de Mama</h3>
     <p><b>Fundamento Clínico:</b> El Cáncer de Mama es la primera causa de muerte por cáncer ginecológico en mujeres chilenas. En etapas iniciales no presenta dolor ni nódulos palpables. La mamografía es el único examen capaz de detectar microcalcificaciones o tumores subclínicos años antes de ser palpables.</p>
     <ul>
       <li><b>Población Objetivo Prioritaria:</b> Mujeres de <b>50 a 69 años</b> (grupo donde aumenta drásticamente la incidencia y el examen tiene mayor rendimiento técnico debido a la menor densidad mamaria).</li>
@@ -293,9 +362,9 @@
   <h3>Indicadores Antropométricos e Identificación Visual</h3>
   <p>Un dato aislado de peso no permite diagnosticar el estado nutricional. En la ficha clínica se utilizan tres índices relacionales principales:</p>
   <ul>
-    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#2f6fb0; font-size:1.2rem;">P</span>eso / <span style="color:#2f6fb0; font-size:1.2rem;">T</span>alla (<span style="color:#2f6fb0;">P/T</span>):</b> Refleja la proporcionalidad corporal. Es el indicador principal para evaluar el <b>estado nutricional actual / agudo</b> (clasifica en desnutrición, riesgo de desnutrir, normopeso, sobrepeso u obesidad).</li>
-    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#2e7d32; font-size:1.2rem;">T</span>alla / <span style="color:#2e7d32; font-size:1.2rem;">E</span>dad (<span style="color:#2e7d32;">T/E</span>):</b> Refleja el <b>crecimiento lineal acumulado / crónico</b> (clasifica en talla normal o retraso estatural).</li>
-    <li><b style="color:var(--navy); font-size: 1.05rem;"><span style="color:#e65100; font-size:1.2rem;">P</span>eso / <span style="color:#e65100; font-size:1.2rem;">E</span>dad (<span style="color:#e65100;">P/E</span>):</b> Funciona como un indicador de <b>alerta global rápida</b> en menores de 1 año.</li>
+    <li><b style="color:var(--navy); font-size: 1rem;"><span style="color:#2f6fb0; font-size:1.15rem;">P</span>eso / <span style="color:#2f6fb0; font-size:1.15rem;">T</span>alla (<span style="color:#2f6fb0;">P/T</span>):</b> Refleja la proporcionalidad corporal. Es el indicador principal para evaluar el <b>estado nutricional actual / agudo</b> (clasifica en desnutrición, riesgo de desnutrir, normopeso, sobrepeso u obesidad).</li>
+    <li><b style="color:var(--navy); font-size: 1rem;"><span style="color:#2e7d32; font-size:1.15rem;">T</span>alla / <span style="color:#2e7d32; font-size:1.15rem;">E</span>dad (<span style="color:#2e7d32;">T/E</span>):</b> Refleja el <b>crecimiento lineal acumulado / crónico</b> (clasifica en talla normal o retraso estatural).</li>
+    <li><b style="color:var(--navy); font-size: 1rem;"><span style="color:#e65100; font-size:1.15rem;">P</span>eso / <span style="color:#e65100; font-size:1.15rem;">E</span>dad (<span style="color:#e65100;">P/E</span>):</b> Funciona como un indicador de <b>alerta global rápida</b> en menores de 1 año.</li>
     <li><b>Perímetro Cefálico (PC):</b> Medición obligatoria del contorno craneal con cinta métrica hasta los 2 años para la detección precoz de alteraciones neurológicas (microcefalia o hidrocefalia).</li>
   </ul>
 
@@ -307,8 +376,8 @@
     <!-- Curva Ascendente -->
     <div class="card-curve" style="border-top: 4px solid var(--green);">
       <h4 style="color: var(--green);">1. Curva Ascendente ↗</h4>
-      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Incremento Óptimo</b></p>
-      <svg width="200" height="130" viewBox="0 0 200 130">
+      <p style="font-size: 0.76rem; margin: 2px 0;"><b>Incremento Óptimo</b></p>
+      <svg width="190" height="120" viewBox="0 0 200 130">
         <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
         <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
         <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
@@ -327,14 +396,14 @@
         <circle cx="150" cy="25" r="4" fill="var(--green)"/>
         <text x="142" y="18" font-size="8" fill="#2e7d32" font-weight="bold">6.2 kg</text>
       </svg>
-      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Ganancia de peso adecuada en el período. Aporte calórico efectivo.<br><b>Conducta TENS:</b> Registrar, felicitar al cuidador y reforzar LME.</p>
+      <p style="font-size: 0.76rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Ganancia de peso adecuada. Aporte calórico efectivo.<br><b>Conducta TENS:</b> Registrar, felicitar al cuidador y reforzar LME.</p>
     </div>
 
     <!-- Curva Aplanada -->
     <div class="card-curve" style="border-top: 4px solid var(--orange);">
       <h4 style="color: var(--orange);">2. Curva Aplanada →</h4>
-      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Estancamiento (Alerta)</b></p>
-      <svg width="200" height="130" viewBox="0 0 200 130">
+      <p style="font-size: 0.76rem; margin: 2px 0;"><b>Estancamiento (Alerta)</b></p>
+      <svg width="190" height="120" viewBox="0 0 200 130">
         <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
         <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
         <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
@@ -353,14 +422,14 @@
         <circle cx="150" cy="55" r="4" fill="var(--orange)"/>
         <text x="142" y="48" font-size="8" fill="var(--orange)" font-weight="bold">5.5 kg</text>
       </svg>
-      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> El niño no ganó peso. Posible falla de acople, grietas o enfermedad.<br><b>Conducta TENS:</b> Alerta temprana. Notificar al profesional sin dar el alta[cite: 1].</p>
+      <p style="font-size: 0.76rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> El niño no ganó peso. Posible falla de acople o enfermedad.<br><b>Conducta TENS:</b> Alerta temprana. Notificar al profesional sin dar el alta[cite: 1].</p>
     </div>
 
     <!-- Curva Descendente -->
     <div class="card-curve" style="border-top: 4px solid var(--red);">
       <h4 style="color: var(--red);">3. Curva Descendente ↘</h4>
-      <p style="font-size: 0.78rem; margin: 2px 0;"><b>Pérdida (Alerta Alta)</b></p>
-      <svg width="200" height="130" viewBox="0 0 200 130">
+      <p style="font-size: 0.76rem; margin: 2px 0;"><b>Pérdida (Alerta Alta)</b></p>
+      <svg width="190" height="120" viewBox="0 0 200 130">
         <line x1="35" y1="15" x2="35" y2="100" stroke="#555" stroke-width="1.5"/>
         <line x1="35" y1="100" x2="185" y2="100" stroke="#555" stroke-width="1.5"/>
         <text x="5" y="12" font-size="8" fill="#333" font-weight="bold">Peso (kg)</text>
@@ -379,7 +448,7 @@
         <circle cx="150" cy="75" r="4" fill="var(--red)"/>
         <text x="142" y="88" font-size="8" fill="var(--red)" font-weight="bold">4.9 kg</text>
       </svg>
-      <p style="font-size: 0.78rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Pérdida activa de peso corporal. Riesgo de deshidratación o patología.<br><b>Conducta TENS:</b> Alerta prioritaria. Evaluación médica de inmediato.</p>
+      <p style="font-size: 0.76rem; text-align: left; margin-top: 4px;"><b>Análisis:</b> Pérdida activa de peso. Riesgo de deshidratación o patología.<br><b>Conducta TENS:</b> Alerta prioritaria. Evaluación médica de inmediato.</p>
     </div>
 
   </div>
@@ -396,8 +465,6 @@
     </ol>
   </div>
 
-  <div class="page-break"></div>
-
   <!-- BLOQUE 3 -->
   <h2>Bloque 3: Valoración Familiar (Estructura vs. Redes)</h2>
   
@@ -410,46 +477,46 @@
   <h3>Leyenda de Simbología Gráfica en Genograma</h3>
   <table class="symbol-table">
     <tr>
-      <td style="width: 70px; text-align: center;">
-        <svg width="30" height="30"><circle cx="15" cy="15" r="12" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
+      <td style="width: 60px; text-align: center;">
+        <svg width="26" height="26"><circle cx="13" cy="13" r="10" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
       </td>
       <td><b>Círculo:</b> Representa a una integrante femenina.</td>
-      <td style="width: 70px; text-align: center;">
-        <svg width="30" height="30"><rect x="3" y="3" width="24" height="24" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
+      <td style="width: 60px; text-align: center;">
+        <svg width="26" height="26"><rect x="3" y="3" width="20" height="20" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/></svg>
       </td>
       <td><b>Cuadrado:</b> Representa a un integrante masculino.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="30" height="30">
-          <circle cx="15" cy="15" r="12" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/>
-          <circle cx="15" cy="15" r="8" fill="none" stroke="var(--navy)" stroke-width="1"/>
+        <svg width="26" height="26">
+          <circle cx="13" cy="13" r="10" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/>
+          <circle cx="13" cy="13" r="6" fill="none" stroke="var(--navy)" stroke-width="1"/>
         </svg>
       </td>
-      <td><b>Doble Borde:</b> Identifica al <b>Caso Índice</b> (usuario principal atendido).</td>
+      <td><b>Doble Borde:</b> Identifica al <b>Caso Índice</b> (usuario principal).</td>
       <td style="text-align: center;">
-        <svg width="50" height="20">
-          <line x1="0" y1="7" x2="50" y2="7" stroke="var(--blue)" stroke-width="2"/>
-          <line x1="0" y1="13" x2="50" y2="13" stroke="var(--blue)" stroke-width="2"/>
+        <svg width="45" height="18">
+          <line x1="0" y1="6" x2="45" y2="6" stroke="var(--blue)" stroke-width="2"/>
+          <line x1="0" y1="12" x2="45" y2="12" stroke="var(--blue)" stroke-width="2"/>
         </svg>
       </td>
-      <td><b>Doble Línea Paralela:</b> Vínculo muy estrecho / relación fuerte.</td>
+      <td><b>Doble Línea Paralela:</b> Vínculo muy estrecho / fuerte.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="50" height="20"><line x1="0" y1="10" x2="50" y2="10" stroke="#666" stroke-width="2" stroke-dasharray="4"/></svg>
+        <svg width="45" height="18"><line x1="0" y1="9" x2="45" y2="9" stroke="#666" stroke-width="2" stroke-dasharray="4"/></svg>
       </td>
-      <td><b>Línea Discontinua:</b> Vínculo distante o relaciones esporádicas.</td>
+      <td><b>Línea Discontinua:</b> Vínculo distante o esporádico.</td>
       <td style="text-align: center;">
-        <svg width="50" height="20"><path d="M 0 10 L 10 3 L 20 17 L 30 3 L 40 17 L 50 10" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
+        <svg width="45" height="18"><path d="M 0 9 L 9 3 L 18 15 L 27 3 L 36 15 L 45 9" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
       </td>
-      <td><b>Línea en Zigzag:</b> Relación conflictiva / fuente de tensión.</td>
+      <td><b>Línea en Zigzag:</b> Relación conflictiva / tensión.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="50" height="20">
-          <line x1="0" y1="10" x2="50" y2="10" stroke="#666" stroke-width="1.5"/>
-          <line x1="22" y1="2" x2="28" y2="18" stroke="var(--red)" stroke-width="2"/>
+        <svg width="45" height="18">
+          <line x1="0" y1="9" x2="45" y2="9" stroke="#666" stroke-width="1.5"/>
+          <line x1="20" y1="2" x2="25" y2="16" stroke="var(--red)" stroke-width="2"/>
         </svg>
       </td>
       <td colspan="3"><b>Línea con Barra Cruzada:</b> Separación matrimonial o divorcio legal.</td>
@@ -465,7 +532,7 @@
   <!-- DIAGRAMA GENOGRAMA -->
   <div class="diagram-box">
     <h3>Genograma de la Familia González (Mirando hacia ADENTRO)</h3>
-    <svg width="520" height="260" viewBox="0 0 520 260">
+    <svg width="480" height="240" viewBox="0 0 520 260">
       <!-- Generación 1 -->
       <text x="10" y="45" font-size="11" font-weight="bold" fill="#666">1ª Generación</text>
       <circle cx="220" cy="40" r="28" fill="#eaf2fa" stroke="var(--navy)" stroke-width="2"/>
@@ -489,19 +556,18 @@
       <text x="375" y="134" font-size="10" text-anchor="middle">Padre</text>
       <!-- Línea Matrimonio/Separación -->
       <line x1="248" y1="130" x2="350" y2="130" stroke="#666" stroke-width="1.5" stroke-dasharray="4"/>
-      <line x1="295" y1="120" x2="303" y2="140" stroke="var(--red)" stroke-width="2"/> <!-- Marca separación -->
+      <line x1="295" y1="120" x2="303" y2="140" stroke="var(--red)" stroke-width="2"/>
 
       <!-- Vínculo Carmen -> Lucas -->
       <line x1="220" y1="158" x2="220" y2="185" stroke="#333" stroke-width="1.5"/>
 
       <!-- Generación 3 -->
       <text x="10" y="210" font-size="11" font-weight="bold" fill="#666">3ª Generación</text>
-      <!-- Lucas: Cuadrado perfecto de 50x50px centrado en X=220 (X=195 a 245) -->
       <rect x="195" y="185" width="50" height="50" fill="#e8f5e9" stroke="var(--green)" stroke-width="2"/>
       <text x="220" y="208" font-size="10" font-weight="bold" text-anchor="middle">Lucas</text>
       <text x="220" y="222" font-size="9" fill="#555" text-anchor="middle">5 años</text>
     </svg>
-    <p style="font-size: 0.8rem; color: #555; margin-top: 4px;">Análisis gráfico: Carmen es el Caso Índice (doble borde) | Rosa y Carmen viven juntas y poseen vínculo estrecho (dos líneas azules paralelas) | Lucas está representado por un cuadrado perfecto (masculino) | Separación legal con el padre (barra roja cruzada).</p>
+    <p style="font-size: 0.78rem; color: #555; margin-top: 4px;">Análisis gráfico: Carmen es el Caso Índice (doble borde) | Rosa y Carmen viven juntas y poseen vínculo estrecho (dos líneas azules paralelas) | Lucas está representado por un cuadrado perfecto (masculino) | Separación legal con el padre (barra roja cruzada).</p>
   </div>
 
   <!-- CONTEXTO TEÓRICO DEL ECOMAPA -->
@@ -512,42 +578,42 @@
   <h3>Leyenda de Simbología Gráfica en Ecomapa</h3>
   <table class="symbol-table">
     <tr>
-      <td style="width: 70px; text-align: center;">
-        <svg width="60" height="20"><line x1="0" y1="10" x2="60" y2="10" stroke="var(--blue)" stroke-width="3"/></svg>
+      <td style="width: 60px; text-align: center;">
+        <svg width="50" height="18"><line x1="0" y1="9" x2="50" y2="9" stroke="var(--blue)" stroke-width="3"/></svg>
       </td>
-      <td><b>Línea Azul Continua Gruesa:</b> Conexión fuerte, sólida y de apoyo constante (red nutricional).</td>
+      <td><b>Línea Azul Continua Gruesa:</b> Conexión fuerte, sólida y de apoyo constante.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="60" height="20"><path d="M 0 10 L 10 3 L 20 17 L 30 3 L 40 17 L 50 3 L 60 10" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
+        <svg width="50" height="18"><path d="M 0 9 L 8 3 L 16 15 L 24 3 L 32 15 L 40 3 L 50 9" fill="none" stroke="var(--red)" stroke-width="2"/></svg>
       </td>
-      <td><b>Línea Roja en Zigzag:</b> Relación estresante, conflictiva o generadora de tensión laboral/económica.</td>
+      <td><b>Línea Roja en Zigzag:</b> Relación estresante, conflictiva o generadora de tensión.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="60" height="20"><line x1="0" y1="10" x2="60" y2="10" stroke="#888" stroke-width="2" stroke-dasharray="4"/></svg>
+        <svg width="50" height="18"><line x1="0" y1="9" x2="50" y2="9" stroke="#888" stroke-width="2" stroke-dasharray="4"/></svg>
       </td>
       <td><b>Línea Gris Discontinua:</b> Vínculo débil, esporádico o frágil.</td>
     </tr>
     <tr>
       <td style="text-align: center;">
-        <svg width="60" height="20">
+        <svg width="50" height="18">
           <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--green)"/>
             </marker>
           </defs>
-          <line x1="5" y1="10" x2="55" y2="10" stroke="var(--green)" stroke-width="2" marker-end="url(#arrow)"/>
+          <line x1="5" y1="9" x2="45" y2="9" stroke="var(--green)" stroke-width="2" marker-end="url(#arrow)"/>
         </svg>
       </td>
-      <td><b>Flechas en los Extremos:</b> Muestran la dirección del flujo de energía, recursos o apoyo.</td>
+      <td><b>Flechas en los Extremos:</b> Muestran la dirección del flujo de energía o apoyo.</td>
     </tr>
   </table>
 
   <!-- DIAGRAMA ECOMAPA -->
   <div class="diagram-box">
     <h3>Ecomapa de la Familia González (Mirando hacia AFUERA)</h3>
-    <svg width="500" height="230" viewBox="0 0 500 230">
+    <svg width="480" height="220" viewBox="0 0 500 230">
       <!-- Familia Centro -->
       <ellipse cx="250" cy="115" rx="70" ry="38" fill="var(--navy)" />
       <text x="250" y="112" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Familia</text>
@@ -556,25 +622,24 @@
       <!-- Nodo CESFAM -->
       <circle cx="80" cy="55" r="32" fill="#eaf2fa" stroke="var(--blue)" stroke-width="2"/>
       <text x="80" y="59" font-size="10" font-weight="bold" text-anchor="middle">CESFAM</text>
-      <line x1="110" y1="68" x2="185" y2="98" stroke="var(--blue)" stroke-width="3"/> <!-- Relación Fuerte -->
+      <line x1="110" y1="68" x2="185" y2="98" stroke="var(--blue)" stroke-width="3"/>
 
       <!-- Nodo Escuela -->
       <circle cx="420" cy="55" r="32" fill="#e8f5e9" stroke="var(--green)" stroke-width="2"/>
       <text x="420" y="59" font-size="10" font-weight="bold" text-anchor="middle">Escuela</text>
-      <line x1="390" y1="68" x2="313" y2="98" stroke="var(--green)" stroke-width="2"/> <!-- Relación Apoyo -->
+      <line x1="390" y1="68" x2="313" y2="98" stroke="var(--green)" stroke-width="2"/>
 
       <!-- Nodo Trabajo Carmen -->
       <circle cx="80" cy="175" r="32" fill="#fdecea" stroke="var(--red)" stroke-width="2"/>
       <text x="80" y="179" font-size="10" font-weight="bold" text-anchor="middle">Trabajo</text>
-      <!-- Zigzag line -->
       <path d="M 110 165 L 130 155 L 145 170 L 160 150 L 185 132" fill="none" stroke="var(--red)" stroke-width="2"/>
 
       <!-- Nodo Club Adulto Mayor -->
       <circle cx="420" cy="175" r="32" fill="#f8fafc" stroke="#888" stroke-width="1.5"/>
       <text x="420" y="179" font-size="9" text-anchor="middle">Club A. Mayor</text>
-      <line x1="390" y1="165" x2="313" y2="132" stroke="#888" stroke-width="1.5" stroke-dasharray="4"/> <!-- Relación Débil -->
+      <line x1="390" y1="165" x2="313" y2="132" stroke="#888" stroke-width="1.5" stroke-dasharray="4"/>
     </svg>
-    <p style="font-size: 0.8rem; color: #555; margin-top: 4px;">Interpretación comunitaria: Conexión sólida con el CESFAM (controles al día) y la Escuela de Lucas | Relación en zigzag con el Trabajo (fuente de tensión) | Vínculo débil con el Club de Adulto Mayor.</p>
+    <p style="font-size: 0.78rem; color: #555; margin-top: 4px;">Interpretación comunitaria: Conexión sólida con el CESFAM (controles al día) y la Escuela de Lucas | Relación en zigzag con el Trabajo (fuente de tensión) | Vínculo débil con el Club de Adulto Mayor.</p>
   </div>
 
   <h3>SÍNTESIS COMPARATIVA: GENOGRAMA VS. ECOMAPA</h3>
@@ -604,8 +669,6 @@
       </tr>
     </tbody>
   </table>
-
-  <div class="page-break"></div>
 
   <!-- BLOQUE 4 -->
   <h2>Bloque 4: Autochequeo de Aprendizaje</h2>
