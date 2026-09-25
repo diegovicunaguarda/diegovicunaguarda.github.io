@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kit Evaluador EMPAM - Guía del Estudiante</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .glass-card {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* ESTILOS EXCLUSIVOS PARA IMPRESIÓN Y GUARDADO EN PDF */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      header, nav, button, .no-print {
+        display: none !important;
+      }
+      main {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      section {
+        display: block !important;
+      }
+      #step-triaje, #step-efam, #step-escalas, #step-motoras {
+        display: none !important;
+      }
+      #step-resumen {
+        display: block !important;
+      }
+      .glass-card, .bg-slate-900, .bg-slate-950, .bg-slate-900\/40, .bg-emerald-900\/40 {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+      }
+      .text-white, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 {
+        color: black !important;
+      }
+      .text-blue-400, .text-emerald-400, .text-amber-400, .text-purple-300, .text-red-400, .text-pink-300 {
+        color: #1e3a8a !important;
+        font-weight: bold !important;
+      }
+      .print-border {
+        border: 2px solid #000 !important;
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+        border-radius: 8px !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white pb-12">
+
+  <!-- Header Fijo (no-print) -->
+  <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur-md no-print">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="bg-blue-600 p-2 rounded-lg text-white">
+          <i class="fa-solid fa-clipboard-user text-lg"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-sm md:text-base leading-tight">Evaluador EMPAM</h1>
+          <p class="text-[11px] text-slate-400">Guía Clínica de Aplicación</p>
+        </div>
+      </div>
+
+      <!-- Navegación por Módulos -->
+      <div class="flex gap-1 overflow-x-auto text-xs whitespace-nowrap">
+        <button onclick="navTo('triaje')" id="nav-triaje" class="px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-bold">1. Triaje</button>
+        <button onclick="navTo('efam')" id="nav-efam" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 font-medium">2. EFAM</button>
+        <button onclick="navTo('escalas')" id="nav-escalas" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 font-medium">3. Escalas</button>
+        <button onclick="navTo('motoras')" id="nav-motoras" class="px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 font-medium">4. Motor</button>
+        <button onclick="navTo('resumen')" id="nav-resumen" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/80 text-white font-bold">5. Ficha / PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-4 w-full flex-1 space-y-6">
+
+    <!-- PASO 1: TRIAJE INICIAL -->
+    <section id="step-triaje" class="space-y-4">
+      <div class="bg-blue-900/30 border border-blue-500/30 p-4 rounded-2xl">
+        <span class="text-[11px] font-bold uppercase text-blue-400 tracking-wider">Paso 1: Triaje Inicial</span>
+        <h2 class="text-lg font-bold text-white mt-1">¿Qué camino le corresponde al usuario?</h2>
+        <p class="text-xs text-slate-300 mt-1">Evalúa la condición física y cognitiva con la que ingresa al box de atención.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Opción Camino Corto -->
+        <div onclick="selectPath('barthel')" id="card-path-barthel" class="glass-card p-4 rounded-2xl border-2 border-transparent hover:border-red-500/50 cursor-pointer transition-all space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="bg-red-500/20 text-red-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Camino Corto</span>
+            <i class="fa-solid fa-wheelchair text-red-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Dependencia Evidente</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Silla de ruedas, persona en cama, secuela grave de ACV, ceguera total o demencia avanzada.
+          </p>
+          <div class="text-xs text-red-300 font-bold pt-2 border-t border-slate-800">
+            → Se aplica directamente el ÍNDICE DE BARTHEL.
+          </div>
+        </div>
+
+        <!-- Opción Camino Largo -->
+        <div onclick="selectPath('efam')" id="card-path-efam" class="glass-card p-4 rounded-2xl border-2 border-blue-500 bg-blue-950/20 cursor-pointer transition-all space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full">Camino Largo</span>
+            <i class="fa-solid fa-person-walking text-emerald-400 text-lg"></i>
+          </div>
+          <h3 class="font-bold text-white text-base">Ingresa Caminando</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Adulto mayor autovalente aparente que acude por sus propios medios a la consulta.
+          </p>
+          <div class="text-xs text-emerald-300 font-bold pt-2 border-t border-slate-800">
+            → Se aplica el EFAM-CHILE (Parte A).
+          </div>
+        </div>
+
+      </div>
+
+      <div id="path-selection-status" class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-300 flex justify-between items-center">
+        <span>Ruta seleccionada: <strong class="text-blue-400" id="selected-path-text">EFAM-Chile (Camino Largo)</strong></span>
+        <button onclick="navTo('efam')" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg">Comenzar Evaluación →</button>
+      </div>
+    </section>
+
+    <!-- PASO 2: EFAM PARTE A & B -->
+    <section id="step-efam" class="hidden space-y-6">
+      
+      <!-- EFAM PARTE A -->
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="bg-blue-600 text-white text-xs px-2 py-0.5 rounded-md">Parte A</span> EFAM-Chile
+          </h2>
+          <span class="text-xs text-slate-400">Suma actual: <strong id="score-efam-a" class="text-blue-400 text-sm">0</strong> pts</span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          
+          <!-- Q1: Bañarse -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">1. ¿Puede bañarse o ducharse?</div>
+            <div class="p-2 bg-slate-900/60 rounded-lg text-slate-300 italic">
+              🗣️ <strong>Diles:</strong> "¿Actualmente se baña o ducha usted solo/a o necesita ayuda?"
+            </div>
+            <select onchange="calcEFAM()" id="efam-a1" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Sin ayuda (6 pts)</option>
+              <option value="3">Con alguna ayuda (3 pts)</option>
+              <option value="0">Incapaz de hacerlo (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q2: Dinero -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">2. ¿Es capaz de manejar su propio dinero?</div>
+            <div class="p-2 bg-slate-900/60 rounded-lg text-slate-300 italic">
+              🗣️ <strong>Diles:</strong> "¿Maneja su dinero o planifica sus compras usted mismo/a?"
+            </div>
+            <select onchange="calcEFAM()" id="efam-a2" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Sin ayuda / Conoce valor y planifica (6 pts)</option>
+              <option value="3">Fallas de memoria pero planifica / Con alguna ayuda (3 pts)</option>
+              <option value="0">Incapaz de manejar dinero (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q3: Fármacos -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">3. ¿Puede usted tomar sus medicamentos?</div>
+            <div class="p-2 bg-slate-900/60 rounded-lg text-slate-300 italic">
+              🗣️ <strong>Diles:</strong> "¿Sabe qué medicamentos toma, para qué sirven y sus horarios?"
+            </div>
+            <select onchange="calcEFAM()" id="efam-a3" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Sin ayuda (Sabe dosis, horario y motivo) (6 pts)</option>
+              <option value="3">Con alguna ayuda (3 pts)</option>
+              <option value="0">Incapaz de tomarlos solo (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q4: Preparar Comida -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">4. Preparación de la comida</div>
+            <div class="p-2 bg-slate-900/60 rounded-lg text-slate-300 italic">
+              🗣️ <strong>Diles:</strong> "Si tuviera que cocinarse usted mismo/a, ¿podría hacerlo?"
+            </div>
+            <select onchange="calcEFAM()" id="efam-a4" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Sin ayuda (Capaz de idear y cocinar) (6 pts)</option>
+              <option value="3">Con alguna ayuda / Colabora (3 pts)</option>
+              <option value="0">Incapaz de hacerlo (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q5: Tareas Casa -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">5. Tareas de la casa</div>
+            <div class="p-2 bg-slate-900/60 rounded-lg text-slate-300 italic">
+              🗣️ <strong>Diles:</strong> "¿Puede hacer las tareas básicas de la casa (barrer, hacer la cama)?"
+            </div>
+            <select onchange="calcEFAM()" id="efam-a5" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Sin ayuda (6 pts)</option>
+              <option value="3">Con alguna ayuda (3 pts)</option>
+              <option value="0">Incapaz de hacerlo (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q6: MMSE -->
+          <div class="glass-card p-4 rounded-xl border border-purple-500/40 space-y-3 bg-purple-950/10">
+            <div class="flex justify-between items-center border-b border-purple-500/30 pb-2">
+              <span class="font-bold text-purple-300 text-sm">6. Mini-Mental Abreviado (MMSE)</span>
+              <span class="text-xs bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-full font-bold" id="mmse-subtotal">0 / 19 pts</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-1">
+                <div class="font-bold text-slate-200">1. Orientación Temporal (0-4 pts)</div>
+                <p class="text-slate-400 italic">"¿En qué mes estamos? ¿Qué día del mes? ¿En qué año? ¿Qué día de la semana?"</p>
+                <div class="flex gap-2 items-center mt-1">
+                  <span class="text-slate-400">Puntos correctos:</span>
+                  <input type="number" min="0" max="4" value="4" id="mmse-q1" onchange="calcMMSE()" class="bg-slate-800 border border-slate-700 text-white px-2 py-1 rounded w-16 text-center font-bold">
+                </div>
+              </div>
+
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-1">
+                <div class="font-bold text-slate-200">2. Registro de 3 Palabras (0-3 pts)</div>
+                <p class="text-slate-400 italic">"Repita conmigo estas palabras y recuérdelas: ÁRBOL - MESA - AVIÓN"</p>
+                <div class="flex gap-2 items-center mt-1">
+                  <span class="text-slate-400">Palabras repetidas correctamente:</span>
+                  <input type="number" min="0" max="3" value="3" id="mmse-q2" onchange="calcMMSE()" class="bg-slate-800 border border-slate-700 text-white px-2 py-1 rounded w-16 text-center font-bold">
+                </div>
+              </div>
+
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-1">
+                <div class="font-bold text-slate-200">3. Números al Revés (0-5 pts)</div>
+                <p class="text-slate-400 italic">"Le voy a decir unos números, repítalos al revés: 1 - 3 - 5 - 7 - 9"</p>
+                <p class="text-[11px] text-amber-300/90">Respuesta correcta: 9 - 7 - 5 - 3 - 1</p>
+                <div class="flex gap-2 items-center mt-1">
+                  <span class="text-slate-400">Dígitos en orden correcto:</span>
+                  <input type="number" min="0" max="5" value="5" id="mmse-q3" onchange="calcMMSE()" class="bg-slate-800 border border-slate-700 text-white px-2 py-1 rounded w-16 text-center font-bold">
+                </div>
+              </div>
+
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-1">
+                <div class="font-bold text-slate-200">4. Instrucción con Papel (0-3 pts)</div>
+                <p class="text-slate-400 italic">"Tome este papel con la mano derecha, dóblelo por la mitad con ambas manos y colóquelo sobre sus piernas."</p>
+                <div class="flex gap-2 items-center mt-1">
+                  <span class="text-slate-400">Acciones correctas hechas:</span>
+                  <input type="number" min="0" max="3" value="3" id="mmse-q4" onchange="calcMMSE()" class="bg-slate-800 border border-slate-700 text-white px-2 py-1 rounded w-16 text-center font-bold">
+                </div>
+              </div>
+
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-1">
+                <div class="font-bold text-slate-200">5. Evocación de Palabras (0-3 pts)</div>
+                <p class="text-slate-400 italic">"¿Cuáles eran las tres palabras que le pedí que recordara?" (Árbol, Mesa, Avión)</p>
+                <div class="flex gap-2 items-center mt-1">
+                  <span class="text-slate-400">Palabras recordadas:</span>
+                  <input type="number" min="0" max="3" value="3" id="mmse-q5" onchange="calcMMSE()" class="bg-slate-800 border border-slate-700 text-white px-2 py-1 rounded w-16 text-center font-bold">
+                </div>
+              </div>
+
+              <div class="bg-slate-900 p-2.5 rounded-lg space-y-2">
+                <div class="font-bold text-slate-200">6. Copia de Dibujo (0-1 pt)</div>
+                <p class="text-slate-400 italic">Muéstrale la pantalla al usuario: "Copie este dibujo en un papel."</p>
+                <div class="flex justify-center bg-white p-3 rounded-lg border border-slate-300">
+                  <svg width="120" height="70" viewBox="0 0 120 70">
+                    <circle cx="45" cy="35" r="25" stroke="black" stroke-width="2" fill="none" />
+                    <circle cx="75" cy="35" r="25" stroke="black" stroke-width="2" fill="none" />
+                  </svg>
+                </div>
+                <select onchange="calcMMSE()" id="mmse-q6" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg mt-1">
+                  <option value="1">Copia Correcta (Los círculos no se cruzan más de la mitad) (1 pt)</option>
+                  <option value="0">Copia Incorrecta (0 pts)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="p-2.5 bg-purple-900/40 rounded-lg text-purple-200 text-xs flex justify-between items-center">
+              <span>Ponderación EFAM A:</span>
+              <strong id="mmse-efam-pts" class="text-sm text-purple-300">6 Puntos</strong>
+            </div>
+
+            <div id="pfeffer-alert" class="hidden p-3 bg-red-900/40 border border-red-500 rounded-xl text-xs text-red-200 space-y-1">
+              <div class="font-bold flex items-center gap-1.5 text-red-300">
+                <i class="fa-solid fa-triangle-exclamation"></i> MMSE ≤ 13 Puntos (Menor o igual a 13 pts)
+              </div>
+              <p>Indica Sospecha de Deterioro Cognitivo. <strong>Debes aplicar el Cuestionario de Pfeffer al acompañante.</strong></p>
+              <button onclick="navTo('escalas')" class="mt-1 px-3 py-1 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-[11px]">Ir a PFEFFER →</button>
+            </div>
+          </div>
+
+          <!-- Q7: Escolaridad -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">7. Años de Escolaridad cumplidos</div>
+            <select onchange="calcEFAM()" id="efam-a7" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">13 o más años (Educación Superior) (6 pts)</option>
+              <option value="5">11 a 12 años (5 pts)</option>
+              <option value="4">8 a 10 años (4 pts)</option>
+              <option value="3">6 a 8 años (3 pts)</option>
+              <option value="2">4 a 5 años (2 pts)</option>
+              <option value="1">2 a 3 años (1 pt)</option>
+              <option value="0">0 a 1 año (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q8: Extensión Brazos -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">8. Extensión de brazos sobre la cabeza</div>
+            <select onchange="calcEFAM()" id="efam-a8" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Lo logra sin dificultad con ambas manos (6 pts)</option>
+              <option value="4">Lo logra sin dificultad con una mano (4 pts)</option>
+              <option value="2">Dificultad con ambas manos (2 pts)</option>
+              <option value="0">No lo logra / Rango incompleto (0 pts)</option>
+            </select>
+          </div>
+
+          <!-- Q9: Encuclillarse -->
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">9. Encuclillarse y levantar objeto del suelo</div>
+            <select onchange="calcEFAM()" id="efam-a9" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="6">Toma el objeto y se levanta sin dificultad (6 pts)</option>
+              <option value="4">Toma objeto pero le cuesta levantarse solo (4 pts)</option>
+              <option value="2">Dificultad para tomar el objeto (2 pts)</option>
+              <option value="0">Le cuesta mucho / No logra agacharse (0 pts)</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div id="efam-a-result-box" class="p-4 rounded-2xl border bg-slate-900 space-y-2">
+          <div class="flex justify-between items-center text-sm font-bold">
+            <span>Resultado EFAM Parte A:</span>
+            <span id="efam-a-final-pts" class="text-base text-blue-400">54 Puntos</span>
+          </div>
+
+          <div id="efam-a-status" class="p-3 rounded-xl font-bold text-xs text-center"></div>
+        </div>
+
+      </div>
+
+      <!-- EFAM PARTE B -->
+      <div id="efam-b-container" class="space-y-4 hidden">
+        <div class="flex justify-between items-center border-t border-slate-800 pt-4">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <span class="bg-emerald-600 text-white text-xs px-2 py-0.5 rounded-md">Parte B</span> Discriminador de Riesgo
+          </h2>
+          <span class="text-xs text-slate-400">Suma B: <strong id="score-efam-b" class="text-emerald-400 text-sm">0</strong> pts</span>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">1. Presión Arterial</div>
+            <select onchange="calcEFAM()" id="efam-b1" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="13">PA Normal, sin antecedentes HTA (13 pts)</option>
+              <option value="13">PA Normal, con diagnóstico, en control y fármacos (13 pts)</option>
+              <option value="9">PA Normal, con diagnóstico, sin control pero fármacos (9 pts)</option>
+              <option value="6">PA Normal, con diagnóstico, sin control ni fármacos (6 pts)</option>
+              <option value="3">PA Elevada (≥ 140/90), sin antecedentes (3 pts)</option>
+              <option value="0">PA Elevada con diagnóstico sin control (0 pts)</option>
+            </select>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">2. Diabetes Mellitus</div>
+            <select onchange="calcEFAM()" id="efam-b2" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="13">Sin Diabetes (13 pts)</option>
+              <option value="6">Diagnosticada, en control y fármacos (6 pts)</option>
+              <option value="3">Diagnosticada, en control sin fármacos (3 pts)</option>
+              <option value="0">Diagnosticada, sin control (0 pts)</option>
+            </select>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">3. ¿Lee diario, revistas o libros?</div>
+            <select onchange="calcEFAM()" id="efam-b3" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="9">Todos los días (9 pts)</option>
+              <option value="7">2 o 3 veces por semana (7 pts)</option>
+              <option value="5">Una vez por semana (5 pts)</option>
+              <option value="2">De vez en cuando (2 pts)</option>
+              <option value="0">Casi nunca o nunca (0 pts)</option>
+            </select>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">4. Puntaje MMSE (Copia automática de Parte A)</div>
+            <div class="p-2 bg-slate-900 rounded-lg text-slate-300 font-bold" id="mmse-efam-b-pts">
+              Puntos otorgados en Parte B: 9 Puntos
+            </div>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">5. ¿En el último mes se ha sentido deprimido o bajoneado?</div>
+            <select onchange="calcEFAM()" id="efam-b5" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="9">Nunca (9 pts)</option>
+              <option value="7">Casi nunca (7 pts)</option>
+              <option value="2">Bastante seguido (2 pts)</option>
+              <option value="0">Casi todo el tiempo (0 pts)</option>
+            </select>
+          </div>
+
+          <div class="glass-card p-3 rounded-xl space-y-2">
+            <div class="font-bold text-white">6. ¿En el último mes se ha sentido nervioso o angustiado?</div>
+            <select onchange="calcEFAM()" id="efam-b6" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg">
+              <option value="9">Nunca (9 pts)</option>
+              <option value="7">Casi nunca (7 pts)</option>
+              <option value="2">Bastante seguido (2 pts)</option>
+              <option value="0">Casi todo el tiempo (0 pts)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="efam-b-result-box" class="p-4 rounded-2xl border bg-slate-900 space-y-2">
+          <div class="flex justify-between items-center text-sm font-bold">
+            <span>Resultado Clasificación Final EFAM:</span>
+            <span id="efam-b-final-pts" class="text-base text-emerald-400">46 Puntos</span>
+          </div>
+
+          <div id="efam-b-status" class="p-3 rounded-xl font-bold text-xs text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            AUTOVALENTE SIN RIESGO
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PASO 3: ESCALAS COMPLEMENTARIAS -->
+    <section id="step-escalas" class="hidden space-y-6">
+      
+      <!-- BARTHEL COMPLETO (10 ÍTEMS = 100 PTS MAX) -->
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-red-500 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-white text-base">Índice de Barthel (Camino Corto)</h3>
+          <span class="text-xs text-red-300 font-bold" id="barthel-total">100 / 100 pts</span>
+        </div>
+        <p class="text-xs text-slate-300">Aplica a usuarios con dependencia evidente. Se evalúan 10 actividades básicas (Máx. 100 pts):</p>
+
+        <div class="space-y-2 text-xs">
+          <div>
+            <span class="font-bold text-slate-200">1. Comer:</span>
+            <select onchange="calcBarthel()" id="barthel-q1" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Totalmente independiente (10 pts)</option>
+              <option value="5">Necesita ayuda para cortar carne, pan, etc. (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">2. Lavarse / Bañarse:</span>
+            <select onchange="calcBarthel()" id="barthel-q2" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="5">Independiente: entra y sale solo del baño (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">3. Vestirse:</span>
+            <select onchange="calcBarthel()" id="barthel-q3" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Independiente (capaz de abotonarse y atarse zapatos) (10 pts)</option>
+              <option value="5">Necesita ayuda (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">4. Arreglarse / Aseo Personal:</span>
+            <select onchange="calcBarthel()" id="barthel-q4" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="5">Independiente para lavarse la cara, peinarse, afeitarse (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">5. Deposiciones (Continencia anal):</span>
+            <select onchange="calcBarthel()" id="barthel-q5" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Continencia normal (10 pts)</option>
+              <option value="5">Incontinencia ocasional o ayuda (5 pts)</option>
+              <option value="0">Incontinencia (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">6. Micción (Continencia vesical):</span>
+            <select onchange="calcBarthel()" id="barthel-q6" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Continencia normal o cuida solo de la sonda (10 pts)</option>
+              <option value="5">Un episodio diario máximo de incontinencia (5 pts)</option>
+              <option value="0">Incontinencia (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">7. Usar el retrete / Inodoro:</span>
+            <select onchange="calcBarthel()" id="barthel-q7" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Independiente (ir al baño, quitarse/ponerse ropa) (10 pts)</option>
+              <option value="5">Necesita ayuda para ir al retrete, pero se limpia solo (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">8. Trasladarse (Sillón a Cama):</span>
+            <select onchange="calcBarthel()" id="barthel-q8" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="15">Independiente (15 pts)</option>
+              <option value="10">Mínima ayuda física o supervisión (10 pts)</option>
+              <option value="5">Gran ayuda, pero es capaz de mantenerse sentado solo (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">9. Deambular / Caminar:</span>
+            <select onchange="calcBarthel()" id="barthel-q9" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="15">Independiente: camina solo 50 metros (15 pts)</option>
+              <option value="10">Necesita ayuda física o supervisión para caminar 50 m (10 pts)</option>
+              <option value="5">Independiente en silla de ruedas sin ayuda (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">10. Subir y Bajar Escalones:</span>
+            <select onchange="calcBarthel()" id="barthel-q10" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-1">
+              <option value="10">Independiente para bajar y subir escaleras (10 pts)</option>
+              <option value="5">Necesita ayuda física o supervisión (5 pts)</option>
+              <option value="0">Dependiente (0 pts)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="barthel-result-text" class="p-2.5 bg-red-950/40 text-red-300 font-bold text-xs rounded-lg text-center">
+          Clasificación: Independiente (100 Puntos)
+        </div>
+      </div>
+
+      <!-- ESCALA DE YESAVAGE COMPLETA (15 PREGUNTAS) -->
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-amber-500 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-white text-base">Escala de Depresión Geriátrica de Yesavage</h3>
+          <span class="text-xs text-amber-300 font-bold" id="yesavage-total">0 / 15 pts</span>
+        </div>
+        <p class="text-xs text-slate-300">Responda a las 15 preguntas considerando la experiencia de la última semana:</p>
+
+        <div class="space-y-2 text-xs">
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>1. ¿Se considera satisfecho/a de su vida?</span>
+            <select onchange="calcYesavage()" id="yes-q1" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">Sí (0 pts)</option>
+              <option value="1">No (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>2. ¿Ha ido abandonando muchas de sus actividades e intereses?</span>
+            <select onchange="calcYesavage()" id="yes-q2" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>3. ¿Se aburre a menudo?</span>
+            <select onchange="calcYesavage()" id="yes-q3" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>4. ¿Siente que su vida está vacía?</span>
+            <select onchange="calcYesavage()" id="yes-q4" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>5. ¿Está de buen ánimo la mayor parte del tiempo?</span>
+            <select onchange="calcYesavage()" id="yes-q5" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">Sí (0 pts)</option>
+              <option value="1">No (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>6. ¿Tiene miedo de que le pueda ocurrir algo malo?</span>
+            <select onchange="calcYesavage()" id="yes-q6" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>7. ¿Está contento/a la mayor parte del tiempo?</span>
+            <select onchange="calcYesavage()" id="yes-q7" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">Sí (0 pts)</option>
+              <option value="1">No (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>8. ¿Se siente a menudo desvalido/a o indefenso/a?</span>
+            <select onchange="calcYesavage()" id="yes-q8" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>9. ¿Prefiere quedarse en casa en vez de salir y hacer cosas nuevas?</span>
+            <select onchange="calcYesavage()" id="yes-q9" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>10. ¿Siente que tiene más problemas de memoria que la mayoría?</span>
+            <select onchange="calcYesavage()" id="yes-q10" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>11. ¿Piensa que es maravilloso estar vivo/a?</span>
+            <select onchange="calcYesavage()" id="yes-q11" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">Sí (0 pts)</option>
+              <option value="1">No (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>12. ¿Se siente inútil tal como está en este momento?</span>
+            <select onchange="calcYesavage()" id="yes-q12" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>13. ¿Se siente lleno/a de energía?</span>
+            <select onchange="calcYesavage()" id="yes-q13" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">Sí (0 pts)</option>
+              <option value="1">No (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>14. ¿Siente que su situación es desesperanzadora?</span>
+            <select onchange="calcYesavage()" id="yes-q14" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+          <div class="bg-slate-900 p-2 rounded-lg flex justify-between items-center">
+            <span>15. ¿Cree que la mayoría de la gente está mejor que usted?</span>
+            <select onchange="calcYesavage()" id="yes-q15" class="bg-slate-800 border border-slate-700 text-white p-1 rounded">
+              <option value="0">No (0 pts)</option>
+              <option value="1">Sí (1 pt)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="yesavage-result-text" class="p-2.5 bg-amber-950/40 text-amber-300 font-bold text-xs rounded-lg text-center">
+          Resultado: Normal (0 - 5 Puntos)
+        </div>
+      </div>
+
+      <!-- CUESTIONARIO DE PFEFFER COMPLETO -->
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-pink-500 space-y-3">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold text-white text-base">Cuestionario de Pfeffer (Al Acompañante)</h3>
+          <span class="text-xs text-pink-300 font-bold" id="pfeffer-total">0 / 33 pts</span>
+        </div>
+        <p class="text-xs text-slate-300">Se aplica al cuidador/familiar si el MMSE resulta ≤ 13 puntos (menor o igual a 13 pts):</p>
+
+        <div class="space-y-2 text-xs">
+          <div>
+            <span class="font-bold text-slate-200">1. ¿Maneja él/ella su propio dinero?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q1" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">2. ¿Es capaz de comprar ropas solo/a, cosas de casa y comestibles?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q2" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">3. ¿Es capaz de calentar agua para café o té y apagar la cocina?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q3" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">4. ¿Es capaz de preparar una comida completa?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q4" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">5. ¿Es capaz de mantenerse al tanto de los acontecimientos actuales del vecindario/país?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q5" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">6. ¿Es capaz de poner atención y discutir un programa de TV, radio o revista?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q6" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">7. ¿Es capaz de recordar compromisos, acontecimientos familiares y fechas?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q7" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">8. ¿Es capaz de manejar sus propios medicamentos según dosis y horario?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q8" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">9. ¿Es capaz de pasear por el vecindario y encontrar el camino de vuelta a casa?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q9" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">10. ¿Es capaz de saludar a sus amigos adecuadamente?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q10" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-bold text-slate-200">11. ¿Puede ser dejado/a en casa en forma segura sin supervisión?</span>
+            <select onchange="calcPfeffer()" id="pfeffer-q11" class="w-full bg-slate-800 border border-slate-700 text-white p-1.5 rounded mt-0.5">
+              <option value="0">Sí, es capaz (0 pts)</option>
+              <option value="1">Con alguna dificultad (1 pt)</option>
+              <option value="2">Necesita ayuda (2 pts)</option>
+              <option value="3">No es capaz (3 pts)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="pfeffer-result-text" class="p-2.5 bg-pink-950/40 text-pink-300 font-bold text-xs rounded-lg text-center">
+          Resultado: Normal (&lt; 6 Puntos)
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PASO 4: PRUEBAS MOTORAS CON CRONÓMETRO -->
+    <section id="step-motoras" class="hidden space-y-6">
+      <div class="bg-emerald-900/30 border border-emerald-500/30 p-4 rounded-2xl">
+        <span class="text-[11px] font-bold uppercase text-emerald-400 tracking-wider">Paso 4: Riesgo de Caídas</span>
+        <h2 class="text-lg font-bold text-white mt-1">Pruebas Motoras y Cronómetro</h2>
+        <p class="text-xs text-slate-300 mt-1">Mide el tiempo exacto en segundos para cada intento.</p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-emerald-500 space-y-3">
+        <h3 class="font-bold text-white text-base">1. Estación Unipodal (Equilibrio Estático)</h3>
+        <p class="text-xs text-slate-300 italic">"Cruce sus brazos sobre el tórax y sosténgase en un solo pie levantando el otro a 90°."</p>
+
+        <div class="bg-slate-900 p-4 rounded-xl flex flex-col items-center space-y-2 border border-slate-800">
+          <span class="text-3xl font-mono font-bold text-emerald-400" id="timer-display-unipodal">0.0 s</span>
+          <div class="flex gap-2">
+            <button onclick="startTimer('unipodal')" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs">Iniciar</button>
+            <button onclick="stopTimer('unipodal')" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-xs">Detener</button>
+            <button onclick="resetTimer('unipodal')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs">Limpiar</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <span class="text-slate-400">Mejor tiempo Pierna Derecha:</span>
+            <input type="number" id="unipodal-der" value="6" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg mt-1 font-bold">
+          </div>
+          <div>
+            <span class="text-slate-400">Mejor tiempo Pierna Izquierda:</span>
+            <input type="number" id="unipodal-izq" value="6" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg mt-1 font-bold">
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-400">Corte: ≥ 5 seg (Mayor o igual a 5 seg) = Normal | &lt; 4 seg = Alterado.</p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border-l-4 border-blue-500 space-y-3">
+        <h3 class="font-bold text-white text-base">2. Timed Up and Go - TUG (Equilibrio Dinámico)</h3>
+        <p class="text-xs text-slate-300 italic">"Levántese de la silla sin apoyarse, camine 3 metros, dé la vuelta en el cono y vuelva a sentarse."</p>
+
+        <div class="bg-slate-900 p-4 rounded-xl flex flex-col items-center space-y-2 border border-slate-800">
+          <span class="text-3xl font-mono font-bold text-blue-400" id="timer-display-tug">0.0 s</span>
+          <div class="flex gap-2">
+            <button onclick="startTimer('tug')" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-xs">Iniciar</button>
+            <button onclick="stopTimer('tug')" class="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-xs">Detener</button>
+            <button onclick="resetTimer('tug')" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-xs">Limpiar</button>
+          </div>
+        </div>
+
+        <div class="text-xs">
+          <span class="text-slate-400">Tiempo registrado en TUG (segundos):</span>
+          <input type="number" id="tug-seconds" value="8" class="w-full bg-slate-800 border border-slate-700 text-white p-2 rounded-lg mt-1 font-bold">
+        </div>
+
+        <p class="text-[11px] text-slate-400">Corte: &lt; 10 seg = Normal | 11 a 19 seg = Riesgo Leve | ≥ 20 seg (Mayor o igual a 20 seg) = Alto Riesgo.</p>
+      </div>
+
+    </section>
+
+    <!-- PASO 5: TRASPASO A LA FICHA Y REPORTE CLÍNICO PDF -->
+    <section id="step-resumen" class="hidden space-y-6">
+      
+      <!-- Botón de Exportación / Guardado en PDF -->
+      <div class="flex justify-between items-center bg-blue-900/40 border border-blue-500/40 p-4 rounded-2xl no-print">
+        <div>
+          <h2 class="text-base font-bold text-white">Reporte Clínico Completo</h2>
+          <p class="text-xs text-slate-300">Descarga o guarda en PDF el resumen de la evaluación realizada.</p>
+        </div>
+        <button onclick="window.print()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-lg transition-all">
+          <i class="fa-solid fa-file-pdf text-base"></i> Guardar como PDF
+        </button>
+      </div>
+
+      <!-- REPORTE IMPRESO COMPLETO -->
+      <div id="printable-report" class="glass-card p-6 rounded-2xl space-y-4 text-xs border border-slate-700">
+        
+        <!-- Encabezado del Informe -->
+        <div class="border-b border-slate-700 pb-3 flex justify-between items-start print-border">
+          <div>
+            <h1 class="text-lg font-bold text-white">Informe de Evaluación EMPAM</h1>
+            <p class="text-slate-400 text-[11px]">Examen de Medicina Preventiva del Adulto Mayor • APS Chile</p>
+          </div>
+          <div class="text-right text-slate-400 text-[11px]">
+            <p>Fecha: <strong class="text-white" id="report-date">25/09/2026</strong></p>
+            <p>Ruta: <strong class="text-blue-400" id="report-path">EFAM-Chile</strong></p>
+          </div>
+        </div>
+
+        <!-- Bloque 1: Resumen de Transcripción a Ficha Papel -->
+        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+          <span class="text-blue-400 font-bold uppercase text-[10px] tracking-wider">1. Transcripción Ficha Física (Página 1)</span>
+          
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-slate-800/80 p-2 rounded">
+              <span class="text-slate-400">EFAM Parte A:</span>
+              <p id="sum-efam-a" class="font-bold text-blue-300 text-sm">54 Puntos</p>
+            </div>
+            <div class="bg-slate-800/80 p-2 rounded">
+              <span class="text-slate-400">EFAM Parte B:</span>
+              <p id="sum-efam-b" class="font-bold text-emerald-300 text-sm">46 Puntos</p>
+            </div>
+          </div>
+
+          <div class="p-2 bg-blue-950/60 text-blue-300 font-bold rounded text-center border border-blue-500/30" id="sum-efam-clasif">
+            CLASIFICACIÓN: AUTOVALENTE SIN RIESGO
+          </div>
+        </div>
+
+        <!-- Bloque 2: Cognición y Motor -->
+        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+          <span class="text-purple-400 font-bold uppercase text-[10px] tracking-wider">2. Evaluación Cognitiva y Motor</span>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div class="bg-slate-800/80 p-2 rounded space-y-1">
+              <span class="text-slate-400">Mini-Mental Abreviado (MMSE):</span>
+              <p id="sum-mmse" class="font-bold text-purple-300 text-sm">19 / 19 Puntos</p>
+              <p id="sum-mmse-status" class="text-[11px] text-slate-300">Normal (≥ 14 Puntos)</p>
+            </div>
+
+            <div class="bg-slate-800/80 p-2 rounded space-y-1">
+              <span class="text-slate-400">Pruebas Motoras (Caídas):</span>
+              <p id="sum-unipodal" class="font-bold text-emerald-300 text-xs">Unipodal D/I: 6s / 6s (Normal)</p>
+              <p id="sum-tug" class="font-bold text-blue-300 text-xs">TUG: 8s (Normal)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloque 3: Escalas Complementarias -->
+        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+          <span class="text-amber-400 font-bold uppercase text-[10px] tracking-wider">3. Escalas Complementarias Aplicadas</span>
+          
+          <div class="space-y-1.5 text-xs text-slate-300">
+            <div class="flex justify-between border-b border-slate-800 pb-1">
+              <span>Índice de Barthel (10 ABVD):</span>
+              <strong id="sum-barthel" class="text-red-300">100 / 100 Puntos (Independiente)</strong>
+            </div>
+            <div class="flex justify-between border-b border-slate-800 pb-1">
+              <span>Yesavage (Depresión - 15 Preguntas):</span>
+              <strong id="sum-yesavage" class="text-amber-300">0 Puntos (Normal)</strong>
+            </div>
+            <div class="flex justify-between">
+              <span>Pfeffer (Informante - 11 Preguntas):</span>
+              <strong id="sum-pfeffer" class="text-pink-300">0 Puntos (Normal)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloque 4: Acciones Sugeridas Sección IX -->
+        <div class="p-3 bg-slate-900 rounded-xl space-y-2">
+          <span class="text-emerald-400 font-bold uppercase text-[10px] tracking-wider">4. Plan de Atención Sugerido (Sección IX)</span>
+          <ul id="sum-plan-actions" class="list-disc list-inside space-y-1 text-slate-300 font-medium">
+            <li>Actividades de promoción y prevención.</li>
+            <li>Controles anuales de salud y talleres de autocuidado en la comunidad.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    function navTo(stepId) {
+      ['triaje', 'efam', 'escalas', 'motoras', 'resumen'].forEach(id => {
+        document.getElementById(`step-${id}`).classList.add('hidden');
+        const btn = document.getElementById(`nav-${id}`);
+        if(btn) btn.className = "px-2.5 py-1.5 rounded-lg bg-slate-800 text-slate-400 font-medium";
+      });
+
+      document.getElementById(`step-${stepId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${stepId}`);
+      if(activeBtn) activeBtn.className = "px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-bold";
+
+      if(stepId === 'resumen') updateSummary();
+    }
+
+    let selectedPath = 'efam';
+    function selectPath(pathKey) {
+      selectedPath = pathKey;
+      if(pathKey === 'barthel') {
+        document.getElementById('selected-path-text').innerText = "Índice de Barthel (Camino Corto)";
+        document.getElementById('card-path-barthel').className = "glass-card p-4 rounded-2xl border-2 border-red-500 bg-red-950/20 cursor-pointer space-y-2";
+        document.getElementById('card-path-efam').className = "glass-card p-4 rounded-2xl border-2 border-transparent cursor-pointer space-y-2";
+      } else {
+        document.getElementById('selected-path-text').innerText = "EFAM-Chile (Camino Largo)";
+        document.getElementById('card-path-efam').className = "glass-card p-4 rounded-2xl border-2 border-blue-500 bg-blue-950/20 cursor-pointer space-y-2";
+        document.getElementById('card-path-barthel').className = "glass-card p-4 rounded-2xl border-2 border-transparent cursor-pointer space-y-2";
+      }
+    }
+
+    let currentMMSE = 19;
+    function calcMMSE() {
+      const q1 = parseInt(document.getElementById('mmse-q1').value) || 0;
+      const q2 = parseInt(document.getElementById('mmse-q2').value) || 0;
+      const q3 = parseInt(document.getElementById('mmse-q3').value) || 0;
+      const q4 = parseInt(document.getElementById('mmse-q4').value) || 0;
+      const q5 = parseInt(document.getElementById('mmse-q5').value) || 0;
+      const q6 = parseInt(document.getElementById('mmse-q6').value) || 0;
+
+      currentMMSE = q1 + q2 + q3 + q4 + q5 + q6;
+      document.getElementById('mmse-subtotal').innerText = `${currentMMSE} / 19 pts`;
+
+      let efamMMSE = 6;
+      if(currentMMSE <= 13) efamMMSE = 0;
+      else if(currentMMSE <= 14) efamMMSE = 3;
+      else if(currentMMSE <= 17) efamMMSE = 4;
+
+      document.getElementById('mmse-efam-pts').innerText = `${efamMMSE} Puntos`;
+
+      let efamBMMSE = 9;
+      if(currentMMSE <= 14) efamBMMSE = 5;
+      else if(currentMMSE <= 18) efamBMMSE = 7;
+      document.getElementById('mmse-efam-b-pts').innerText = `Puntos otorgados en Parte B: ${efamBMMSE} Puntos`;
+
+      if(currentMMSE <= 13) {
+        document.getElementById('pfeffer-alert').classList.remove('hidden');
+      } else {
+        document.getElementById('pfeffer-alert').classList.add('hidden');
+      }
+
+      calcEFAM();
+    }
+
+    let efamATotal = 54;
+    let efamBTotal = 46;
+
+    function calcEFAM() {
+      const a1 = parseInt(document.getElementById('efam-a1').value);
+      const a2 = parseInt(document.getElementById('efam-a2').value);
+      const a3 = parseInt(document.getElementById('efam-a3').value);
+      const a4 = parseInt(document.getElementById('efam-a4').value);
+      const a5 = parseInt(document.getElementById('efam-a5').value);
+      
+      let mmseEfamPts = 6;
+      if(currentMMSE <= 13) mmseEfamPts = 0;
+      else if(currentMMSE <= 14) mmseEfamPts = 3;
+      else if(currentMMSE <= 17) mmseEfamPts = 4;
+
+      const a7 = parseInt(document.getElementById('efam-a7').value);
+      const a8 = parseInt(document.getElementById('efam-a8').value);
+      const a9 = parseInt(document.getElementById('efam-a9').value);
+
+      efamATotal = a1 + a2 + a3 + a4 + a5 + mmseEfamPts + a7 + a8 + a9;
+      document.getElementById('score-efam-a').innerText = efamATotal;
+      document.getElementById('efam-a-final-pts').innerText = `${efamATotal} Puntos`;
+
+      const statusA = document.getElementById('efam-a-status');
+      const containerB = document.getElementById('efam-b-container');
+
+      if(efamATotal <= 42) {
+        statusA.className = "p-3 rounded-xl font-bold text-xs text-center bg-amber-500/20 text-amber-300 border border-amber-500/40";
+        statusA.innerText = "RIESGO DE DEPENDENCIA (≤ 42 Puntos) - ¡Aquí se detiene el EFAM!";
+        containerB.classList.add('hidden');
+      } else {
+        statusA.className = "p-3 rounded-xl font-bold text-xs text-center bg-blue-500/20 text-blue-300 border border-blue-500/40";
+        statusA.innerText = "AUTOVALENTE (≥ 43 Puntos) - Continuar a Parte B";
+        containerB.classList.remove('hidden');
+
+        const b1 = parseInt(document.getElementById('efam-b1').value);
+        const b2 = parseInt(document.getElementById('efam-b2').value);
+        const b3 = parseInt(document.getElementById('efam-b3').value);
+        
+        let mmseBMms = 9;
+        if(currentMMSE <= 14) mmseBMms = 5;
+        else if(currentMMSE <= 18) mmseBMms = 7;
+
+        const b5 = parseInt(document.getElementById('efam-b5').value);
+        const b6 = parseInt(document.getElementById('efam-b6').value);
+
+        efamBTotal = b1 + b2 + b3 + mmseBMms + b5 + b6;
+        document.getElementById('score-efam-b').innerText = efamBTotal;
+        document.getElementById('efam-b-final-pts').innerText = `${efamBTotal} Puntos`;
+
+        const statusB = document.getElementById('efam-b-status');
+        if(efamBTotal >= 46) {
+          statusB.className = "p-3 rounded-xl font-bold text-xs text-center bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+          statusB.innerText = "AUTOVALENTE SIN RIESGO (≥ 46 Puntos)";
+        } else {
+          statusB.className = "p-3 rounded-xl font-bold text-xs text-center bg-amber-500/20 text-amber-300 border border-amber-500/40";
+          statusB.innerText = "AUTOVALENTE CON RIESGO (≤ 45 Puntos)";
+        }
+      }
+    }
+
+    let barthelTotal = 100;
+    function calcBarthel() {
+      let total = 0;
+      for(let i=1; i<=10; i++) {
+        total += parseInt(document.getElementById(`barthel-q${i}`).value) || 0;
+      }
+      barthelTotal = total;
+      document.getElementById('barthel-total').innerText = `${total} / 100 pts`;
+
+      let clasif = "Independiente";
+      if(total < 20) clasif = "Dependencia Total (< 20)";
+      else if(total <= 35) clasif = "Dependencia Severa (20 - 35)";
+      else if(total <= 55) clasif = "Dependencia Moderada (40 - 55)";
+      else if(total <= 95) clasif = "Dependencia Leve (60 - 95)";
+
+      document.getElementById('barthel-result-text').innerText = `Clasificación Barthel: ${clasif} (${total} Pts)`;
+    }
+
+    let yesavageTotal = 0;
+    function calcYesavage() {
+      let total = 0;
+      for(let i=1; i<=15; i++) {
+        total += parseInt(document.getElementById(`yes-q${i}`).value) || 0;
+      }
+      yesavageTotal = total;
+      document.getElementById('yesavage-total').innerText = `${total} / 15 pts`;
+
+      let clasif = "Normal (0 - 5)";
+      if(total >= 10) clasif = "Depresión Establecida (≥ 10)";
+      else if(total >= 6) clasif = "Depresión Leve (6 - 9)";
+
+      document.getElementById('yesavage-result-text').innerText = `Resultado Yesavage: ${clasif} (${total} Pts)`;
+    }
+
+    let pfefferTotal = 0;
+    function calcPfeffer() {
+      let total = 0;
+      for(let i=1; i<=11; i++) {
+        total += parseInt(document.getElementById(`pfeffer-q${i}`).value) || 0;
+      }
+      pfefferTotal = total;
+      document.getElementById('pfeffer-total').innerText = `${total} / 33 pts`;
+      document.getElementById('pfeffer-result-text').innerText = `Pfeffer: ${total >= 6 ? 'Screening Positivo (≥ 6 Pts)' : 'Normal (< 6 Pts)'} (${total} Pts)`;
+    }
+
+    let timerIntervals = {};
+    let timerTimes = { unipodal: 0, tug: 0 };
+
+    function startTimer(type) {
+      if(timerIntervals[type]) return;
+      timerIntervals[type] = setInterval(() => {
+        timerTimes[type] += 0.1;
+        document.getElementById(`timer-display-${type}`).innerText = `${timerTimes[type].toFixed(1)} s`;
+        if(type === 'tug') document.getElementById('tug-seconds').value = timerTimes[type].toFixed(1);
+      }, 100);
+    }
+
+    function stopTimer(type) {
+      clearInterval(timerIntervals[type]);
+      timerIntervals[type] = null;
+    }
+
+    function resetTimer(type) {
+      stopTimer(type);
+      timerTimes[type] = 0;
+      document.getElementById(`timer-display-${type}`).innerText = "0.0 s";
+    }
+
+    function updateSummary() {
+      document.getElementById('report-path').innerText = selectedPath === 'barthel' ? "Índice de Barthel (Camino Corto)" : "EFAM-Chile (Camino Largo)";
+      
+      const today = new Date();
+      document.getElementById('report-date').innerText = today.toLocaleDateString('es-CL');
+
+      document.getElementById('sum-efam-a').innerText = `${efamATotal} Puntos`;
+      document.getElementById('sum-efam-b').innerText = `${efamBTotal} Puntos`;
+      
+      const clasifBox = document.getElementById('sum-efam-clasif');
+      const planUl = document.getElementById('sum-plan-actions');
+
+      if(selectedPath === 'barthel') {
+        clasifBox.innerText = `RUTA DEPENDIENTE - BARTHEL: ${barthelTotal} PTS`;
+        planUl.innerHTML = `
+          <li>Visita Domiciliaria Integral.</li>
+          <li>Centro Comunitario de Rehabilitación (RBC) / Ayudas Técnicas GES.</li>
+          <li>Ingreso a Programa de Dependencia Severa si corresponde.</li>
+        `;
+      } else if(efamATotal <= 42) {
+        clasifBox.innerText = "CLASIFICACIÓN: EN RIESGO DE DEPENDENCIA";
+        planUl.innerHTML = `
+          <li>Derivar a médico para tratamiento de limitación funcional / dolor osteoarticular.</li>
+          <li>Control de seguimiento de su condición de riesgo antes de 6 meses.</li>
+          ${currentMMSE <= 13 ? '<li>Derivar a profesional para MMSE Extendido + Taller de memoria.</li>' : ''}
+        `;
+      } else if(efamBTotal >= 46) {
+        clasifBox.innerText = "CLASIFICACIÓN: AUTOVALENTE SIN RIESGO";
+        planUl.innerHTML = `
+          <li>Actividades de promoción y prevención en la comunidad.</li>
+          <li>Controles anuales de salud y talleres de autocuidado.</li>
+        `;
+      } else {
+        clasifBox.innerText = "CLASIFICACIÓN: AUTOVALENTE CON RIESGO";
+        planUl.innerHTML = `
+          <li>Control PSCV vigente o derivar a médico para ingreso PSCV / Educación.</li>
+          <li>Derivar a médico si presenta sospecha de ansiedad/depresión.</li>
+          <li>Control de seguimiento de riesgo antes de los 6 meses.</li>
+          ${currentMMSE <= 13 ? '<li>Derivar a profesional para MMSE Extendido + Taller de memoria.</li>' : ''}
+        `;
+      }
+
+      document.getElementById('sum-mmse').innerText = `${currentMMSE} / 19 Puntos`;
+      document.getElementById('sum-mmse-status').innerText = currentMMSE <= 13 ? "STATUS: Alterado (≤ 13 Pts) - PFEFFER APLICADO" : "STATUS: Normal (≥ 14 Pts)";
+
+      const uDer = document.getElementById('unipodal-der').value;
+      const uIzq = document.getElementById('unipodal-izq').value;
+      document.getElementById('sum-unipodal').innerText = `Unipodal D/I: ${uDer}s / ${uIzq}s`;
+
+      const tugVal = document.getElementById('tug-seconds').value;
+      document.getElementById('sum-tug').innerText = `TUG: ${tugVal}s (${tugVal >= 20 ? 'Alto Riesgo' : 'Normal/Leve'})`;
+
+      document.getElementById('sum-barthel').innerText = `${barthelTotal} / 100 Puntos`;
+
+      let clasifYes = "Normal";
+      if(yesavageTotal >= 10) clasifYes = "Depresión Establecida";
+      else if(yesavageTotal >= 6) clasifYes = "Depresión Leve";
+      document.getElementById('sum-yesavage').innerText = `${yesavageTotal} Puntos (${clasifYes})`;
+
+      document.getElementById('sum-pfeffer').innerText = `${pfefferTotal} Puntos (${pfefferTotal >= 6 ? 'Screening Positivo' : 'Normal'})`;
+    }
+
+    calcMMSE();
+    calcBarthel();
+    calcYesavage();
+    calcPfeffer();
+  </script>
+</body>
+</html>
