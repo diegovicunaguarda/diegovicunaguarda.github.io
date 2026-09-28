@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro Operativo de Salud - CFT Estatal RM</title>
+  <style>
+    :root {
+      --primary: #0056b3;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --text: #333333;
+      --success: #28a745;
+      --warning: #ffc107;
+      --danger: #dc3545;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 12px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: var(--primary);
+      text-align: center;
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+    .counter-box {
+      background: #e3f2fd;
+      border: 1px solid #90caf9;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      font-weight: bold;
+      color: #0d47a1;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #666;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 4px;
+      margin-top: 16px;
+      margin-bottom: 12px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pa-status {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 4px;
+      display: none;
+    }
+    .pa-normal { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .pa-elevada { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .pa-alta { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .alert-box {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-submit {
+      background-color: var(--primary);
+      color: white;
+    }
+    .btn-sync {
+      background-color: var(--warning);
+      color: #212529;
+    }
+    .btn-export {
+      background-color: var(--success);
+      color: white;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>CFT Estatal RM - Sede Colina</h2>
+  <div class="counter-box" id="counter">Cargando estado...</div>
+
+  <form id="healthForm">
+    <div class="section-title">1. Contexto y Paciente</div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>ID / Folio Paciente</label>
+        <input type="text" id="folio" placeholder="P001" required>
+      </div>
+      <div class="form-group">
+        <label>Sexo</label>
+        <select id="sexo" required onchange="calcularBiometria()">
+          <option value="">Seleccionar</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Edad (años)</label>
+      <input type="number" id="edad" required>
+    </div>
+
+    <div class="section-title">2. Signos Vitales</div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>PA Sistólica (mmHg)</label>
+        <input type="number" id="paSistolica" oninput="evaluarPresion()">
+      </div>
+      <div class="form-group">
+        <label>PA Diastólica (mmHg)</label>
+        <input type="number" id="paDiastolica" oninput="evaluarPresion()">
+      </div>
+    </div>
+    <div id="paStatus" class="pa-status"></div>
+
+    <div class="grid-2" style="margin-top: 10px;">
+      <div class="form-group">
+        <label>Frec. Cardíaca (lpm)</label>
+        <input type="number" id="fc">
+      </div>
+      <div class="form-group">
+        <label>SpO2 (%)</label>
+        <input type="number" id="spo2">
+      </div>
+    </div>
+
+    <div class="section-title">3. Parámetros Metabólicos</div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Glicemia (mg/dL)</label>
+        <input type="number" id="glicemia">
+      </div>
+      <div class="form-group">
+        <label>Última comida</label>
+        <select id="ayuno">
+          <option value="">Seleccionar</option>
+          <option value="Ayuno (>=8 hrs)">Ayuno (≥8 hrs)</option>
+          <option value="Hace menos de 2 hrs">Hace menos de 2 hrs</option>
+          <option value="Hace más de 2 hrs">Hace más de 2 hrs</option>
+          <option value="No sabe">No sabe</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Peso (kg)</label>
+        <input type="number" step="0.1" id="peso" oninput="calcularBiometria()">
+      </div>
+      <div class="form-group">
+        <label>Talla (metros)</label>
+        <input type="number" step="0.01" id="talla" oninput="calcularBiometria()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Circunferencia Cintura (cm)</label>
+      <input type="number" id="cintura" oninput="calcularBiometria()">
+    </div>
+
+    <!-- Asistente de Cálculo Educativo -->
+    <div id="resultadoBiometria" class="alert-box" style="display:none;">
+      <strong>Asistente Educativo:</strong>
+      <div id="textIMC">IMC: -</div>
+      <div id="textCintura">Riesgo Cintura: -</div>
+    </div>
+
+    <button type="submit" class="btn btn-submit" id="btnGuardar">Guardar Registro</button>
+  </form>
+
+  <button class="btn btn-sync" id="btnSync" onclick="sincronizarPendientes()" style="display:none;">Sincronizar Pendientes a Google Sheets</button>
+  <button class="btn btn-export" onclick="exportarCSV()">Descargar Respaldo Excel local</button>
+</div>
+
+<script>
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyCghtK56KEEUXxIgx2U37BAlAP_u8gWtjm6HIIyR0qmZfIFfVHzDQX1jEvQJkeDvHI/exec";
+
+  let registros = JSON.parse(localStorage.getItem('operativoSaludData')) || [];
+
+  function actualizarEstado() {
+    const pendientes = registros.filter(r => !r.sincronizado).length;
+    document.getElementById('counter').innerText = `Total en celular: ${registros.length} | Pendientes por enviar: ${pendientes}`;
+    document.getElementById('btnSync').style.display = pendientes > 0 ? "block" : "none";
+  }
+
+  function evaluarPresion() {
+    const sis = parseInt(document.getElementById('paSistolica').value);
+    const dia = parseInt(document.getElementById('paDiastolica').value);
+    const statusBox = document.getElementById('paStatus');
+
+    if (!isNaN(sis) && !isNaN(dia)) {
+      statusBox.style.display = "block";
+      statusBox.className = "pa-status";
+
+      if (sis < 120 && dia < 80) {
+        statusBox.classList.add("pa-normal");
+        statusBox.innerText = "🟢 Presión Arterial Normal";
+      } else if ((sis >= 120 && sis <= 139) || (dia >= 80 && dia <= 89)) {
+        statusBox.classList.add("pa-elevada");
+        statusBox.innerText = "🟡 Presión Arterial Elevada / Alerta";
+      } else if (sis >= 140 || dia >= 90) {
+        statusBox.classList.add("pa-alta");
+        statusBox.innerText = "🔴 Presión Arterial Alta";
+      }
+    } else {
+      statusBox.style.display = "none";
+    }
+  }
+
+  function calcularBiometria() {
+    const peso = parseFloat(document.getElementById('peso').value);
+    const talla = parseFloat(document.getElementById('talla').value);
+    const cintura = parseFloat(document.getElementById('cintura').value);
+    const sexo = document.getElementById('sexo').value;
+    const box = document.getElementById('resultadoBiometria');
+
+    let htmlIMC = "IMC: Incompleto";
+    let htmlCintura = "Riesgo Cintura: Incompleto";
+
+    if (peso > 0 && talla > 0) {
+      let imcVal = (peso / (talla * talla)).toFixed(1);
+      let estado = "";
+      let colorStyle = "";
+
+      if (imcVal < 18.5) {
+        estado = "Bajo peso";
+        colorStyle = "color: #0275d8; font-weight: bold;"; // Azul
+      } else if (imcVal < 25) {
+        estado = "Normopeso";
+        colorStyle = "color: #28a745; font-weight: bold;"; // Verde
+      } else if (imcVal < 30) {
+        estado = "Sobrepeso";
+        colorStyle = "color: #d39e00; font-weight: bold;"; // Amarillo
+      } else if (imcVal < 35) {
+        estado = "Obesidad Grado I";
+        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+      } else if (imcVal < 40) {
+        estado = "Obesidad Grado II";
+        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+      } else {
+        estado = "Obesidad Grado III";
+        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+      }
+
+      htmlIMC = `IMC: <span style="${colorStyle}">${imcVal} (${estado})</span>`;
+    }
+
+    if (cintura > 0 && sexo) {
+      if (sexo === "Femenino") {
+        if (cintura >= 88) {
+          htmlCintura = `Riesgo Cintura: <span style="color: #dc3545; font-weight: bold;">🔴 Muy Alto (≥88 cm)</span>`;
+        } else if (cintura >= 80) {
+          htmlCintura = `Riesgo Cintura: <span style="color: #d39e00; font-weight: bold;">🟡 Aumentado (≥80 cm)</span>`;
+        } else {
+          htmlCintura = `Riesgo Cintura: <span style="color: #28a745; font-weight: bold;">🟢 Normal (<80 cm)</span>`;
+        }
+      } else if (sexo === "Masculino") {
+        if (cintura >= 102) {
+          htmlCintura = `Riesgo Cintura: <span style="color: #dc3545; font-weight: bold;">🔴 Muy Alto (≥102 cm)</span>`;
+        } else if (cintura >= 94) {
+          htmlCintura = `Riesgo Cintura: <span style="color: #d39e00; font-weight: bold;">🟡 Aumentado (≥94 cm)</span>`;
+        } else {
+          htmlCintura = `Riesgo Cintura: <span style="color: #28a745; font-weight: bold;">🟢 Normal (<94 cm)</span>`;
+        }
+      } else {
+        htmlCintura = `Riesgo Cintura: Registrado`;
+      }
+    }
+
+    box.style.display = (peso || talla || cintura) ? "block" : "none";
+    document.getElementById('textIMC').innerHTML = htmlIMC;
+    document.getElementById('textCintura').innerHTML = htmlCintura;
+  }
+
+  async function enviarAGoogle(registro) {
+    if (!GOOGLE_SCRIPT_URL) return false;
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(registro)
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  document.getElementById('healthForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnGuardar');
+    btn.disabled = true;
+    btn.innerText = "Guardando...";
+
+    const peso = parseFloat(document.getElementById('peso').value);
+    const talla = parseFloat(document.getElementById('talla').value);
+    let imc = (peso > 0 && talla > 0) ? (peso / (talla * talla)).toFixed(1) : "";
+
+    const nuevoRegistro = {
+      fechaHora: new Date().toLocaleString("es-CL"),
+      folio: document.getElementById('folio').value,
+      sexo: document.getElementById('sexo').value,
+      edad: document.getElementById('edad').value,
+      paSistolica: document.getElementById('paSistolica').value,
+      paDiastolica: document.getElementById('paDiastolica').value,
+      fc: document.getElementById('fc').value,
+      spo2: document.getElementById('spo2').value,
+      glicemia: document.getElementById('glicemia').value,
+      ayuno: document.getElementById('ayuno').value,
+      peso: document.getElementById('peso').value,
+      talla: document.getElementById('talla').value,
+      imc: imc,
+      cintura: document.getElementById('cintura').value,
+      sincronizado: false
+    };
+
+    let enviado = await enviarAGoogle(nuevoRegistro);
+    if (enviado) nuevoRegistro.sincronizado = true;
+
+    registros.push(nuevoRegistro);
+    localStorage.setItem('operativoSaludData', JSON.stringify(registros));
+    
+    actualizarEstado();
+    alert(`Registro ${nuevoRegistro.folio} guardado ${enviado ? 'y enviado a Google Sheets.' : 'en el celular (sin conexión).'}`);
+
+    document.getElementById('healthForm').reset();
+    document.getElementById('resultadoBiometria').style.display = "none";
+    document.getElementById('paStatus').style.display = "none";
+    btn.disabled = false;
+    btn.innerText = "Guardar Registro";
+  });
+
+  async function sincronizarPendientes() {
+    const btn = document.getElementById('btnSync');
+    btn.disabled = true;
+    btn.innerText = "Sincronizando...";
+
+    for (let r of registros) {
+      if (!r.sincronizado) {
+        let enviado = await enviarAGoogle(r);
+        if (enviado) r.sincronizado = true;
+      }
+    }
+
+    localStorage.setItem('operativoSaludData', JSON.stringify(registros));
+    actualizarEstado();
+    btn.disabled = false;
+    alert("Proceso de sincronización finalizado.");
+  }
+
+  function exportarCSV() {
+    if (registros.length === 0) return alert("No hay datos.");
+    let csv = "\uFEFFFecha_Hora;ID_Folio;Sexo;Edad;PA_Sistolica;PA_Diastolica;FC;SpO2;Glicemia;Ayuno;Peso_kg;Talla_m;IMC;Cintura_cm\n";
+    registros.forEach(r => {
+      csv += `"${r.fechaHora}";"${r.folio}";"${r.sexo}";${r.edad};${r.paSistolica};${r.paDiastolica};${r.fc};${r.spo2};${r.glicemia};"${r.ayuno}";${r.peso};${r.talla};${r.imc};${r.cintura}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Operativo_Salud_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+  }
+
+  actualizarEstado();
+</script>
+</body>
+</html>
