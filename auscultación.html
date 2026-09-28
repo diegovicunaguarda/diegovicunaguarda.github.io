@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auscultador Respiratorio DIY</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #121212; color: #e0e0e0; padding: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
+    .card { background: #1e1e1e; padding: 18px; border-radius: 14px; margin-bottom: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    button { background: #2563eb; color: white; border: none; padding: 14px 20px; font-size: 15px; font-weight: bold; border-radius: 10px; margin: 6px; cursor: pointer; width: 90%; }
+    button:disabled { background: #333; color: #777; }
+    .rec-btn { background: #dc2626; }
+    .save-btn { background: #16a34a; }
+    input[type=range] { width: 100%; margin: 12px 0; accent-color: #2563eb; }
+    label { display: block; margin-top: 12px; font-size: 14px; text-align: left; font-weight: 600; }
+    .val { float: right; color: #60a5fa; }
+  </style>
+</head>
+<body>
+  <h2>Auscultador Respiratorio</h2>
+  
+  <div class="card">
+    <button id="btnStart">1. Iniciar Auscultación en Vivo</button>
+    <button id="btnStop" disabled style="background:#4b5563;">Detener Escucha</button>
+  </div>
+
+  <div class="card">
+    <label>Ganancia (Amplificación): <span class="val" id="lblGain">2.5x</span></label>
+    <input type="range" id="sliderGain" min="0.5" max="8.0" step="0.1" value="2.5">
+
+    <label>Corte Grave (Filtro Pasa-Altos): <span class="val" id="lblHP">80 Hz</span></label>
+    <input type="range" id="sliderHP" min="20" max="200" step="5" value="80">
+
+    <label>Corte Agudo (Filtro Pasa-Bajos): <span class="val" id="lblLP">1200 Hz</span></label>
+    <input type="range" id="sliderLP" min="400" max="2500" step="50" value="1200">
+  </div>
+
+  <div class="card">
+    <button id="btnRec" disabled class="rec-btn">2. Grabar Audio</button>
+    <button id="btnSave" disabled class="save-btn">3. Descargar Grabación Limpia</button>
+  </div>
+
+  <script>
+    let audioCtx, source, highPass, lowPass, gainNode, recorder;
+    let audioChunks = [];
+
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const btnRec = document.getElementById('btnRec');
+    const btnSave = document.getElementById('btnSave');
+
+    btnStart.onclick = async () => {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+        
+        // Se desactivan los procesadores de voz por software del teléfono
+        // Esto evita que Android deforme o "corte" los ruidos respiratorios
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false
+          }
+        });
+
+        source = audioCtx.createMediaStreamSource(stream);
+
+        // 1. Filtro Pasa-Altos: elimina roce mecánico y retumbo
+        highPass = audioCtx.createBiquadFilter();
+        highPass.type = 'highpass';
+        highPass.frequency.value = document.getElementById('sliderHP').value;
+
+        // 2. Filtro Pasa-Bajos: elimina estática y siseo agudo del micrófono
+        lowPass = audioCtx.createBiquadFilter();
+        lowPass.type = 'lowpass';
+        lowPass.frequency.value = document.getElementById('sliderLP').value;
+
+        // 3. Control de Volumen / Amplificación
+        gainNode = audioCtx.createGain();
+        gainNode.gain.value = document.getElementById('sliderGain').value;
+
+        // Cadena de procesamiento: Entrada (3.5mm) -> Pasa-Altos -> Pasa-Bajos -> Ganancia -> Audífonos
+        source.connect(highPass);
+        highPass.connect(lowPass);
+        lowPass.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        // Canal de grabación conectado directo a la señal procesada
+        const dest = audioCtx.createMediaStreamDestination();
+        gainNode.connect(dest);
+        recorder = new MediaRecorder(dest.stream);
+
+        recorder.ondataavailable = e => audioChunks.push(e.data);
+        recorder.onstop = () => { btnSave.disabled = false; };
+
+        btnStart.disabled = true;
+        btnStop.disabled = false;
+        btnRec.disabled = false;
+      } catch (err) {
+        alert("Error al acceder al micrófono. Asegúrate de dar permisos en el navegador.");
+      }
+    };
+
+    btnStop.onclick = () => {
+      if (audioCtx) audioCtx.close();
+      btnStart.disabled = false;
+      btnStop.disabled = true;
+      btnRec.disabled = true;
+      btnSave.disabled = true;
+    };
+
+    btnRec.onclick = () => {
+      if (recorder.state === 'inactive') {
+        audioChunks = [];
+        recorder.start();
+        btnRec.textContent = 'Detener Grabación';
+        btnRec.style.background = '#d97706';
+      } else {
+        recorder.stop();
+        btnRec.textContent = '2. Grabar Audio';
+        btnRec.style.background = '#dc2626';
+      }
+    };
+
+    btnSave.onclick = () => {
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `auscultacion_${new Date().toISOString().slice(0,10)}_${Date.now().toString().slice(-4)}.webm`;
+      a.click();
+    };
+
+    // Ajuste de controles en tiempo real
+    document.getElementById('sliderGain').oninput = e => {
+      document.getElementById('lblGain').textContent = e.target.value + 'x';
+      if (gainNode) gainNode.gain.value = e.target.value;
+    };
+    document.getElementById('sliderHP').oninput = e => {
+      document.getElementById('lblHP').textContent = e.target.value + ' Hz';
+      if (highPass) highPass.frequency.value = e.target.value;
+    };
+    document.getElementById('sliderLP').oninput = e => {
+      document.getElementById('lblLP').textContent = e.target.value + ' Hz';
+      if (lowPass) lowPass.frequency.value = e.target.value;
+    };
+  </script>
+</body>
+</html>
