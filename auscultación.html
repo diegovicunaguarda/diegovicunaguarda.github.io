@@ -3,73 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auscultador Profesional V2 - Anti-Golpe</title>
+  <title>Auscultador Pro - Minimalista</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
     .card { background: #1e293b; padding: 20px; border-radius: 16px; margin-bottom: 16px; border: 1px solid #334155; }
     button { background: #2563eb; color: white; border: none; padding: 16px 20px; font-size: 16px; font-weight: bold; border-radius: 12px; margin: 8px 0; cursor: pointer; width: 100%; }
     button:disabled { background: #334155; color: #64748b; }
-    .status { font-size: 14px; color: #38bdf8; margin-top: 10px; font-weight: 600; }
-    .indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #64748b; margin-right: 6px; }
-    .active { background: #22c55e; }
-    .suppressed { background: #ef4444; }
+    
+    /* Indicador minimalista de luz LED */
+    .status-container { display: flex; justify-content: center; align-items: center; margin: 16px 0 8px 0; }
+    .dot { width: 24px; height: 24px; border-radius: 50%; background: #64748b; transition: background-color 0.12s ease, box-shadow 0.12s ease; }
+    .dot.active { background: #22c55e; box-shadow: 0 0 14px rgba(34, 197, 94, 0.7); }      /* VERDE */
+    .dot.suppressed { background: #ef4444; box-shadow: 0 0 14px rgba(239, 68, 68, 0.7); }  /* ROJO */
+
     .meter { height: 10px; background: #334155; border-radius: 5px; overflow: hidden; margin-top: 15px; }
     .fill { height: 100%; width: 0%; background: #38bdf8; transition: width 0.05s linear; }
   </style>
 </head>
 <body>
-  <h2>Auscultador V2 Pro</h2>
-  <p style="font-size: 13px; color: #94a3b8;">Filtro de pendiente 24dB + Supresor de Golpes de Despegue</p>
+  <h2>Auscultador Pro</h2>
 
   <div class="card">
-    <button id="btnStart">Iniciar Auscultación Avanzada</button>
+    <button id="btnStart">Iniciar Auscultación</button>
     <button id="btnStop" disabled style="background:#475569;">Detener</button>
-    <div style="margin-top:12px; font-size:13px;">
-      <span id="dot" class="indicator"></span><span id="txtStatus">Estado: Listo</span>
+    
+    <!-- Punto LED de Estado -->
+    <div class="status-container">
+      <div id="dot" class="dot"></div>
     </div>
+
     <div class="meter"><div class="fill" id="meterFill"></div></div>
   </div>
 
   <script>
-    let audioCtx, source, hp1, hp2, lp1, lp2, limiter, gainNode, analyser;
-    let animFrame;
+    let audioCtx = null;
+    let mediaStream = null;
+    let animFrame = null;
+    let hp1, hp2, lp1, lp2, limiter, gainNode, analyser;
     let isMutedForTransient = false;
 
-    document.getElementById('btnStart').onclick = async () => {
-      try {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const dot = document.getElementById('dot');
+    const meterFill = document.getElementById('meterFill');
 
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+    btnStart.onclick = async () => {
+      try {
+        if (audioCtx) {
+          await audioCtx.close();
+          audioCtx = null;
+        }
+
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 0 });
+
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: false,
+            noiseSuppression: false,
+            autoGainControl: false,
+            channelCount: 1
+          }
         });
 
-        source = audioCtx.createMediaStreamSource(stream);
+        const source = audioCtx.createMediaStreamSource(mediaStream);
 
-        // 1. Doble Pasa-Altos (24 dB/octava en 105 Hz) para aniquilar el retumbo de manos
-        hp1 = audioCtx.createBiquadFilter(); hp1.type = 'highpass'; hp1.frequency.value = 105;
-        hp2 = audioCtx.createBiquadFilter(); hp2.type = 'highpass'; hp2.frequency.value = 105;
-
-        // 2. Doble Pasa-Bajos (24 dB/octava en 1100 Hz) para eliminar siseo de fondo
+        // Filtro Doble Pasa-Altos (100 Hz) y Doble Pasa-Bajos (1100 Hz)
+        hp1 = audioCtx.createBiquadFilter(); hp1.type = 'highpass'; hp1.frequency.value = 100;
+        hp2 = audioCtx.createBiquadFilter(); hp2.type = 'highpass'; hp2.frequency.value = 100;
         lp1 = audioCtx.createBiquadFilter(); lp1.type = 'lowpass'; lp1.frequency.value = 1100;
         lp2 = audioCtx.createBiquadFilter(); lp2.type = 'lowpass'; lp2.frequency.value = 1100;
 
-        // 3. Limitador de Pared (Brickwall Limiter) - Evita la saturación en oídos
+        // Limitador de seguridad
         limiter = audioCtx.createDynamicsCompressor();
-        limiter.threshold.value = -12; // Techo estricto en dB
-        limiter.knee.value = 0;         // Curva dura instantánea
-        limiter.ratio.value = 20;       // Compresión 20:1 (actúa como muro)
-        limiter.attack.value = 0.001;   // 1 ms de reacción ultra rápida
-        limiter.release.value = 0.04;   // 40 ms de recuperación
+        limiter.threshold.value = -12;
+        limiter.knee.value = 0;
+        limiter.ratio.value = 20;
+        limiter.attack.value = 0.001;
+        limiter.release.value = 0.04;
 
-        // 4. Ganancia Principal con control de respuesta
         gainNode = audioCtx.createGain();
         gainNode.gain.value = 2.8;
 
-        // 5. Analizador para el Supresor de Transitorios en JS
         analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256; // Ventana rápida de análisis
+        analyser.fftSize = 256;
 
-        // Cadena: Mic -> HP1 -> HP2 -> LP1 -> LP2 -> Limiter -> Gain -> Audífonos
         source.connect(hp1);
         hp1.connect(hp2);
         hp2.connect(lp1);
@@ -79,15 +96,13 @@
         gainNode.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        document.getElementById('btnStart').disabled = true;
-        document.getElementById('btnStop').disabled = false;
-        document.getElementById('txtStatus').textContent = "Escuchando en vivo (Procesando...)";
-        document.getElementById('dot').className = "indicator active";
+        btnStart.disabled = true;
+        btnStop.disabled = false;
+        dot.className = "dot active"; // Se pone verde al iniciar
 
         const pcmData = new Float32Array(analyser.fftSize);
 
-        // Bucle de Detección de Golpes / Despegue de Campana
-        function detectTransients() {
+        function processAudio() {
           analyser.getFloatTimeDomainData(pcmData);
 
           let maxPeak = 0;
@@ -100,41 +115,42 @@
           }
 
           let rms = Math.sqrt(sumSquares / pcmData.length);
-          document.getElementById('meterFill').style.width = Math.min(100, rms * 500) + '%';
+          meterFill.style.width = Math.min(100, rms * 500) + '%';
 
-          // DETECTOR DE IMPACTO: Si el pico supera el umbral crítico (despegue o golpe)
+          // Detección de impacto / despegue brusco
           if (maxPeak > 0.45) {
-            // Muteo de emergencia instantáneo (cae a 0.01 en 5 ms)
             gainNode.gain.setTargetAtTime(0.01, audioCtx.currentTime, 0.005);
-            document.getElementById('dot').className = "indicator suppressed";
-            document.getElementById('txtStatus').textContent = "Impacto / Despegue bloqueado";
+            dot.className = "dot suppressed"; // ROJO
             isMutedForTransient = true;
           } else if (isMutedForTransient && maxPeak < 0.2) {
-            // Se recupera la ganancia normal cuando se apacigua el ruido (en 80 ms)
             gainNode.gain.setTargetAtTime(2.8, audioCtx.currentTime, 0.08);
-            document.getElementById('dot').className = "indicator active";
-            document.getElementById('txtStatus').textContent = "Escuchando en vivo";
+            dot.className = "dot active"; // VERDE
             isMutedForTransient = false;
           }
 
-          animFrame = requestAnimationFrame(detectTransients);
+          animFrame = requestAnimationFrame(processAudio);
         }
 
-        detectTransients();
+        processAudio();
 
       } catch (err) {
-        alert("Recuerda ejecutar la página en HTTPS para permitir el acceso al micrófono.");
+        alert("Recuerda ejecutar la página bajo HTTPS para dar acceso al micrófono.");
       }
     };
 
-    document.getElementById('btnStop').onclick = () => {
-      if (audioCtx) audioCtx.close();
-      cancelAnimationFrame(animFrame);
-      document.getElementById('btnStart').disabled = false;
-      document.getElementById('btnStop').disabled = true;
-      document.getElementById('txtStatus').textContent = "Estado: Detenido";
-      document.getElementById('dot').className = "indicator";
-      document.getElementById('meterFill').style.width = '0%';
+    btnStop.onclick = async () => {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+      }
+      if (audioCtx) {
+        await audioCtx.close();
+        audioCtx = null;
+      }
+      btnStart.disabled = false;
+      btnStop.disabled = true;
+      dot.className = "dot"; // GRIS (Apagado)
+      meterFill.style.width = '0%';
     };
   </script>
 </body>
