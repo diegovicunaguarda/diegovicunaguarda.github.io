@@ -3,31 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auscultador Inteligente Auto-DSP</title>
+  <title>Auscultador Profesional V2 - Anti-Golpe</title>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
     .card { background: #1e293b; padding: 20px; border-radius: 16px; margin-bottom: 16px; border: 1px solid #334155; }
-    button { background: #3b82f6; color: white; border: none; padding: 16px 20px; font-size: 16px; font-weight: bold; border-radius: 12px; margin: 8px 0; cursor: pointer; width: 100%; transition: all 0.2s; }
-    button:disabled { background: #334155; color: #94a3b8; }
+    button { background: #2563eb; color: white; border: none; padding: 16px 20px; font-size: 16px; font-weight: bold; border-radius: 12px; margin: 8px 0; cursor: pointer; width: 100%; }
+    button:disabled { background: #334155; color: #64748b; }
     .status { font-size: 14px; color: #38bdf8; margin-top: 10px; font-weight: 600; }
+    .indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #64748b; margin-right: 6px; }
+    .active { background: #22c55e; }
+    .suppressed { background: #ef4444; }
     .meter { height: 10px; background: #334155; border-radius: 5px; overflow: hidden; margin-top: 15px; }
-    .fill { height: 100%; width: 0%; background: #34d399; transition: width 0.1s ease; }
+    .fill { height: 100%; width: 0%; background: #38bdf8; transition: width 0.05s linear; }
   </style>
 </head>
 <body>
-  <h2>Auscultador Inteligente</h2>
-  <p style="font-size: 13px; color: #94a3b8;">Filtro adaptativo y ganancia automática activa</p>
+  <h2>Auscultador V2 Pro</h2>
+  <p style="font-size: 13px; color: #94a3b8;">Filtro de pendiente 24dB + Supresor de Golpes de Despegue</p>
 
   <div class="card">
-    <button id="btnStart">Iniciar Auscultación Automática</button>
+    <button id="btnStart">Iniciar Auscultación Avanzada</button>
     <button id="btnStop" disabled style="background:#475569;">Detener</button>
-    <div class="status" id="txtStatus">Estado: Listo</div>
+    <div style="margin-top:12px; font-size:13px;">
+      <span id="dot" class="indicator"></span><span id="txtStatus">Estado: Listo</span>
+    </div>
     <div class="meter"><div class="fill" id="meterFill"></div></div>
   </div>
 
   <script>
-    let audioCtx, source, highPass, lowPass, compressor, gainNode, analyser;
+    let audioCtx, source, hp1, hp2, lp1, lp2, limiter, gainNode, analyser;
     let animFrame;
+    let isMutedForTransient = false;
 
     document.getElementById('btnStart').onclick = async () => {
       try {
@@ -39,74 +45,85 @@
 
         source = audioCtx.createMediaStreamSource(stream);
 
-        // 1. Filtro Pasa-Altos fijo (elimina roce y graves pesados)
-        highPass = audioCtx.createBiquadFilter();
-        highPass.type = 'highpass';
-        highPass.frequency.value = 85; 
+        // 1. Doble Pasa-Altos (24 dB/octava en 105 Hz) para aniquilar el retumbo de manos
+        hp1 = audioCtx.createBiquadFilter(); hp1.type = 'highpass'; hp1.frequency.value = 105;
+        hp2 = audioCtx.createBiquadFilter(); hp2.type = 'highpass'; hp2.frequency.value = 105;
 
-        // 2. Filtro Pasa-Bajos fijo (elimina estática de alta frecuencia)
-        lowPass = audioCtx.createBiquadFilter();
-        lowPass.type = 'lowpass';
-        lowPass.frequency.value = 1100; 
+        // 2. Doble Pasa-Bajos (24 dB/octava en 1100 Hz) para eliminar siseo de fondo
+        lp1 = audioCtx.createBiquadFilter(); lp1.type = 'lowpass'; lp1.frequency.value = 1100;
+        lp2 = audioCtx.createBiquadFilter(); lp2.type = 'lowpass'; lp2.frequency.value = 1100;
 
-        // 3. Compresor de Dinámica Automático (Atena golpes de fricción)
-        compressor = audioCtx.createDynamicsCompressor();
-        compressor.threshold.value = -24; // Empieza a comprimir sonidos muy fuertes
-        compressor.knee.value = 12;
-        compressor.ratio.value = 8;        // Reduce picos fuertes 8:1
-        compressor.attack.value = 0.003;   // Reacción ultra rápida (3 ms)
-        compressor.release.value = 0.25;
+        // 3. Limitador de Pared (Brickwall Limiter) - Evita la saturación en oídos
+        limiter = audioCtx.createDynamicsCompressor();
+        limiter.threshold.value = -12; // Techo estricto en dB
+        limiter.knee.value = 0;         // Curva dura instantánea
+        limiter.ratio.value = 20;       // Compresión 20:1 (actúa como muro)
+        limiter.attack.value = 0.001;   // 1 ms de reacción ultra rápida
+        limiter.release.value = 0.04;   // 40 ms de recuperación
 
-        // 4. Control de Ganancia Inteligente (AGC)
+        // 4. Ganancia Principal con control de respuesta
         gainNode = audioCtx.createGain();
-        gainNode.gain.value = 3.0; // Ganancia base inicial
+        gainNode.gain.value = 2.8;
 
-        // 5. Analizador de espectro para el bucle de auto-ajuste
+        // 5. Analizador para el Supresor de Transitorios en JS
         analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 512;
+        analyser.fftSize = 256; // Ventana rápida de análisis
 
-        // Cadena: Micrófono -> Pasa-Altos -> Pasa-Bajos -> Compresor -> Ganancia AGC -> Analizador -> Audífonos
-        source.connect(highPass);
-        highPass.connect(lowPass);
-        lowPass.connect(compressor);
-        compressor.connect(gainNode);
+        // Cadena: Mic -> HP1 -> HP2 -> LP1 -> LP2 -> Limiter -> Gain -> Audífonos
+        source.connect(hp1);
+        hp1.connect(hp2);
+        hp2.connect(lp1);
+        lp1.connect(lp2);
+        lp2.connect(limiter);
+        limiter.connect(gainNode);
         gainNode.connect(analyser);
         analyser.connect(audioCtx.destination);
 
         document.getElementById('btnStart').disabled = true;
         document.getElementById('btnStop').disabled = false;
-        document.getElementById('txtStatus').textContent = "Procesando audio en tiempo real...";
+        document.getElementById('txtStatus').textContent = "Escuchando en vivo (Procesando...)";
+        document.getElementById('dot').className = "indicator active";
 
-        // Bucle de Autorregulación de Ganancia (AGC)
         const pcmData = new Float32Array(analyser.fftSize);
-        function autoAdjust() {
+
+        // Bucle de Detección de Golpes / Despegue de Campana
+        function detectTransients() {
           analyser.getFloatTimeDomainData(pcmData);
-          
-          // Calcular valor RMS (volumen real de la señal)
-          let sum = 0;
+
+          let maxPeak = 0;
+          let sumSquares = 0;
+
           for (let i = 0; i < pcmData.length; i++) {
-            sum += pcmData[i] * pcmData[i];
-          }
-          let rms = Math.sqrt(sum / pcmData.length);
-          
-          // Actualizar barra visual
-          document.getElementById('meterFill').style.width = Math.min(100, rms * 400) + '%';
-
-          // Lógica AGC: Si el audio es muy débil, auto-amplifica suavemente; si es muy fuerte, atenúa.
-          if (rms < 0.03 && rms > 0.005) {
-            gainNode.gain.setTargetAtTime(4.5, audioCtx.currentTime, 0.1); // Subir volumen a ruidos suaves
-          } else if (rms >= 0.03 && rms < 0.15) {
-            gainNode.gain.setTargetAtTime(2.5, audioCtx.currentTime, 0.1); // Volumen normal respiratorio
-          } else if (rms >= 0.15) {
-            gainNode.gain.setTargetAtTime(0.8, audioCtx.currentTime, 0.05); // Atenuar impactos o tos
+            let abs = Math.abs(pcmData[i]);
+            if (abs > maxPeak) maxPeak = abs;
+            sumSquares += abs * abs;
           }
 
-          animFrame = requestAnimationFrame(autoAdjust);
+          let rms = Math.sqrt(sumSquares / pcmData.length);
+          document.getElementById('meterFill').style.width = Math.min(100, rms * 500) + '%';
+
+          // DETECTOR DE IMPACTO: Si el pico supera el umbral crítico (despegue o golpe)
+          if (maxPeak > 0.45) {
+            // Muteo de emergencia instantáneo (cae a 0.01 en 5 ms)
+            gainNode.gain.setTargetAtTime(0.01, audioCtx.currentTime, 0.005);
+            document.getElementById('dot').className = "indicator suppressed";
+            document.getElementById('txtStatus').textContent = "Impacto / Despegue bloqueado";
+            isMutedForTransient = true;
+          } else if (isMutedForTransient && maxPeak < 0.2) {
+            // Se recupera la ganancia normal cuando se apacigua el ruido (en 80 ms)
+            gainNode.gain.setTargetAtTime(2.8, audioCtx.currentTime, 0.08);
+            document.getElementById('dot').className = "indicator active";
+            document.getElementById('txtStatus').textContent = "Escuchando en vivo";
+            isMutedForTransient = false;
+          }
+
+          animFrame = requestAnimationFrame(detectTransients);
         }
-        autoAdjust();
+
+        detectTransients();
 
       } catch (err) {
-        alert("Asegúrate de ejecutar la página en un entorno HTTPS seguro para dar acceso al micrófono.");
+        alert("Recuerda ejecutar la página en HTTPS para permitir el acceso al micrófono.");
       }
     };
 
@@ -116,6 +133,7 @@
       document.getElementById('btnStart').disabled = false;
       document.getElementById('btnStop').disabled = true;
       document.getElementById('txtStatus').textContent = "Estado: Detenido";
+      document.getElementById('dot').className = "indicator";
       document.getElementById('meterFill').style.width = '0%';
     };
   </script>
