@@ -78,7 +78,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .folio-warning {
+    .folio-warning, .talla-warning {
       color: #856404;
       background-color: #fff3cd;
       border: 1px solid #ffeeba;
@@ -213,7 +213,8 @@
       </div>
       <div class="form-group">
         <label>Talla (metros)</label>
-        <input type="number" step="0.01" id="talla" oninput="calcularBiometria()">
+        <input type="number" step="0.01" id="talla" oninput="evaluarTalla(); calcularBiometria();">
+        <div id="tallaWarning" class="talla-warning">⚠️ Revisa la talla: debe ingresarse en metros (ej: 1.65 en vez de 165).</div>
       </div>
     </div>
     <div class="form-group">
@@ -257,6 +258,16 @@
     warning.style.display = existe ? "block" : "none";
   }
 
+  function evaluarTalla() {
+    const val = parseFloat(document.getElementById('talla').value);
+    const warning = document.getElementById('tallaWarning');
+    if (!isNaN(val) && (val < 0.5 || val > 2.5)) {
+      warning.style.display = "block";
+    } else {
+      warning.style.display = "none";
+    }
+  }
+
   function evaluarPresion() {
     const sis = parseInt(document.getElementById('paSistolica').value);
     const dia = parseInt(document.getElementById('paDiastolica').value);
@@ -283,13 +294,16 @@
 
   function calcularBiometria() {
     const peso = parseFloat(document.getElementById('peso').value);
-    const talla = parseFloat(document.getElementById('talla').value);
+    let talla = parseFloat(document.getElementById('talla').value);
     const cintura = parseFloat(document.getElementById('cintura').value);
     const sexo = document.getElementById('sexo').value;
     const box = document.getElementById('resultadoBiometria');
 
     let htmlIMC = "IMC: Incompleto";
     let htmlCintura = "Riesgo Cintura: Incompleto";
+
+    // Si ingresan 165 cm en vez de 1.65 m para la fórmula del IMC
+    if (talla > 3) talla = talla / 100;
 
     if (peso > 0 && talla > 0) {
       let imcVal = (peso / (talla * talla)).toFixed(1);
@@ -370,7 +384,7 @@
     if (existe) {
       const confirmar = confirm(`¡Hola! El folio "${folioIngresado}" ya fue registrado antes en este celular.\n\n¿Deseas guardarlo de todas formas o prefieres cancelar para corregir el número?`);
       if (!confirmar) {
-        return; // Detiene el envío para que la estudiante corrija el folio
+        return;
       }
     }
 
@@ -379,7 +393,9 @@
     btn.innerText = "Guardando...";
 
     const peso = parseFloat(document.getElementById('peso').value);
-    const talla = parseFloat(document.getElementById('talla').value);
+    let talla = parseFloat(document.getElementById('talla').value);
+    if (talla > 3) talla = talla / 100;
+    
     let imc = (peso > 0 && talla > 0) ? (peso / (talla * talla)).toFixed(1) : "";
 
     const nuevoRegistro = {
@@ -413,6 +429,7 @@
     document.getElementById('resultadoBiometria').style.display = "none";
     document.getElementById('paStatus').style.display = "none";
     document.getElementById('folioWarning').style.display = "none";
+    document.getElementById('tallaWarning').style.display = "none";
     btn.disabled = false;
     btn.innerText = "Guardar Registro";
   });
