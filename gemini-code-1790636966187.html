@@ -78,6 +78,16 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
+    .folio-warning {
+      color: #856404;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: none;
+    }
     .pa-status {
       padding: 6px 10px;
       border-radius: 6px;
@@ -136,7 +146,8 @@
     <div class="grid-2">
       <div class="form-group">
         <label>ID / Folio Paciente</label>
-        <input type="text" id="folio" placeholder="P001" required>
+        <input type="text" id="folio" placeholder="P001" required oninput="verificarFolioExistente()">
+        <div id="folioWarning" class="folio-warning">⚠️ Este folio ya fue guardado en este celular. Revisa si es el número correcto.</div>
       </div>
       <div class="form-group">
         <label>Sexo</label>
@@ -235,6 +246,17 @@
     document.getElementById('btnSync').style.display = pendientes > 0 ? "block" : "none";
   }
 
+  function verificarFolioExistente() {
+    const val = document.getElementById('folio').value.trim().toLowerCase();
+    const warning = document.getElementById('folioWarning');
+    if (!val) {
+      warning.style.display = "none";
+      return;
+    }
+    const existe = registros.some(r => r.folio.trim().toLowerCase() === val);
+    warning.style.display = existe ? "block" : "none";
+  }
+
   function evaluarPresion() {
     const sis = parseInt(document.getElementById('paSistolica').value);
     const dia = parseInt(document.getElementById('paDiastolica').value);
@@ -276,22 +298,22 @@
 
       if (imcVal < 18.5) {
         estado = "Bajo peso";
-        colorStyle = "color: #0275d8; font-weight: bold;"; // Azul
+        colorStyle = "color: #0275d8; font-weight: bold;";
       } else if (imcVal < 25) {
         estado = "Normopeso";
-        colorStyle = "color: #28a745; font-weight: bold;"; // Verde
+        colorStyle = "color: #28a745; font-weight: bold;";
       } else if (imcVal < 30) {
         estado = "Sobrepeso";
-        colorStyle = "color: #d39e00; font-weight: bold;"; // Amarillo
+        colorStyle = "color: #d39e00; font-weight: bold;";
       } else if (imcVal < 35) {
         estado = "Obesidad Grado I";
-        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+        colorStyle = "color: #dc3545; font-weight: bold;";
       } else if (imcVal < 40) {
         estado = "Obesidad Grado II";
-        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+        colorStyle = "color: #dc3545; font-weight: bold;";
       } else {
         estado = "Obesidad Grado III";
-        colorStyle = "color: #dc3545; font-weight: bold;"; // Rojo
+        colorStyle = "color: #dc3545; font-weight: bold;";
       }
 
       htmlIMC = `IMC: <span style="${colorStyle}">${imcVal} (${estado})</span>`;
@@ -341,6 +363,17 @@
 
   document.getElementById('healthForm').addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    const folioIngresado = document.getElementById('folio').value.trim();
+    const existe = registros.some(r => r.folio.trim().toLowerCase() === folioIngresado.toLowerCase());
+
+    if (existe) {
+      const confirmar = confirm(`¡Hola! El folio "${folioIngresado}" ya fue registrado antes en este celular.\n\n¿Deseas guardarlo de todas formas o prefieres cancelar para corregir el número?`);
+      if (!confirmar) {
+        return; // Detiene el envío para que la estudiante corrija el folio
+      }
+    }
+
     const btn = document.getElementById('btnGuardar');
     btn.disabled = true;
     btn.innerText = "Guardando...";
@@ -351,7 +384,7 @@
 
     const nuevoRegistro = {
       fechaHora: new Date().toLocaleString("es-CL"),
-      folio: document.getElementById('folio').value,
+      folio: folioIngresado,
       sexo: document.getElementById('sexo').value,
       edad: document.getElementById('edad').value,
       paSistolica: document.getElementById('paSistolica').value,
@@ -379,6 +412,7 @@
     document.getElementById('healthForm').reset();
     document.getElementById('resultadoBiometria').style.display = "none";
     document.getElementById('paStatus').style.display = "none";
+    document.getElementById('folioWarning').style.display = "none";
     btn.disabled = false;
     btn.innerText = "Guardar Registro";
   });
