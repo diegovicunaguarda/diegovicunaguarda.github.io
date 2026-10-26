@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Promoción, prevención o ambas?</title>
+<style>
+  :root {
+    --navy: #1b3a6b;
+    --gray: #5a6472;
+    --line: #d5dbe3;
+    --green: #2e7d32;
+    --green-bg: #e8f5e9;
+    --red: #c62828;
+    --red-bg: #fdecea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #ffffff;
+    color: #1f2733;
+    line-height: 1.5;
+  }
+  header {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px 16px 0;
+  }
+  header h1 { margin: 0 0 4px; font-size: 1.5rem; color: var(--navy); }
+  header p { margin: 0; color: var(--gray); font-size: 0.95rem; }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 16px 16px 60px;
+  }
+  .counter {
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0 0 16px;
+  }
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .q-number {
+    font-size: 0.85rem;
+    color: var(--gray);
+    margin-bottom: 6px;
+  }
+  .q-prompt {
+    font-size: 1.05rem;
+    margin: 0 0 14px;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #ffffff;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    color: #1f2733;
+  }
+  .option:hover:not(.correct):not(.incorrect):not([disabled]) {
+    border-color: var(--navy);
+  }
+  .option.correct {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .option.incorrect {
+    background: var(--red-bg);
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .option[disabled] { cursor: default; }
+  .feedback {
+    display: none;
+    margin-top: 10px;
+    font-size: 0.95rem;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { color: var(--green); }
+  .feedback.no { color: var(--red); }
+  .summary {
+    display: none;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .summary.show { display: block; }
+  .summary h2 { margin: 0 0 6px; color: var(--navy); font-size: 1.2rem; }
+  .summary p { margin: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>¿Promoción, prevención o ambas?</h1>
+  <p>Actividad interactiva. Lean cada situación y elijan una alternativa. Si se equivocan, pueden intentarlo de nuevo.</p>
+</header>
+
+<main>
+  <p class="counter" id="counter">0 de 7 respondidas</p>
+
+  <div id="preguntas"></div>
+
+  <div class="summary" id="summary">
+    <h2>Actividad completada</h2>
+    <p id="scoreText"></p>
+  </div>
+</main>
+
+<script>
+const opciones = ["Promoción", "Prevención", "Ambas"];
+const pistaIncorrecta = "No es esa. Vuelvan a leer la situación: ¿fortalece algo que ya protege la salud, o evita un daño concreto?";
+
+const preguntas = [
+  {
+    prompt: "En una feria se toma la presión arterial y la glicemia a las personas que quieran, solo para pesquisar factores de riesgo. No se entrega educación.",
+    correct: 1,
+    feedback: "Prevención. Pesquisar factores de riesgo busca identificar a tiempo un riesgo concreto. No es un diagnóstico ni una acción educativa."
+  },
+  {
+    prompt: "En un jardín infantil, la educadora quiere reforzar los buenos hábitos de alimentación del curso y pide un taller de alimentación saludable.",
+    correct: 0,
+    feedback: "Promoción. No hay un riesgo medido: se fortalece un hábito protector que el curso ya tiene."
+  },
+  {
+    prompt: "En un jardín infantil, los controles de salud muestran exceso de peso en muchos niños del curso, y se hace un taller de alimentación saludable.",
+    correct: 1,
+    feedback: "Prevención. Es el mismo taller de la situación anterior, pero ahora hay un riesgo medido y la acción busca evitar sus complicaciones. Cambió el diagnóstico, no el taller."
+  },
+  {
+    prompt: "Un club de adultos mayores pide un taller de alimentación saludable y accesible.",
+    correct: 0,
+    feedback: "Promoción. El taller responde a lo que pidió el club y fortalece un hábito protector. No hay un riesgo medido."
+  },
+  {
+    prompt: "El mismo taller de alimentación, dirigido a las personas del club que tuvieron presión o glicemia alta en un operativo.",
+    correct: 1,
+    feedback: "Prevención. Es el mismo taller, pero dirigido a personas con un riesgo medido, y busca evitar complicaciones. Cambió a quién se dirige y lo que mostraron los datos."
+  },
+  {
+    prompt: "Apoderados de un jardín infantil quieren fomentar buenos hábitos de pantallas y sueño en casa, y piden una charla.",
+    correct: 0,
+    feedback: "Promoción. Los apoderados quieren fortalecer buenos hábitos y no hay un daño observado."
+  },
+  {
+    prompt: "Algunos apoderados cuentan que sus hijos duermen mal por el uso de pantallas. La charla enseña rutinas de sueño y cómo reconocer cuándo el uso de pantallas ya les está haciendo daño.",
+    correct: 2,
+    feedback: "Ambas. La charla fortalece hábitos de sueño (promoción) y a la vez busca evitar un daño que ya se observa en algunos niños (prevención)."
+  }
+];
+
+const total = preguntas.length;
+let respondidas = 0;
+let aciertosPrimerIntento = 0;
+
+function construirPregunta(contenedor, q, indice) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const num = document.createElement('div');
+  num.className = 'q-number';
+  num.textContent = 'Situación ' + (indice + 1);
+  card.appendChild(num);
+
+  const prompt = document.createElement('p');
+  prompt.className = 'q-prompt';
+  prompt.textContent = q.prompt;
+  card.appendChild(prompt);
+
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+
+  let resuelta = false;
+  let falloPrimero = false;
+
+  opciones.forEach((texto, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = texto;
+    btn.addEventListener('click', () => {
+      if (resuelta) return;
+      if (i === q.correct) {
+        btn.classList.add('correct');
+        feedback.textContent = q.feedback;
+        feedback.className = 'feedback show ok';
+        resuelta = true;
+        respondidas++;
+        if (!falloPrimero) aciertosPrimerIntento++;
+        actualizar();
+        card.querySelectorAll('.option').forEach(o => o.setAttribute('disabled', 'true'));
+      } else {
+        btn.classList.add('incorrect');
+        btn.setAttribute('disabled', 'true');
+        feedback.textContent = pistaIncorrecta;
+        feedback.className = 'feedback show no';
+        falloPrimero = true;
+      }
+    });
+    card.appendChild(btn);
+  });
+
+  card.appendChild(feedback);
+  contenedor.appendChild(card);
+}
+
+function actualizar() {
+  document.getElementById('counter').textContent = respondidas + ' de ' + total + ' respondidas';
+  if (respondidas === total) {
+    document.getElementById('summary').classList.add('show');
+    document.getElementById('scoreText').textContent =
+      'Acertaron ' + aciertosPrimerIntento + ' de ' + total + ' al primer intento.';
+  }
+}
+
+const contenedor = document.getElementById('preguntas');
+preguntas.forEach((q, i) => construirPregunta(contenedor, q, i));
+</script>
+
+</body>
+</html>
